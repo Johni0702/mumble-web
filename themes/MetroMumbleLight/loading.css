@@ -1,0 +1,33 @@
+.loading-container {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #eee;
+  z-index: 1000;
+}
+
+.loading-circle {
+  box-sizing: border-box;
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: calc(50% - 40px);
+  left: calc(50% - 40px);
+  border-radius: 100%;
+  border: 10px solid #ddd;
+  border-top-color: #999;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loaded {
+  top: -100%;
+  transition: top 1s;
+  transition-delay: 2s;
+}

@@ -1,0 +1,48 @@
+{
+  "name": "mumble-web",
+  "version": "0.0.1",
+  "description": "An HTML5 Mumble client.",
+  "scripts": {
+    "build": "webpack",
+    "prepublish": "rm -r dist && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jonas Herzig <me@johni0702.de>",
+  "license": "ISC",
+  "repository": "johni0702/mumble-web",
+  "homepage": "https://github.com/johni0702/mumble-web",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "audio-buffer-utils": "^3.1.2",
+    "audio-context": "^0.1.0",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-runtime": "^6.18.0",
+    "brfs": "^1.4.3",
+    "css-loader": "^0.26.0",
+    "dompurify": "^0.8.3",
+    "duplex-maker": "^1.0.0",
+    "extract-loader": "^0.1.0",
+    "file-loader": "^0.9.0",
+    "getusermedia": "^2.0.0",
+    "html-loader": "^0.4.4",
+    "json-loader": "^0.5.4",
+    "knockout": "^3.4.0",
+    "lodash.assign": "^4.2.0",
+    "microphone-stream": "^3.0.5",
+    "raw-loader": "^0.5.1",
+    "regexp-replace-loader": "0.0.1",
+    "stream-chunker": "^1.2.8",
+    "transform-loader": "^0.2.3",
+    "webpack": "^1.13.3",
+    "webworkify-webpack-dropin": "^1.1.9",
+    "libsamplerate.js": "^1.0.0",
+    "mumble-client-codecs-browser": "^1.0.1",
+    "mumble-client-websocket": "^1.0.0",
+    "web-audio-buffer-queue": "^1.0.0"
+  }
+}

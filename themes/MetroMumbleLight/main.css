@@ -1,0 +1,252 @@
+html, body {
+  background-color: #eee;
+  margin: 0;
+  overflow: hidden;
+  height: 100%
+}
+#container {
+  height: 98%;
+  margin: 0 1% 0 1%;
+}
+#container::before {
+  display: block;
+  content: "";
+  height: 1%;
+}
+.channel-root-container {
+  text-size: 16px;
+  margin-left: 2px;
+  background-color: white;
+  border: 1px solid lightgray;
+  float: left;
+  width: calc(60% - 6px);
+  height: calc(100% - 38px);
+  border-radius: 3px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.chat {
+  margin-right: 2px;
+  float: left;
+  width: 40%;
+  height: calc(100% - 38px);
+}
+.log {
+  background-color: white;
+  height: calc(100% - 42px);
+  padding: 5px;
+  border: 1px lightgray solid;
+  border-radius: 3px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.branch img {
+  height: 19px;
+}
+.branch {
+  float: left;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  background-color: white;
+  margin-right:
+}
+.channel-sub {
+  margin-left: 9px;
+  border-left: 1px transparent solid;
+  padding-left: 9px;
+}
+.channel-wrapper:nth-last-child(n + 2) > .branch:not(:empty) + .channel-sub {
+  border-left: 1px lightgray solid;
+}
+.channel-tree,
+.user-wrapper {
+  margin-left: 9px;
+}
+.channel-tree,
+.user-tree {
+  float: left;
+}
+.channel-tree::before,
+.user-tree::before {
+  content: "";
+  display: block;
+  position: relative;
+  width: 9px;
+  border-left: 1px lightgray solid;
+  border-bottom: 1px lightgray solid;
+  height: 14px;
+}
+.channel-wrapper:nth-last-child(n + 2) > .channel-tree:after,
+.user-wrapper:nth-last-child(n + 2) .user-tree:after {
+  content: "";
+  display: block;
+  position: relative;
+  width: 0px;
+  border-left: 1px lightgray solid;
+  height: 14px;
+}
+.user {
+  margin-left: 9px;
+}
+.user-status, .channel-status {
+  float: right;
+}
+.user,.channel{
+  height: 23px;
+  padding: 2px;
+  border: 1px solid transparent;
+}
+.selected {
+  background-color: lightblue !important;
+  border: 1px solid gray;
+  border-radius: 3px;
+}
+.user:hover,.channel:hover {
+  background-color: lightgray;
+}
+.thisClient {
+  font-weight: bold
+}
+.currentChannel {
+  font-weight: bold
+}
+.user-status img, .channel-status img {
+  margin-top: 2px;
+  width: 19px;
+  height: 19px
+}
+.channel img, .user img {
+  width: auto;
+  height: 19px;
+}
+.channel-name, .user-name {
+  display: inline;
+}
+.channel:hover .tooltip, .user:hover .tooltip {
+  visibility: visible;
+  height: auto;
+  transition-delay: 1s;
+}
+.tooltip {
+  visibility: hidden;
+  height: 0px;
+  background: white;
+  border: 1px solid gray;
+  margin-top: 16px;
+  margin-left: 30px;
+  padding: 10px;
+  position: absolute;
+  z-index: 100;
+}
+.toolbar {
+  height: 36px;
+}
+.toolbar img {
+  height: 28px;
+  width: 28px;
+  padding: 2px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+.toolbar img:hover {
+  border: 1px solid #bbb;
+  background-color: #ddd;
+}
+.toolbar .tb-active {
+  border: 1px solid #bbb;
+  background-color: white;
+}
+.divider {
+  display: inline-block;
+  height: 32px;
+  border-left: 1px lightgray solid;
+}
+.handle-horizontal {
+  width: auto !important;
+  border: none !important;
+  background-color: #eee !important;
+}
+.handle-vertical {
+  display: none;
+}
+.channel-icon .channel-icon-active {
+  display: none;
+}
+.channel-tag {
+  font-weight: bold;
+  color: orange;
+}
+.user-tag {
+  font-weight: bold;
+  color: green;
+}
+#message-box {
+  width: 100%;
+  border: none;
+  background: none;
+  margin: 5px 0 5px 0;
+  padding: 0;
+  height: 20px;
+}
+form {
+  margin: 0;
+  padding: 0;
+}
+.message-content p {
+  margin: 0;
+}
+.tb-information, .tb-record, .tb-comment, .tb-settings{
+  filter: grayscale(100%);
+}
+.dialog-header {
+  height: 20px;
+  width: calc(100% - 10px);
+  padding: 5px;
+  text-align: center;
+  color: white;
+  background-color: gray;
+  border-bottom: 1px solid darkgray;
+}
+.dialog-footer {
+  margin: 10px;
+  margin-bottom: 0px;
+}
+.dialog-close {
+  float: left;
+}
+.dialog-submit {
+  float: right;
+}
+.dialog-close, .dialog-submit {
+  width: 45%;
+  font-size: 15px;
+  border: 1px gray solid;
+  border-radius: 3px;
+  background-color: white;
+  color: black;
+  padding: 1px;
+}
+.connect-dialog table {
+  text-align: center;
+  width: 100%
+}
+.connect-dialog {
+  position: absolute;
+  width: 300px;
+  height: 197px;
+  top: calc(50% - 100px);
+  left: calc(50% - 150px);
+  background-color: #eee;
+  border: 1px gray solid;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  z-index: 20;
+}
+.connect-dialog input[type=text] {
+  font-size: 15px;
+  border: 1px gray solid;
+  border-radius: 3px;
+  background-color: white;
+  color: black;
+  padding: 2px;
+  width: calc(100% - 8px);
+}
