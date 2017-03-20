@@ -38,8 +38,9 @@ which natively support Websockets. To use this client with any standard mumble
 server, websockify must be set up (preferably on the same machine that the
 Mumble server is running on).
 
-You can install websockify via `npm install -g websockify` or via your package
-manager `apt install websockify`.
+You can install websockify via your package manager `apt install websockify` or
+manually from the [websockify GitHub page]. Note that while some versions might
+function better than others, the python version generally seems to be the best.
 
 There are two basic ways you can use websockify with mumble-web:
 - Standalone, use websockify for both, websockets and serving static files
@@ -89,3 +90,4 @@ map $http_upgrade $connection_upgrade {
 ISC
 
 [Mumble]: https://wiki.mumble.info/wiki/Main_Page
+[websockify GitHub page]: https://github.com/novnc/websockify
