@@ -140,7 +140,11 @@ class GlobalBindings {
           })
         }
       }, err => {
-        log('Connection error:', err)
+	  if (err.type == 4) {
+	      log('Connection error: invalid server password')
+	  } else {
+              log('Connection error:', err)
+	  }
       })
     }
 
