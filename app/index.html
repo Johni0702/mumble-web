@@ -20,8 +20,8 @@
       <div class="loading-circle" data-bind="css: { loaded: true }"></div>
     </div>
     <div id="container" style="display: none" data-bind="visible: true">
-      <!-- ko with: connectDialog -->
-        <div class="connect-dialog" data-bind="visible: visible">
+      <!-- ko with: connectDialog --> 
+      <div class="connect-dialog" data-bind="visible: visible"> 
           <div class="dialog-header">
             Connect to Server
           </div>
@@ -42,6 +42,10 @@
                 <tr>
                   <td>Username</td>
                   <td><input id="username" type="text" data-bind="value: username"></td>
+                </tr>
+		<tr>
+                  <td>Password</td>
+                  <td><input id="password" type="password" data-bind="value: password"></td>
                 </tr>
             </table>
             <div class="dialog-footer">

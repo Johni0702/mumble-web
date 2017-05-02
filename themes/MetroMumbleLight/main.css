@@ -233,7 +233,7 @@ form {
 .connect-dialog {
   position: absolute;
   width: 300px;
-  height: 197px;
+  height: 227px;
   top: calc(50% - 100px);
   left: calc(50% - 150px);
   background-color: #eee;
@@ -242,6 +242,15 @@ form {
   z-index: 20;
 }
 .connect-dialog input[type=text] {
+  font-size: 15px;
+  border: 1px gray solid;
+  border-radius: 3px;
+  background-color: white;
+  color: black;
+  padding: 2px;
+  width: calc(100% - 8px);
+}
+.connect-dialog input[type=password] {
   font-size: 15px;
   border: 1px gray solid;
   border-radius: 3px;

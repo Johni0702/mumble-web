@@ -27,12 +27,13 @@ function ConnectDialog () {
   self.port = ko.observable('443')
   self.token = ko.observable('')
   self.username = ko.observable('')
+  self.password = ko.observable('')
   self.visible = ko.observable(true)
   self.show = self.visible.bind(self.visible, true)
   self.hide = self.visible.bind(self.visible, false)
   self.connect = function () {
     self.hide()
-    ui.connect(self.username(), self.address(), self.port(), self.token())
+    ui.connect(self.username(), self.address(), self.port(), self.token(), self.password())
   }
 }
 
@@ -81,7 +82,7 @@ class GlobalBindings {
       return '[' + new Date().toLocaleTimeString('en-US') + ']'
     }
 
-    this.connect = (username, host, port, token) => {
+    this.connect = (username, host, port, token, password) => {
       this.resetClient()
 
       log('Connecting to server ', host)
@@ -89,12 +90,12 @@ class GlobalBindings {
       // TODO: token
       mumbleConnect(`wss://${host}:${port}`, {
         username: username,
+        password: password,
         codecs: CodecsBrowser
       }).done(client => {
         log('Connected!')
 
         this.client = client
-
         // Prepare for connection errors
         client.on('error', function (err) {
           log('Connection error:', err)
@@ -139,7 +140,11 @@ class GlobalBindings {
           })
         }
       }, err => {
-        log('Connection error:', err)
+	  if (err.type == 4) {
+	      log('Connection error: invalid server password')
+	  } else {
+              log('Connection error:', err)
+	  }
       })
     }
 
@@ -433,6 +438,9 @@ window.onload = function () {
   }
   if (queryParams.username) {
     ui.connectDialog.username(queryParams.username)
+  }
+  if (queryParams.password) {
+    ui.connectDialog.password(queryParams.password)
   }
   ko.applyBindings(ui)
 }
