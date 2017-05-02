@@ -4,7 +4,7 @@
   "description": "An HTML5 Mumble client.",
   "scripts": {
     "build": "webpack",
-    "prepublish": "rm -r dist && npm run build",
+    "prepublish": "rm -rf dist && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jonas Herzig <me@johni0702.de>",
