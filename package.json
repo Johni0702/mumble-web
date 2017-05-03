@@ -1,6 +1,6 @@
 {
   "name": "mumble-web",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An HTML5 Mumble client.",
   "scripts": {
     "build": "webpack",
@@ -24,7 +24,7 @@
     "babel-runtime": "^6.18.0",
     "brfs": "^1.4.3",
     "css-loader": "^0.26.0",
-    "dompurify": "^0.8.7",
+    "dompurify": "^0.8.9",
     "duplex-maker": "^1.0.0",
     "extract-loader": "^0.1.0",
     "file-loader": "^0.9.0",
