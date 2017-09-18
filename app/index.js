@@ -119,6 +119,7 @@ class GlobalBindings {
 
         // Handle messages
         client.on('message', (sender, message, users, channels, trees) => {
+          sender = serder || { __ui: "Server" }
           ui.log.push({
             type: 'chat-message',
             user: sender.__ui,
