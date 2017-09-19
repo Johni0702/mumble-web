@@ -195,7 +195,7 @@ form {
 .message-content p {
   margin: 0;
 }
-.tb-information, .tb-record, .tb-comment, .tb-settings{
+.tb-information, .tb-record, .tb-comment {
   filter: grayscale(100%);
 }
 .dialog-header {
@@ -230,16 +230,37 @@ form {
   text-align: center;
   width: 100%
 }
-.connect-dialog {
+.dialog {
   position: absolute;
-  width: 300px;
-  height: 227px;
-  top: calc(50% - 100px);
-  left: calc(50% - 150px);
   background-color: #eee;
   border: 1px gray solid;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   z-index: 20;
+}
+.settings-dialog {
+  width: 300px;
+  height: 156px;
+  top: calc(50% - 100px);
+  left: calc(50% - 150px);
+}
+.settings-dialog table {
+  width: 100%;
+  padding: 5px;
+}
+.settings-dialog td {
+  width: 50%;
+}
+.settings-dialog table select {
+  width: 100%;
+}
+.settings-dialog table input {
+  width: 100%;
+}
+.connect-dialog {
+  width: 300px;
+  height: 227px;
+  top: calc(50% - 100px);
+  left: calc(50% - 150px);
 }
 .connect-dialog input[type=text] {
   font-size: 15px;

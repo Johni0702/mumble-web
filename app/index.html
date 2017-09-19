@@ -21,7 +21,7 @@
     </div>
     <div id="container" style="display: none" data-bind="visible: true">
       <!-- ko with: connectDialog --> 
-      <div class="connect-dialog" data-bind="visible: visible"> 
+      <div class="connect-dialog dialog" data-bind="visible: visible">
           <div class="dialog-header">
             Connect to Server
           </div>
@@ -51,6 +51,36 @@
             <div class="dialog-footer">
               <input class="dialog-close" type="button" data-bind="click: hide" value="Cancel">
               <input class="dialog-submit" type="submit" value="Connect">
+            </div>
+          </form>
+        </div>
+      <!-- /ko -->
+      <!-- ko with: settingsDialog -->
+      <div class="settings-dialog dialog" data-bind="visible: $data">
+          <div class="dialog-header">
+            Settings
+          </div>
+          <form data-bind="submit: $root.applySettings">
+            <table>
+                <tr>
+                  <td>Transmission</td>
+                  <td>
+                    <select data-bind='value: voiceMode'>
+                      <option value="cont">Continuous</option>
+                      <option value="vad" disabled>Voice Activity</option>
+                      <option value="ptt">Push To Talk</option>
+                  </td>
+                </tr>
+                <tr data-bind="style: {visibility: voiceMode() == 'ptt' ? 'visible' : 'hidden'}">
+                  <td>PTT Key</td>
+                  <td>
+                    <input type="button" data-bind="value: pttKeyDisplay, click: recordPttKey">
+                  </td>
+                </tr>
+            </table>
+            <div class="dialog-footer">
+              <input class="dialog-close" type="button" data-bind="click: $root.closeSettings" value="Cancel">
+              <input class="dialog-submit" type="submit" value="Apply">
             </div>
           </form>
         </div>
@@ -87,7 +117,7 @@
         <img class="tb-comment" data-bind="click: commentDialog.show"
                       rel="comment" src="/svg/toolbar-comment.svg">
         <div class="divider"></div>
-        <img class="tb-settings" data-bind="click: settingsDialog.show"
+        <img class="tb-settings" data-bind="click: openSettings"
                       rel="settings" src="/svg/config_basic.svg">
         <div class="divider"></div>
         <img class="tb-sourcecode" data-bind="click: openSourceCode"

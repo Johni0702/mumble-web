@@ -7,6 +7,7 @@ import audioContext from 'audio-context'
 import Resampler from 'libsamplerate.js'
 import ko from 'knockout'
 import _dompurify from 'dompurify'
+import keyboardjs from 'keyboardjs'
 
 import { ContinuousVoiceHandler, PushToTalkVoiceHandler, initVoice } from './voice'
 
@@ -53,13 +54,35 @@ function CommentDialog () {
 }
 
 class SettingsDialog {
-  constructor () {
-    this.visible = ko.observable(false)
-    this.voiceMode = ko.observable()
+  constructor (settings) {
+    this.voiceMode = ko.observable(settings.voiceMode)
+    this.pttKey = ko.observable(settings.pttKey)
+    this.pttKeyDisplay = ko.observable(settings.pttKey)
   }
 
-  show () {
-    this.visible(true)
+  applyTo (settings) {
+    settings.voiceMode = this.voiceMode()
+    settings.pttKey = this.pttKey()
+  }
+
+  recordPttKey () {
+    var combo = []
+    const keydown = e => {
+      combo = e.pressedKeys
+      let comboStr = combo.join(' + ')
+      this.pttKeyDisplay('> ' + comboStr + ' <')
+    }
+    const keyup = () => {
+      keyboardjs.unbind('', keydown, keyup)
+      let comboStr = combo.join(' + ')
+      if (comboStr) {
+        this.pttKey(comboStr).pttKeyDisplay(comboStr)
+      } else {
+        this.pttKeyDisplay(this.pttKey())
+      }
+    }
+    keyboardjs.bind('', keydown, keyup)
+    this.pttKeyDisplay('> ? <')
   }
 }
 
@@ -67,6 +90,13 @@ class Settings {
   constructor () {
     const load = key => window.localStorage.getItem('mumble.' + key)
     this.voiceMode = load('voiceMode') || 'cont'
+    this.pttKey = load('pttKey') || 'ctrl + shift'
+  }
+
+  save () {
+    const save = (key, val) => window.localStorage.setItem('mumble.' + key, val)
+    save('voiceMode', this.voiceMode)
+    save('pttKey', this.pttKey)
   }
 }
 
@@ -77,7 +107,7 @@ class GlobalBindings {
     this.connectDialog = new ConnectDialog()
     this.connectionInfo = new ConnectionInfo()
     this.commentDialog = new CommentDialog()
-    this.settingsDialog = new SettingsDialog()
+    this.settingsDialog = ko.observable()
     this.log = ko.observableArray()
     this.thisUser = ko.observable()
     this.root = ko.observable()
@@ -86,6 +116,25 @@ class GlobalBindings {
 
     this.select = element => {
       this.selected(element)
+    }
+
+    this.openSettings = () => {
+      this.settingsDialog(new SettingsDialog(this.settings))
+    }
+
+    this.applySettings = () => {
+      const settingsDialog = this.settingsDialog()
+
+      settingsDialog.applyTo(this.settings)
+
+      this._updateVoiceHandler()
+
+      this.settings.save()
+      this.settingsDialog(null)
+    }
+
+    this.closeSettings = () => {
+      this.settingsDialog(null)
     }
 
     this.getTimeString = () => {
@@ -309,7 +358,7 @@ class GlobalBindings {
       if (mode === 'cont') {
         voiceHandler = new ContinuousVoiceHandler(this.client)
       } else if (mode === 'ptt') {
-        voiceHandler = new PushToTalkVoiceHandler(this.client, 'ctrl + shift')
+        voiceHandler = new PushToTalkVoiceHandler(this.client, this.settings.pttKey)
       } else if (mode === 'vad') {
 
       } else {
