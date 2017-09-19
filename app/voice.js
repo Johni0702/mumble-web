@@ -15,8 +15,22 @@ class VoiceHandler extends Writable {
   _getOrCreateOutbound () {
     if (!this._outbound) {
       this._outbound = this._client.createVoiceStream()
+      this.emit('started_talking')
     }
     return this._outbound
+  }
+
+  _stopOutbound () {
+    if (this._outbound) {
+      this.emit('stopped_talking')
+      this._outbound.end()
+      this._outbound = null
+    }
+  }
+
+  _final (callback) {
+    this._stopOutbound()
+    callback()
   }
 }
 

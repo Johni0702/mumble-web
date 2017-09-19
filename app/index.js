@@ -301,6 +301,10 @@ class GlobalBindings {
       if (!this.client) {
         return
       }
+      if (voiceHandler) {
+        voiceHandler.end()
+        voiceHandler = null
+      }
       let mode = this.settings.voiceMode
       if (mode === 'cont') {
         voiceHandler = new ContinuousVoiceHandler(this.client)
@@ -310,7 +314,18 @@ class GlobalBindings {
 
       } else {
         log('Unknown voice mode:', mode)
+        return
       }
+      voiceHandler.on('started_talking', () => {
+        if (this.thisUser()) {
+          this.thisUser().talking('on')
+        }
+      })
+      voiceHandler.on('stopped_talking', () => {
+        if (this.thisUser()) {
+          this.thisUser().talking('off')
+        }
+      })
     }
 
     this.messageBoxHint = ko.pureComputed(() => {
@@ -525,6 +540,9 @@ var voiceHandler
 
 initVoice(data => {
   if (!ui.client) {
+    if (voiceHandler) {
+      voiceHandler.end()
+    }
     voiceHandler = null
   } else if (voiceHandler) {
     voiceHandler.write(new Float32Array(data.buffer, data.byteOffset, data.byteLength / 4))
