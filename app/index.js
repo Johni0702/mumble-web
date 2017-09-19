@@ -3,13 +3,12 @@ import url from 'url'
 import mumbleConnect from 'mumble-client-websocket'
 import CodecsBrowser from 'mumble-client-codecs-browser'
 import BufferQueueNode from 'web-audio-buffer-queue'
-import MicrophoneStream from 'microphone-stream'
 import audioContext from 'audio-context'
-import chunker from 'stream-chunker'
 import Resampler from 'libsamplerate.js'
-import getUserMedia from 'getusermedia'
 import ko from 'knockout'
 import _dompurify from 'dompurify'
+
+import { ContinuousVoiceHandler, initVoice } from './voice'
 
 const dompurify = _dompurify(window)
 
@@ -53,16 +52,27 @@ function CommentDialog () {
   }
 }
 
-function SettingsDialog () {
-  var self = this
-  self.visible = ko.observable(false)
-  self.show = function () {
-    self.visible(true)
+class SettingsDialog {
+  constructor () {
+    this.visible = ko.observable(false)
+    this.voiceMode = ko.observable()
+  }
+
+  show () {
+    this.visible(true)
+  }
+}
+
+class Settings {
+  constructor () {
+    const load = key => window.localStorage.getItem('mumble.' + key)
+    this.voiceMode = load('voiceMode') || 'cont'
   }
 }
 
 class GlobalBindings {
   constructor () {
+    this.settings = new Settings()
     this.client = null
     this.connectDialog = new ConnectDialog()
     this.connectionInfo = new ConnectionInfo()
@@ -140,6 +150,9 @@ class GlobalBindings {
             message: sanitize(client.welcomeMessage)
           })
         }
+
+        // Startup audio input processing
+        this._updateVoiceHandler()
       }, err => {
 	  if (err.type == 4) {
 	      log('Connection error: invalid server password')
@@ -283,6 +296,22 @@ class GlobalBindings {
     }
 
     this.connected = () => this.thisUser() != null
+
+    this._updateVoiceHandler = () => {
+      if (!this.client) {
+        return
+      }
+      let mode = this.settings.voiceMode
+      if (mode === 'cont') {
+        voiceHandler = new ContinuousVoiceHandler(this.client)
+      } else if (mode === 'ptt') {
+
+      } else if (mode === 'vad') {
+
+      } else {
+        log('Unknown voice mode:', mode)
+      }
+    }
 
     this.messageBoxHint = ko.pureComputed(() => {
       if (!this.thisUser()) {
@@ -492,34 +521,14 @@ function userToState () {
   return flags.join(', ')
 }
 
-// Audio input
+var voiceHandler
 
-var resampler = new Resampler({
-  unsafe: true,
-  type: Resampler.Type.SINC_FASTEST,
-  ratio: 48000 / audioContext.sampleRate
-})
-
-var voiceStream
-resampler.pipe(chunker(4 * 480)).on('data', function (data) {
+initVoice(data => {
   if (!ui.client) {
-    voiceStream = null
+    voiceHandler = null
+  } else if (voiceHandler) {
+    voiceHandler.write(new Float32Array(data.buffer, data.byteOffset, data.byteLength / 4))
   }
-  if (!voiceStream && ui.client) {
-    voiceStream = ui.client.createVoiceStream()
-  }
-  if (voiceStream) {
-    voiceStream.write(new Float32Array(data.buffer, data.byteOffset, data.byteLength / 4))
-  }
-})
-
-getUserMedia({ audio: true }, function (err, userMedia) {
-  if (err) {
-    log('Cannot initialize user media. Microphone will not work:', err)
-  } else {
-    var micStream = new MicrophoneStream(userMedia, { objectMode: true })
-    micStream.on('data', function (data) {
-      resampler.write(Buffer.from(data.getChannelData(0).buffer))
-    })
-  }
+}, err => {
+  log('Cannot initialize user media. Microphone will not work:', err)
 })
