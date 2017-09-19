@@ -8,7 +8,7 @@ import Resampler from 'libsamplerate.js'
 import ko from 'knockout'
 import _dompurify from 'dompurify'
 
-import { ContinuousVoiceHandler, initVoice } from './voice'
+import { ContinuousVoiceHandler, PushToTalkVoiceHandler, initVoice } from './voice'
 
 const dompurify = _dompurify(window)
 
@@ -309,7 +309,7 @@ class GlobalBindings {
       if (mode === 'cont') {
         voiceHandler = new ContinuousVoiceHandler(this.client)
       } else if (mode === 'ptt') {
-
+        voiceHandler = new PushToTalkVoiceHandler(this.client, 'ctrl + shift')
       } else if (mode === 'vad') {
 
       } else {

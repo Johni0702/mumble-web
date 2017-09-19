@@ -31,6 +31,7 @@
     "getusermedia": "^2.0.0",
     "html-loader": "^0.4.4",
     "json-loader": "^0.5.4",
+    "keyboardjs": "^2.3.4",
     "knockout": "^3.4.0",
     "lodash.assign": "^4.2.0",
     "microphone-stream": "^3.0.5",

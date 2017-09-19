@@ -4,6 +4,7 @@ import audioContext from 'audio-context'
 import chunker from 'stream-chunker'
 import Resampler from 'libsamplerate.js'
 import getUserMedia from 'getusermedia'
+import keyboardjs from 'keyboardjs'
 
 class VoiceHandler extends Writable {
   constructor (client) {
@@ -41,6 +42,35 @@ export class ContinuousVoiceHandler extends VoiceHandler {
 
   _write (data, _, callback) {
     this._getOrCreateOutbound().write(data, callback)
+  }
+}
+
+export class PushToTalkVoiceHandler extends VoiceHandler {
+  constructor (client, key) {
+    super(client)
+    this._key = key
+    this._pushed = false
+    this._keydown_handler = () => this._pushed = true
+    this._keyup_handler = () => {
+      this._stopOutbound()
+      this._pushed = false
+    }
+    keyboardjs.bind(this._key, this._keydown_handler, this._keyup_handler)
+  }
+
+  _write (data, _, callback) {
+    if (this._pushed) {
+      this._getOrCreateOutbound().write(data, callback)
+    } else {
+      callback()
+    }
+  }
+
+  _final (callback) {
+    super._final(e => {
+      keyboardjs.unbind(this._key, this._keydown_handler, this._keyup_handler)
+      callback(e)
+    })
   }
 }
 
