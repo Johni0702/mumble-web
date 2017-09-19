@@ -8,8 +8,8 @@ The Mumble protocol uses TCP for control and UDP for voice.
 Running in a browser, both are unavailable to this client.
 Instead Websockets are used for all communications.
 
-libopus and libsamplerate, compiled to JS via emscripten, are used for audio decoding.
-Therefore, at the moment only the Opus codec is supported.
+libopus, libcelt (0.7.1) and libsamplerate, compiled to JS via emscripten, are used for audio decoding.
+Therefore, at the moment only the Opus and CELT Alpha codecs are supported.
 
 Quite a few features, most noticeably voice activity detection and all
 administrative functionallity, are still missing.

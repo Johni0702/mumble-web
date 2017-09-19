@@ -41,7 +41,7 @@
     "webpack": "^1.13.3",
     "webworkify-webpack-dropin": "^1.1.9",
     "libsamplerate.js": "^1.0.0",
-    "mumble-client-codecs-browser": "^1.0.1",
+    "mumble-client-codecs-browser": "^1.1.0",
     "mumble-client-websocket": "^1.0.0",
     "mumble-client": "^1.1.0",
     "web-audio-buffer-queue": "^1.0.0"
