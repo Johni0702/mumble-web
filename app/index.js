@@ -97,7 +97,7 @@ class GlobalBindings {
 
         this.client = client
         // Prepare for connection errors
-        client.on('error', function (err) {
+        client.on('error', (err) => {
           log('Connection error:', err)
           this.resetClient()
         })
@@ -279,7 +279,7 @@ class GlobalBindings {
         this.client.disconnect()
       }
       this.client = null
-      this.thisUser(null).root(null).selected(null)
+      this.selected(null).root(null).thisUser(null)
     }
 
     this.connected = () => this.thisUser() != null
@@ -502,6 +502,9 @@ var resampler = new Resampler({
 
 var voiceStream
 resampler.pipe(chunker(4 * 480)).on('data', function (data) {
+  if (!ui.client) {
+    voiceStream = null
+  }
   if (!voiceStream && ui.client) {
     voiceStream = ui.client.createVoiceStream()
   }
