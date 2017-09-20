@@ -67,11 +67,23 @@
                   <td>
                     <select data-bind='value: voiceMode'>
                       <option value="cont">Continuous</option>
-                      <option value="vad" disabled>Voice Activity</option>
+                      <option value="vad">Voice Activity</option>
                       <option value="ptt">Push To Talk</option>
                   </td>
                 </tr>
-                <tr data-bind="style: {visibility: voiceMode() == 'ptt' ? 'visible' : 'hidden'}">
+                <tr data-bind="visible: voiceMode() == 'vad'">
+                  <td colspan="2">
+                    <div class="mic-volume-container">
+                      <div class="mic-volume" data-bind="style: {
+                          width: testVadLevel()*100 + '%',
+                          background: testVadActive() ? 'green' : 'red'
+                        }"></div>
+                    </div>
+                    <input type="range" min="0" max="1" step="0.01"
+                           data-bind="value: vadLevel">
+                  </td>
+                </tr>
+                <tr data-bind="visible: voiceMode() == 'ptt'">
                   <td>PTT Key</td>
                   <td>
                     <input type="button" data-bind="value: pttKeyDisplay, click: recordPttKey">

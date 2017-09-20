@@ -208,8 +208,10 @@ form {
   border-bottom: 1px solid darkgray;
 }
 .dialog-footer {
+  position: absolute;
+  bottom: 0px;
+  width: calc(100% - 20px);
   margin: 10px;
-  margin-bottom: 0px;
 }
 .dialog-close {
   float: left;
@@ -255,6 +257,14 @@ form {
 }
 .settings-dialog table input {
   width: 100%;
+  margin: 0px;
+}
+.settings-dialog .mic-volume-container {
+  height: 10px;
+  border: 3px solid black;
+}
+.settings-dialog .mic-volume {
+  height: 100%;
 }
 .connect-dialog {
   width: 300px;

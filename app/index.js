@@ -9,7 +9,7 @@ import ko from 'knockout'
 import _dompurify from 'dompurify'
 import keyboardjs from 'keyboardjs'
 
-import { ContinuousVoiceHandler, PushToTalkVoiceHandler, initVoice } from './voice'
+import { ContinuousVoiceHandler, PushToTalkVoiceHandler, VADVoiceHandler, initVoice } from './voice'
 
 const dompurify = _dompurify(window)
 
@@ -58,11 +58,34 @@ class SettingsDialog {
     this.voiceMode = ko.observable(settings.voiceMode)
     this.pttKey = ko.observable(settings.pttKey)
     this.pttKeyDisplay = ko.observable(settings.pttKey)
+    this.vadLevel = ko.observable(settings.vadLevel)
+    this.testVadLevel = ko.observable(0)
+    this.testVadActive = ko.observable(false)
+
+    this._setupTestVad()
+    this.vadLevel.subscribe(() => this._setupTestVad())
+  }
+
+  _setupTestVad () {
+    if (this._testVad) {
+      this._testVad.end()
+    }
+    this._testVad = new VADVoiceHandler(null, this.vadLevel())
+    this._testVad.on('started_talking', () => this.testVadActive(true))
+                 .on('stopped_talking', () => this.testVadActive(false))
+                 .on('level', level => this.testVadLevel(level))
+    testVoiceHandler = this._testVad
   }
 
   applyTo (settings) {
     settings.voiceMode = this.voiceMode()
     settings.pttKey = this.pttKey()
+    settings.vadLevel = this.vadLevel()
+  }
+
+  end () {
+    this._testVad.end()
+    testVoiceHandler = null
   }
 
   recordPttKey () {
@@ -89,14 +112,16 @@ class SettingsDialog {
 class Settings {
   constructor () {
     const load = key => window.localStorage.getItem('mumble.' + key)
-    this.voiceMode = load('voiceMode') || 'cont'
+    this.voiceMode = load('voiceMode') || 'vad'
     this.pttKey = load('pttKey') || 'ctrl + shift'
+    this.vadLevel = load('vadLevel') || 0.3
   }
 
   save () {
     const save = (key, val) => window.localStorage.setItem('mumble.' + key, val)
     save('voiceMode', this.voiceMode)
     save('pttKey', this.pttKey)
+    save('vadLevel', this.vadLevel)
   }
 }
 
@@ -130,10 +155,13 @@ class GlobalBindings {
       this._updateVoiceHandler()
 
       this.settings.save()
-      this.settingsDialog(null)
+      this.closeSettings()
     }
 
     this.closeSettings = () => {
+      if (this.settingsDialog()) {
+        this.settingsDialog().end()
+      }
       this.settingsDialog(null)
     }
 
@@ -360,7 +388,7 @@ class GlobalBindings {
       } else if (mode === 'ptt') {
         voiceHandler = new PushToTalkVoiceHandler(this.client, this.settings.pttKey)
       } else if (mode === 'vad') {
-
+        voiceHandler = new VADVoiceHandler(this.client, this.settings.vadLevel)
       } else {
         log('Unknown voice mode:', mode)
         return
@@ -586,15 +614,19 @@ function userToState () {
 }
 
 var voiceHandler
+var testVoiceHandler
 
 initVoice(data => {
+  if (testVoiceHandler) {
+    testVoiceHandler.write(data)
+  }
   if (!ui.client) {
     if (voiceHandler) {
       voiceHandler.end()
     }
     voiceHandler = null
   } else if (voiceHandler) {
-    voiceHandler.write(new Float32Array(data.buffer, data.byteOffset, data.byteLength / 4))
+    voiceHandler.write(data)
   }
 }, err => {
   log('Cannot initialize user media. Microphone will not work:', err)

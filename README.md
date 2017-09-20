@@ -11,7 +11,7 @@ Instead Websockets are used for all communications.
 libopus, libcelt (0.7.1) and libsamplerate, compiled to JS via emscripten, are used for audio decoding.
 Therefore, at the moment only the Opus and CELT Alpha codecs are supported.
 
-Quite a few features, most noticeably voice activity detection and all
+Quite a few features, most noticeably all
 administrative functionallity, are still missing.
 
 ### Installing
