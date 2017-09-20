@@ -141,6 +141,12 @@ class GlobalBindings {
     this.selfMute = ko.observable()
     this.selfDeaf = ko.observable()
 
+    this.selfMute.subscribe(mute => {
+      if (voiceHandler) {
+        voiceHandler.setMute(mute)
+      }
+    })
+
     this.select = element => {
       this.selected(element)
     }
@@ -411,6 +417,9 @@ class GlobalBindings {
           this.thisUser().talking('off')
         }
       })
+      if (this.selfMute()) {
+        voiceHandler.setMute(true)
+      }
     }
 
     this.messageBoxHint = ko.pureComputed(() => {

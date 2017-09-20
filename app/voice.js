@@ -13,9 +13,20 @@ class VoiceHandler extends Writable {
     super({ objectMode: true })
     this._client = client
     this._outbound = null
+    this._mute = false
+  }
+
+  setMute (mute) {
+    this._mute = mute
+    if (mute) {
+      this._stopOutbound()
+    }
   }
 
   _getOrCreateOutbound () {
+    if (this._mute) {
+      throw new Error('tried to send audio while self-muted')
+    }
     if (!this._outbound) {
       if (!this._client) {
         this._outbound = DropStream.obj()
@@ -65,7 +76,11 @@ export class ContinuousVoiceHandler extends VoiceHandler {
   }
 
   _write (data, _, callback) {
-    this._getOrCreateOutbound().write(data, callback)
+    if (this._mute) {
+      callback()
+    } else {
+      this._getOrCreateOutbound().write(data, callback)
+    }
   }
 }
 
@@ -83,7 +98,7 @@ export class PushToTalkVoiceHandler extends VoiceHandler {
   }
 
   _write (data, _, callback) {
-    if (this._pushed) {
+    if (this._pushed && !this._mute) {
       this._getOrCreateOutbound().write(data, callback)
     } else {
       callback()
@@ -128,7 +143,7 @@ export class VADVoiceHandler extends VoiceHandler {
   }
 
   _write (data, _, callback) {
-    if (this._active) {
+    if (this._active && !this._mute) {
       if (this._backlog.length > 0) {
         for (let oldData of this._backlog) {
           this._getOrCreateOutbound().write(oldData)
