@@ -138,6 +138,8 @@ class GlobalBindings {
     this.root = ko.observable()
     this.messageBox = ko.observable('')
     this.selected = ko.observable()
+    this.selfMute = ko.observable()
+    this.selfDeaf = ko.observable()
 
     this.select = element => {
       this.selected(element)
@@ -230,6 +232,12 @@ class GlobalBindings {
 
         // Startup audio input processing
         this._updateVoiceHandler()
+        // Tell server our mute/deaf state (if necessary)
+        if (this.selfDeaf()) {
+          this.client.setSelfDeaf(true)
+        } else if (this.selfMute()) {
+          this.client.setSelfMute(true)
+        }
       }, err => {
 	  if (err.type == 4) {
 	      log('Connection error: invalid server password')
@@ -463,6 +471,9 @@ class GlobalBindings {
     }
 
     this.requestMute = user => {
+      if (user === this.thisUser) {
+        this.selfMute(true)
+      }
       if (this.connected()) {
         if (user === this.thisUser) {
           this.client.setSelfMute(true)
@@ -473,6 +484,10 @@ class GlobalBindings {
     }
 
     this.requestDeaf = user => {
+      if (user === this.thisUser) {
+        this.selfMute(true)
+        this.selfDeaf(true)
+      }
       if (this.connected()) {
         if (user === this.thisUser) {
           this.client.setSelfDeaf(true)
@@ -483,6 +498,10 @@ class GlobalBindings {
     }
 
     this.requestUnmute = user => {
+      if (user === this.thisUser) {
+        this.selfMute(false)
+        this.selfDeaf(false)
+      }
       if (this.connected()) {
         if (user === this.thisUser) {
           this.client.setSelfMute(false)
@@ -493,6 +512,9 @@ class GlobalBindings {
     }
 
     this.requestUndeaf = user => {
+      if (user === this.thisUser) {
+        this.selfDeaf(false)
+      }
       if (this.connected()) {
         if (user === this.thisUser) {
           this.client.setSelfDeaf(false)

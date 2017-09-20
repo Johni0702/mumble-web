@@ -111,16 +111,16 @@
         <img class="tb-information" data-bind="click: connectionInfo.show"
                       rel="information" src="/svg/information_icon.svg">
         <div class="divider"></div>
-        <img class="tb-mute" data-bind="visible: !thisUser() || !thisUser().selfMute(),
+        <img class="tb-mute" data-bind="visible: !selfMute(),
                               click: function () { requestMute(thisUser) }"
                       rel="mute" src="/svg/audio-input-microphone.svg">
-        <img class="tb-unmute tb-active" data-bind="visible: thisUser() && thisUser().selfMute(),
+        <img class="tb-unmute tb-active" data-bind="visible: selfMute,
                               click: function () { requestUnmute(thisUser) }"
                       rel="unmute" src="/svg/audio-input-microphone-muted.svg">
-        <img class="tb-deaf" data-bind="visible: !thisUser() || !thisUser().selfDeaf(),
+        <img class="tb-deaf" data-bind="visible: !selfDeaf(),
                               click: function () { requestDeaf(thisUser) }"
                       rel="deaf" src="/svg/audio-output.svg">
-        <img class="tb-undeaf tb-active" data-bind="visible: thisUser() && thisUser().selfDeaf(),
+        <img class="tb-undeaf tb-active" data-bind="visible: selfDeaf,
                               click: function () { requestUndeaf(thisUser) }"
                       rel="undeaf" src="/svg/audio-output-deafened.svg">
         <img class="tb-record" data-bind="click: function(){}"
