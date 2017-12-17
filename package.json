@@ -1,6 +1,6 @@
 {
   "name": "mumble-web",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "An HTML5 Mumble client.",
   "scripts": {
     "build": "webpack",
@@ -46,7 +46,7 @@
     "libsamplerate.js": "^1.0.0",
     "mumble-client-codecs-browser": "^1.1.1",
     "mumble-client-websocket": "^1.0.0",
-    "mumble-client": "^1.1.0",
+    "mumble-client": "^1.1.1",
     "web-audio-buffer-queue": "^1.0.0"
   }
 }
