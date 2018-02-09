@@ -72,7 +72,7 @@ server {
         location / {
                 root /path/to/dist;
         }
-        location /mumble {
+        location /demo {
                 proxy_pass http://websockify:64737;
                 proxy_http_version 1.1;
                 proxy_set_header Upgrade $http_upgrade;
