@@ -303,3 +303,7 @@ form {
   padding: 2px;
   width: calc(100% - 8px);
 }
+.connect-dialog.error-dialog {
+  width: 400px;
+  left: calc(50% - 200px);
+}

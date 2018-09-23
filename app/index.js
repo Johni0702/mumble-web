@@ -38,6 +38,22 @@ function ConnectDialog () {
   }
 }
 
+function ConnectErrorDialog (connectDialog) {
+  var self = this
+  self.type = ko.observable(0)
+  self.reason = ko.observable('')
+  self.username = connectDialog.username
+  self.password = connectDialog.password
+  self.joinOnly = connectDialog.joinOnly
+  self.visible = ko.observable(false)
+  self.show = self.visible.bind(self.visible, true)
+  self.hide = self.visible.bind(self.visible, false)
+  self.connect = () => {
+    self.hide()
+    connectDialog.connect()
+  }
+}
+
 function ConnectionInfo () {
   var self = this
   self.visible = ko.observable(false)
@@ -131,6 +147,7 @@ class GlobalBindings {
     this.settings = new Settings()
     this.client = null
     this.connectDialog = new ConnectDialog()
+    this.connectErrorDialog = new ConnectErrorDialog(this.connectDialog)
     this.connectionInfo = new ConnectionInfo()
     this.commentDialog = new CommentDialog()
     this.settingsDialog = ko.observable()
@@ -246,11 +263,13 @@ class GlobalBindings {
           this.client.setSelfMute(true)
         }
       }, err => {
-	  if (err.type == 4) {
-	      log('Connection error: invalid server password')
-	  } else {
-              log('Connection error:', err)
-	  }
+        if (err.$type && err.$type.name === 'Reject') {
+          this.connectErrorDialog.type(err.type)
+          this.connectErrorDialog.reason(err.reason)
+          this.connectErrorDialog.show()
+        } else {
+          log('Connection error:', err)
+        }
       })
     }
 

@@ -65,6 +65,64 @@
           </form>
         </div>
       <!-- /ko -->
+      <!-- ko with: connectErrorDialog -->
+       <div class="connect-dialog error-dialog dialog" data-bind="visible: visible()">
+          <div class="dialog-header">
+            Failed to connect
+          </div>
+          <form data-bind="submit: connect">
+            <table>
+                <tr>
+                  <td colspan=2>
+                    <!-- ko if: type() == 0 || type() == 8 -->
+                    The connection has been refused.
+                    <!-- /ko -->
+                    <!-- ko if: type() == 1 -->
+                    The server uses an incompatible version.
+                    <!-- /ko -->
+                    <!-- ko if: type() == 2 -->
+                    Your user name was rejected. Maybe try a different one?
+                    <!-- /ko -->
+                    <!-- ko if: type() == 3 -->
+                    The given password is incorrect.
+                    The user name you have chosen requires a special one.
+                    <!-- /ko -->
+                    <!-- ko if: type() == 4 -->
+                    The given password is incorrect.
+                    <!-- /ko -->
+                    <!-- ko if: type() == 5 -->
+                    The user name you have chosen is already in use.
+                    <!-- /ko -->
+                    <!-- ko if: type() == 6 -->
+                    The server is full.
+                    <!-- /ko -->
+                    <!-- ko if: type() == 7 -->
+                    The server requires you to provide a client certificate
+                    which is not supported by this web application.
+                    <!-- /ko -->
+                    <br>
+                    The server reports:
+                    <br>
+                    "<span class="connect-error-reason" data-bind="text: reason"></span>"
+                  </td>
+                </tr>
+                <tr data-bind="visible: type() == 2 || type() == 3 || type() == 5">
+                  <td>Username</td>
+                  <td><input id="username" type="text" data-bind="value: username"></td>
+                </tr>
+                <tr data-bind="visible: type() == 3 || type() == 4">
+                  <td>Password</td>
+                  <td><input id="password" type="password" data-bind="value: password"></td>
+                </tr>
+            </table>
+            <div class="dialog-footer">
+              <input class="dialog-close" type="button" value="Cancel"
+                     data-bind="click: hide, visible: !joinOnly()">
+              <input class="dialog-submit" type="submit" value="Retry">
+            </div>
+          </form>
+        </div>
+      <!-- /ko -->
       <!-- ko with: settingsDialog -->
       <div class="settings-dialog dialog" data-bind="visible: $data">
           <div class="dialog-header">
