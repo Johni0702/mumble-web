@@ -132,6 +132,7 @@ class Settings {
     this.voiceMode = load('voiceMode') || 'vad'
     this.pttKey = load('pttKey') || 'ctrl + shift'
     this.vadLevel = load('vadLevel') || 0.3
+    this.toolbarVertical = load('toolbarVertical') || false
   }
 
   save () {
@@ -139,6 +140,7 @@ class Settings {
     save('voiceMode', this.voiceMode)
     save('pttKey', this.pttKey)
     save('vadLevel', this.vadLevel)
+    save('toolbarVertical', this.toolbarVertical)
   }
 }
 
@@ -151,10 +153,12 @@ class GlobalBindings {
     this.connectionInfo = new ConnectionInfo()
     this.commentDialog = new CommentDialog()
     this.settingsDialog = ko.observable()
+    this.minimalView = ko.observable(false)
     this.log = ko.observableArray()
     this.thisUser = ko.observable()
     this.root = ko.observable()
     this.messageBox = ko.observable('')
+    this.toolbarHorizontal = ko.observable(!this.settings.toolbarVertical)
     this.selected = ko.observable()
     this.selfMute = ko.observable()
     this.selfDeaf = ko.observable()
@@ -164,6 +168,12 @@ class GlobalBindings {
         voiceHandler.setMute(mute)
       }
     })
+
+    this.toggleToolbarOrientation = () => {
+      this.toolbarHorizontal(!this.toolbarHorizontal())
+      this.settings.toolbarVertical = !this.toolbarHorizontal()
+      this.settings.save()
+    }
 
     this.select = element => {
       this.selected(element)
@@ -591,6 +601,15 @@ class GlobalBindings {
       var homepage = require('../package.json').homepage
       window.open(homepage, '_blank').focus()
     }
+
+    this.updateSize = () => {
+      this.minimalView(window.innerWidth < 320)
+      if (this.minimalView()) {
+        this.toolbarHorizontal(window.innerWidth < window.innerHeight)
+      } else {
+        this.toolbarHorizontal(!this.settings.toolbarVertical)
+      }
+    }
   }
 }
 var ui = new GlobalBindings()
@@ -625,6 +644,9 @@ window.onload = function () {
   ui.connectDialog.joinOnly(useJoinDialog)
   ko.applyBindings(ui)
 }
+
+window.onresize = () => ui.updateSize()
+ui.updateSize()
 
 function log () {
   console.log.apply(console, arguments)

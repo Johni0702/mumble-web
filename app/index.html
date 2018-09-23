@@ -19,7 +19,8 @@
     <div class="loading-container" data-bind="css: { loaded: true }">
       <div class="loading-circle" data-bind="css: { loaded: true }"></div>
     </div>
-    <div id="container" style="display: none" data-bind="visible: true">
+    <div id="container" style="display: none" data-bind="visible: true,
+                                                         css: { minimal: minimalView }">
       <!-- ko with: connectDialog --> 
       <div class="connect-dialog dialog" data-bind="visible: visible() && !joinOnly()">
           <div class="dialog-header">
@@ -171,9 +172,12 @@
       <script type="text/html" id="channel-tag">
         <span class="channel-tag" data-bind="text: name"></span>
       </script>
-      <div class="toolbar">
-        <img class="handle-horizontal" src="/svg/handle_horizontal.svg">
-        <img class="handle-vertical" src="/svg/handle_horizontal.svg">
+      <div class="toolbar" data-bind="css: { 'toolbar-horizontal': toolbarHorizontal(),
+                                             'toolbar-vertical': !toolbarHorizontal() }">
+        <img class="handle-horizontal" src="/svg/handle_horizontal.svg"
+             data-bind="click: toggleToolbarOrientation">
+        <img class="handle-vertical" src="/svg/handle_vertical.svg"
+             data-bind="click: toggleToolbarOrientation">
         <img class="tb-connect" data-bind="visible: !connectDialog.joinOnly(),
                                            click: connectDialog.show"
                       rel="connect" src="/svg/applications-internet.svg">
@@ -326,8 +330,11 @@
         <!-- /ko -->
         <!-- /ko -->
       </script>
-      <div class="channel-root-container" data-bind="if: root">
+      <div class="channel-root-container" data-bind="if: root, visible: !minimalView()">
         <div class="channel-root" data-bind="template: {name: 'channel', data: root}"></div>
+      </div>
+      <div class="channel-root-container" data-bind="if: thisUser, visible: minimalView()">
+        <div class="channel-root" data-bind="template: {name: 'channel', data: thisUser().channel}"></div>
       </div>
     </div>
   </body>

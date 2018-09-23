@@ -5,13 +5,7 @@ html, body {
   height: 100%
 }
 #container {
-  height: 98%;
-  margin: 0 1% 0 1%;
-}
-#container::before {
-  display: block;
-  content: "";
-  height: 1%;
+  height: 100%;
 }
 .channel-root-container {
   text-size: 16px;
@@ -19,17 +13,35 @@ html, body {
   background-color: white;
   border: 1px solid lightgray;
   float: left;
-  width: calc(60% - 6px);
-  height: calc(100% - 38px);
   border-radius: 3px;
   overflow-x: hidden;
   overflow-y: auto;
 }
+.toolbar-horizontal ~ .channel-root-container {
+  margin-top: 2px;
+  width: calc(59% - 6px);
+  height: calc(98% - 38px);
+}
+.toolbar-vertical ~ .channel-root-container {
+  margin-top: 1%;
+  width: calc(59% - 6px);
+  height: calc(98% - 6px);
+}
 .chat {
   margin-right: 2px;
   float: left;
-  width: 40%;
-  height: calc(100% - 38px);
+}
+.toolbar-horizontal ~ .chat {
+  margin-top: 2px;
+  margin-left: 1%;
+  width: 39%;
+  height: calc(98% - 38px);
+}
+.toolbar-vertical ~ .chat {
+  margin-top: 1%;
+  margin-left: 2px;
+  width: calc(39% - 36px);
+  height: calc(98% - 4px);
 }
 .log {
   background-color: white;
@@ -139,7 +151,8 @@ html, body {
   z-index: 100;
 }
 .toolbar {
-  height: 36px;
+  display: flex;
+  align-items: center;
 }
 .toolbar img {
   height: 28px;
@@ -156,17 +169,52 @@ html, body {
   border: 1px solid #bbb;
   background-color: white;
 }
+.toolbar-horizontal {
+  flex-direction: row;
+  height: 36px;
+  margin-top: 4px;
+  margin-left: 1%;
+  padding-left: 5px;
+}
+.toolbar-vertical {
+  flex-direction: column;
+  width: 36px;
+  margin-top: 1%;
+  margin-left: 4px;
+  padding-top: 5px;
+  float: left;
+}
+.toolbar-horizontal > * {
+  margin-right: 5px;
+}
+.toolbar-vertical > * {
+  margin-bottom: 5px;
+}
 .divider {
   display: inline-block;
+}
+.toolbar-horizontal .divider {
   height: 32px;
   border-left: 1px lightgray solid;
 }
-.handle-horizontal {
+.toolbar-vertical .divider {
+  width: 32px;
+  border-top: 1px lightgray solid;
+}
+.toolbar-horizontal .handle-horizontal {
   width: auto !important;
   border: none !important;
   background-color: #eee !important;
 }
-.handle-vertical {
+.toolbar-horizontal .handle-vertical {
+  display: none;
+}
+.toolbar-vertical .handle-vertical {
+  height: auto !important;
+  border: none !important;
+  background-color: #eee !important;
+}
+.toolbar-vertical .handle-horizontal {
   display: none;
 }
 .channel-icon .channel-icon-active {
@@ -306,4 +354,68 @@ form {
 .connect-dialog.error-dialog {
   width: 400px;
   left: calc(50% - 200px);
+}
+
+
+/****************/
+/* Minimal view */
+/****************/
+
+.minimal .toolbar-horizontal ~ .channel-root-container {
+  width: calc(98% - 6px);
+}
+.minimal .toolbar-vertical ~ .channel-root-container {
+  width: calc(98% - 42px);
+}
+.minimal .handle-horizontal {
+  display: none;
+}
+.minimal .handle-vertical {
+  display: none;
+}
+.minimal .divider {
+  display: none;
+}
+.minimal .tb-connect {
+  display: none;
+}
+.minimal .tb-information {
+  display: none;
+}
+.minimal .tb-record {
+  display: none;
+}
+.minimal .tb-comment {
+  display: none;
+}
+.minimal .tb-settings {
+  display: none;
+}
+.minimal .tb-sourcecode {
+  display: none;
+}
+.minimal .chat {
+  display: none;
+}
+.minimal .channel-wrapper {
+  display: none;
+}
+.minimal .channel {
+  display: none;
+}
+.minimal .user-tree {
+  display: none;
+}
+.minimal .user-wrapper {
+  margin-left: 0px;
+}
+.minimal .user {
+  margin-left: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border: none;
+  height: 19px;
+}
+.minimal .user-status {
+  height: 19px;
 }
