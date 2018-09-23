@@ -28,6 +28,7 @@ function ConnectDialog () {
   self.token = ko.observable('')
   self.username = ko.observable('')
   self.password = ko.observable('')
+  self.joinOnly = ko.observable(false)
   self.visible = ko.observable(true)
   self.show = self.visible.bind(self.visible, true)
   self.hide = self.visible.bind(self.visible, false)
@@ -580,21 +581,29 @@ window.mumbleUi = ui
 
 window.onload = function () {
   var queryParams = url.parse(document.location.href, true).query
+  var useJoinDialog = queryParams.joinDialog
   if (queryParams.address) {
     ui.connectDialog.address(queryParams.address)
+  } else {
+    useJoinDialog = false
   }
   if (queryParams.port) {
     ui.connectDialog.port(queryParams.port)
+  } else {
+    useJoinDialog = false
   }
   if (queryParams.token) {
     ui.connectDialog.token(queryParams.token)
   }
   if (queryParams.username) {
     ui.connectDialog.username(queryParams.username)
+  } else {
+    useJoinDialog = false
   }
   if (queryParams.password) {
     ui.connectDialog.password(queryParams.password)
   }
+  ui.connectDialog.joinOnly(useJoinDialog)
   ko.applyBindings(ui)
 }
 
