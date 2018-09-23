@@ -1,0 +1,22 @@
+$black: #bbb !default
+$darkgray: #777 !default
+$gray: #555 !default
+$lightgray: #555 !default
+$bg-color: #2c2c2c !default
+$white: #1c1c1c !default
+
+$lightblue: #557 !default
+
+$toolbar-hover-bg-color: $lightblue !default
+$toolbar-hover-border-color: $lightblue !default
+$toolbar-active-bg-color: $gray !default
+$toolbar-active-border-color: $gray !default
+$dialog-color: $black !default
+$channel-selected-bg-color: $lightblue !default
+
+@import '../MetroMumbleLight/main';
+
+.dialog-header {
+  color: #000;
+  font-weight: bold;
+}

@@ -1,5 +1,50 @@
+$black: #000 !default
+$darkgray: #888 !default
+$gray: #a9a9a9 !default
+$lightgray: #d3d3d3 !default
+$bg-color: #eee !default
+$white: #fff !default
+
+$font-color: $black !default
+$panel-bg-color: $white !default
+$panel-border-color: $lightgray !default
+$channel-tree-color: $lightgray !default
+$channel-hover-bg-color: $lightgray !default
+$channel-selected-bg-color: lightblue !default
+$channel-selected-border-color: $darkgray !default
+$tooltip-border-color: $darkgray !default
+$chat-channel-color: orange !default
+$chat-user-color: green !default
+$chat-input-color: $font-color !default
+$mic-volume-border-color: $black !default
+
+$toolbar-hover-bg-color: $lightgray !default
+$toolbar-hover-border-color: $gray !default
+$toolbar-active-bg-color: $white !default
+$toolbar-active-border-color: $toolbar-hover-bg-color !default
+$toolbar-divider-color: $lightgray !default
+$dialog-header-color: $white !default
+$dialog-header-bg-color: $darkgray !default
+$dialog-header-border-bottom-color: $gray !default
+$dialog-bg-color: $bg-color !default
+$dialog-border-color: $darkgray !default
+$dialog-color: $font-color !default
+$dialog-button-border-color: $darkgray !default
+$dialog-button-bg-color: $white !default
+$dialog-button-color: $dialog-color !default
+$dialog-input-border-color: $darkgray !default
+$dialog-input-bg-color: $white !default
+$dialog-input-color: $dialog-color !default
+
+$tooltip-bg-color: $panel-bg-color !default
+$channels-bg-color: $panel-bg-color !default
+$channels-border-color: $panel-border-color !default
+$chat-bg-color: $panel-bg-color !default
+$chat-border-color: $panel-border-color !default
+
 html, body {
-  background-color: #eee;
+  background-color: $bg-color;
+  color: $font-color;
   margin: 0;
   overflow: hidden;
   height: 100%
@@ -10,8 +55,8 @@ html, body {
 .channel-root-container {
   text-size: 16px;
   margin-left: 2px;
-  background-color: white;
-  border: 1px solid lightgray;
+  background-color: $channels-bg-color;
+  border: 1px solid $channels-border-color;
   float: left;
   border-radius: 3px;
   overflow-x: hidden;
@@ -44,10 +89,10 @@ html, body {
   height: calc(98% - 4px);
 }
 .log {
-  background-color: white;
+  background-color: $chat-bg-color;
   height: calc(100% - 42px);
   padding: 5px;
-  border: 1px lightgray solid;
+  border: 1px $chat-border-color solid;
   border-radius: 3px;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -59,8 +104,7 @@ html, body {
   float: left;
   padding-top: 3px;
   padding-bottom: 3px;
-  background-color: white;
-  margin-right:
+  background-color: $channels-bg-color;
 }
 .channel-sub {
   margin-left: 9px;
@@ -68,7 +112,7 @@ html, body {
   padding-left: 9px;
 }
 .channel-wrapper:nth-last-child(n + 2) > .branch:not(:empty) + .channel-sub {
-  border-left: 1px lightgray solid;
+  border-left: 1px $channel-tree-color solid;
 }
 .channel-tree,
 .user-wrapper {
@@ -84,8 +128,8 @@ html, body {
   display: block;
   position: relative;
   width: 9px;
-  border-left: 1px lightgray solid;
-  border-bottom: 1px lightgray solid;
+  border-left: 1px $channel-tree-color solid;
+  border-bottom: 1px $channel-tree-color solid;
   height: 14px;
 }
 .channel-wrapper:nth-last-child(n + 2) > .channel-tree:after,
@@ -94,7 +138,7 @@ html, body {
   display: block;
   position: relative;
   width: 0px;
-  border-left: 1px lightgray solid;
+  border-left: 1px $channel-tree-color solid;
   height: 14px;
 }
 .user {
@@ -109,12 +153,12 @@ html, body {
   border: 1px solid transparent;
 }
 .selected {
-  background-color: lightblue !important;
-  border: 1px solid gray;
+  background-color: $channel-selected-bg-color !important;
+  border: 1px solid $channel-selected-border-color;
   border-radius: 3px;
 }
 .user:hover,.channel:hover {
-  background-color: lightgray;
+  background-color: $channel-hover-bg-color;
 }
 .thisClient {
   font-weight: bold
@@ -142,8 +186,8 @@ html, body {
 .tooltip {
   visibility: hidden;
   height: 0px;
-  background: white;
-  border: 1px solid gray;
+  background: $tooltip-bg-color;
+  border: 1px solid $tooltip-border-color;
   margin-top: 16px;
   margin-left: 30px;
   padding: 10px;
@@ -162,12 +206,12 @@ html, body {
   border-radius: 3px;
 }
 .toolbar img:hover {
-  border: 1px solid #bbb;
-  background-color: #ddd;
+  border: 1px solid $toolbar-hover-bg-color;
+  background-color: $toolbar-hover-border-color;
 }
 .toolbar .tb-active {
-  border: 1px solid #bbb;
-  background-color: white;
+  border: 1px solid $toolbar-active-bg-color;
+  background-color: $toolbar-active-border-color;
 }
 .toolbar-horizontal {
   flex-direction: row;
@@ -195,16 +239,16 @@ html, body {
 }
 .toolbar-horizontal .divider {
   height: 32px;
-  border-left: 1px lightgray solid;
+  border-left: 1px $toolbar-divider-color solid;
 }
 .toolbar-vertical .divider {
   width: 32px;
-  border-top: 1px lightgray solid;
+  border-top: 1px $toolbar-divider-color solid;
 }
 .toolbar-horizontal .handle-horizontal {
   width: auto !important;
   border: none !important;
-  background-color: #eee !important;
+  background-color: $bg-color !important;
 }
 .toolbar-horizontal .handle-vertical {
   display: none;
@@ -212,7 +256,7 @@ html, body {
 .toolbar-vertical .handle-vertical {
   height: auto !important;
   border: none !important;
-  background-color: #eee !important;
+  background-color: $bg-color !important;
 }
 .toolbar-vertical .handle-horizontal {
   display: none;
@@ -222,16 +266,17 @@ html, body {
 }
 .channel-tag {
   font-weight: bold;
-  color: orange;
+  color: $chat-channel-color;
 }
 .user-tag {
   font-weight: bold;
-  color: green;
+  color: $chat-user-color;
 }
 #message-box {
   width: 100%;
   border: none;
   background: none;
+  color: $chat-input-color;
   margin: 5px 0 5px 0;
   padding: 0;
   height: 20px;
@@ -251,9 +296,9 @@ form {
   width: calc(100% - 10px);
   padding: 5px;
   text-align: center;
-  color: white;
-  background-color: gray;
-  border-bottom: 1px solid darkgray;
+  color: $dialog-header-color;
+  background-color: $dialog-header-bg-color;
+  border-bottom: 1px solid $dialog-header-border-bottom-color;
 }
 .dialog-footer {
   position: absolute;
@@ -270,10 +315,10 @@ form {
 .dialog-close, .dialog-submit {
   width: 45%;
   font-size: 15px;
-  border: 1px gray solid;
+  border: 1px $dialog-button-border-color solid;
   border-radius: 3px;
-  background-color: white;
-  color: black;
+  background-color: $dialog-button-bg-color;
+  color: $dialog-button-color;
   padding: 1px;
 }
 .connect-dialog table {
@@ -282,8 +327,9 @@ form {
 }
 .dialog {
   position: absolute;
-  background-color: #eee;
-  border: 1px gray solid;
+  background-color: $dialog-bg-color;
+  color: $dialog-color;
+  border: 1px $dialog-border-color solid;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   z-index: 20;
 }
@@ -309,7 +355,7 @@ form {
 }
 .settings-dialog .mic-volume-container {
   height: 10px;
-  border: 3px solid black;
+  border: 3px solid $mic-volume-border-color;
 }
 .settings-dialog .mic-volume {
   height: 100%;
@@ -335,19 +381,19 @@ form {
 }
 .connect-dialog input[type=text] {
   font-size: 15px;
-  border: 1px gray solid;
+  border: 1px $dialog-input-border-color solid;
   border-radius: 3px;
-  background-color: white;
-  color: black;
+  background-color: $dialog-input-bg-color;
+  color: $dialog-input-color;
   padding: 2px;
   width: calc(100% - 8px);
 }
 .connect-dialog input[type=password] {
   font-size: 15px;
-  border: 1px gray solid;
+  border: 1px $dialog-input-border-color solid;
   border-radius: 3px;
-  background-color: white;
-  color: black;
+  background-color: $dialog-input-bg-color;
+  color: $dialog-input-color;
   padding: 2px;
   width: calc(100% - 8px);
 }

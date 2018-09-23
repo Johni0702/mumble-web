@@ -86,8 +86,18 @@ map $http_upgrade $connection_upgrade {
 }
 ```
 
+### Themes
+The default theme of mumble-web tries to mimic the excellent [MetroMumble]Light theme.
+mumble-web also includes a dark version, named MetroMumbleDark, which is heavily inspired by [MetroMumble]'s dark version.
+
+To select a theme other than the default one, append a `theme=dark` query parameter (where `dark` is the name of the theme) when accessing the mumble-web page.
+E.g. [this](https://voice.johni0702.de/?address=voice.johni0702.de&port=443/demo&theme=dark)is the live demo linked above but using the dark theme (`dark` is an alias for `MetroMumbleDark`).
+
+Custom themes can be created by deriving them from the MetroMumbleLight/Dark themes just like the MetroMumbleDark theme is derived from the MetroMumbleLight theme.
+
 ### License
 ISC
 
 [Mumble]: https://wiki.mumble.info/wiki/Main_Page
 [websockify GitHub page]: https://github.com/novnc/websockify
+[MetroMumble]: https://github.com/xPoke/MetroMumble

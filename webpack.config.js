@@ -8,6 +8,7 @@ module.exports = {
       './app/index.js',
       './app/index.html'
     ],
+    theme: './app/theme.js',
     matrix: './app/matrix.js'
   },
   output: {
@@ -49,6 +50,15 @@ module.exports = {
           'file-loader',
           'extract-loader',
           'css-loader'
+        ]
+      },
+      {
+        test: /\.scss$/,
+        loaders: [
+          'file-loader?name=[hash].css',
+          'extract-loader',
+          'css-loader',
+          'sass-loader'
         ]
       },
       {

@@ -1,9 +1,13 @@
+$bg-color: #eee !default
+$spinner-color: #999 !default
+$spinner-bg-color: #ddd !default
+
 .loading-container {
   position: absolute;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: #eee;
+  background-color: $bg-color;
   z-index: 1000;
 }
 
@@ -15,8 +19,8 @@
   top: calc(50% - 40px);
   left: calc(50% - 40px);
   border-radius: 100%;
-  border: 10px solid #ddd;
-  border-top-color: #999;
+  border: 10px solid $spinner-bg-color;
+  border-top-color: $spinner-color;
   animation: spin 1s infinite linear;
 }
 
