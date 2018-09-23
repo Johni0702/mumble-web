@@ -3,12 +3,15 @@ var theme = 'MetroMumbleLight'
 var path = require('path')
 
 module.exports = {
-  entry: [
-    './app/index.js',
-    './app/index.html'
-  ],
+  entry: {
+    index: [
+      './app/index.js',
+      './app/index.html'
+    ],
+    matrix: './app/matrix.js'
+  },
   output: {
-    filename: 'index.js',
+    filename: '[name].js',
     path: './dist'
   },
   module: {

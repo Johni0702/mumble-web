@@ -225,6 +225,9 @@ class GlobalBindings {
           this.resetClient()
         })
 
+        // Make sure we stay open if we're running as Matrix widget
+        window.matrixWidget.setAlwaysOnScreen(true)
+
         // Register all channels, recursively
         const registerChannel = channel => {
           this._newChannel(channel)
@@ -620,6 +623,9 @@ window.mumbleUi = ui
 window.onload = function () {
   var queryParams = url.parse(document.location.href, true).query
   var useJoinDialog = queryParams.joinDialog
+  if (queryParams.matrix) {
+    useJoinDialog = true
+  }
   if (queryParams.address) {
     ui.connectDialog.address(queryParams.address)
   } else {
