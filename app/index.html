@@ -304,14 +304,15 @@
             <div data-bind="if: comment">
               <div class="user-comment tooltip" data-bind="html: comment"></div>
             </div>
-            <img class="user-talk-off" data-bind="visible: talking() == 'off'"
+            <img class="user-talk user-talk-off" data-bind="visible: talking() == 'off'"
                 alt="talk off" src="/svg/talking_off.svg">
-            <img class="user-talk-on" data-bind="visible: talking() == 'on'"
+            <img class="user-talk user-talk-on" data-bind="visible: talking() == 'on'"
                 alt="talk on" src="/svg/talking_on.svg">
-            <img class="user-talk-whisper" data-bind="visible: talking() == 'whisper'"
+            <img class="user-talk user-talk-whisper" data-bind="visible: talking() == 'whisper'"
                 alt="whisper" src="/svg/talking_whisper.svg">
-            <img class="user-talk-shout" data-bind="visible: talking() == 'shout'"
+            <img class="user-talk user-talk-shout" data-bind="visible: talking() == 'shout'"
                 alt="shout" src="/svg/talking_alt.svg">
+            <!-- /ko -->
             <div class="user-name" data-bind="text: name"></div>
           </div>
         </div>

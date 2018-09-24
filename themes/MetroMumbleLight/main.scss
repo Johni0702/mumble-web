@@ -144,11 +144,15 @@ html, body {
 .user {
   margin-left: 9px;
 }
+.user-talk {
+  vertical-align: middle;
+}
 .user-status, .channel-status {
   float: right;
 }
 .user,.channel{
   height: 23px;
+  line-height: 23px;
   padding: 2px;
   border: 1px solid transparent;
 }
@@ -461,6 +465,7 @@ form {
   padding-bottom: 0px;
   border: none;
   height: 19px;
+  line-height: 19px;
 }
 .minimal .user-status {
   height: 19px;
