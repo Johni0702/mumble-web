@@ -189,6 +189,7 @@ class GlobalBindings {
     this.log = ko.observableArray()
     this.thisUser = ko.observable()
     this.root = ko.observable()
+    this.avatarView = ko.observable()
     this.messageBox = ko.observable('')
     this.toolbarHorizontal = ko.observable(!this.settings.toolbarVertical)
     this.selected = ko.observable()
@@ -409,6 +410,9 @@ class GlobalBindings {
         } else {
           this.requestDeaf(ui)
         }
+      }
+      ui.viewAvatar = () => {
+        this.avatarView(ui.texture())
       }
       Object.entries(simpleProperties).forEach(key => {
         ui[key[1]] = ko.observable(user[key[0]])

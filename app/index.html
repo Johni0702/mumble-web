@@ -179,6 +179,8 @@
           </form>
         </div>
       <!-- /ko -->
+      <img class="avatar-view" data-bind="visible: avatarView, attr: { src: avatarView },
+                                          click: function () { avatarView(null) }"></img>
       <!-- ko with: userContextMenu -->
       <ul class="context-menu" data-bind="if: target,
                                           style: { left: posX() + 'px',
@@ -216,7 +218,8 @@
         </li>
         <!-- /ko -->
 
-        <li data-bind="css: { disabled: !canChangeAvatar() }, visible: texture">
+        <li data-bind="css: { disabled: !canChangeAvatar() }, visible: texture,
+                       click: viewAvatar">
           View Avatar
         </li>
         <!-- ko if: $data === $root.thisUser() -->

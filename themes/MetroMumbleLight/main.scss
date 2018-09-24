@@ -253,6 +253,17 @@ html, body {
     }
   }
 }
+.avatar-view {
+  position: absolute;
+  z-index: 200;
+  max-width: 90%;
+  max-height: 90%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
 .toolbar {
   display: flex;
   align-items: center;
