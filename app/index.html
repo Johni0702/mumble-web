@@ -160,6 +160,17 @@
                     <input type="button" data-bind="value: pttKeyDisplay, click: recordPttKey">
                   </td>
                 </tr>
+                <tr>
+                  <td>Show Avatars</td>
+                  <td>
+                    <select data-bind='value: showAvatars'>
+                      <option value="always">Always</option>
+                      <option value="own_channel">Same Channel</option>
+                      <option value="linked_channel">Linked Channels</option>
+                      <option value="minimal_only">Minimal View</option>
+                      <option value="never">Never</option>
+                  </td>
+                </tr>
             </table>
             <div class="dialog-footer">
               <input class="dialog-close" type="button" data-bind="click: $root.closeSettings" value="Cancel">
@@ -304,6 +315,15 @@
             <div data-bind="if: comment">
               <div class="user-comment tooltip" data-bind="html: comment"></div>
             </div>
+            <!-- ko if: show_avatar() -->
+            <img class="user-avatar" alt="avatar"
+                 data-bind="attr: { src: texture },
+                            css: { 'user-avatar-talk-off': talking() == 'off',
+                                   'user-avatar-talk-on': talking() == 'on',
+                                   'user-avatar-talk-whisper': talking() == 'whisper',
+                                   'user-avatar-talk-shout': talking() == 'shout' }">
+            <!-- /ko -->
+            <!-- ko ifnot: show_avatar() -->
             <img class="user-talk user-talk-off" data-bind="visible: talking() == 'off'"
                 alt="talk off" src="/svg/talking_off.svg">
             <img class="user-talk user-talk-on" data-bind="visible: talking() == 'on'"

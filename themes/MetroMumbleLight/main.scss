@@ -17,6 +17,9 @@ $chat-channel-color: orange !default
 $chat-user-color: green !default
 $chat-input-color: $font-color !default
 $mic-volume-border-color: $black !default
+$talk-outline-color: green !default
+$whisper-outline-color: purple !default
+$shout-outline-color: cyan !default
 
 $toolbar-hover-bg-color: $lightgray !default
 $toolbar-hover-border-color: $gray !default
@@ -144,8 +147,26 @@ html, body {
 .user {
   margin-left: 9px;
 }
-.user-talk {
+.user-avatar, .user-talk {
   vertical-align: middle;
+}
+@mixin drop-shadow-4x($size, $blur, $color) {
+  filter: drop-shadow(#{+$size} #{+$size} $blur $color)
+          drop-shadow(#{+$size} #{-$size} $blur $color)
+          drop-shadow(#{-$size} #{+$size} $blur $color)
+          drop-shadow(#{-$size} #{-$size} $blur $color);
+}
+@mixin user-avatar-drop-shadow($color) {
+  @include drop-shadow-4x(1px, 1px, $color);
+}
+.user-avatar-talk-on {
+  @include user-avatar-drop-shadow($talk-outline-color);
+}
+.user-avatar-talk-whisper {
+  @include user-avatar-drop-shadow($whisper-outline-color);
+}
+.user-avatar-talk-shout {
+  @include user-avatar-drop-shadow($shout-outline-color);
 }
 .user-status, .channel-status {
   float: right;
@@ -339,7 +360,7 @@ form {
 }
 .settings-dialog {
   width: 300px;
-  height: 156px;
+  height: 200px;
   top: calc(50% - 100px);
   left: calc(50% - 150px);
 }

@@ -78,6 +78,7 @@ class SettingsDialog {
     this.vadLevel = ko.observable(settings.vadLevel)
     this.testVadLevel = ko.observable(0)
     this.testVadActive = ko.observable(false)
+    this.showAvatars = ko.observable(settings.showAvatars())
 
     this._setupTestVad()
     this.vadLevel.subscribe(() => this._setupTestVad())
@@ -98,6 +99,7 @@ class SettingsDialog {
     settings.voiceMode = this.voiceMode()
     settings.pttKey = this.pttKey()
     settings.vadLevel = this.vadLevel()
+    settings.showAvatars(this.showAvatars())
   }
 
   end () {
@@ -133,6 +135,7 @@ class Settings {
     this.pttKey = load('pttKey') || 'ctrl + shift'
     this.vadLevel = load('vadLevel') || 0.3
     this.toolbarVertical = load('toolbarVertical') || false
+    this.showAvatars = ko.observable(load('showAvatars') || 'always')
   }
 
   save () {
@@ -141,6 +144,7 @@ class Settings {
     save('pttKey', this.pttKey)
     save('vadLevel', this.vadLevel)
     save('toolbarVertical', this.toolbarVertical)
+    save('showAvatars', this.showAvatars())
   }
 }
 
@@ -295,12 +299,48 @@ class GlobalBindings {
         suppress: 'suppress',
         selfMute: 'selfMute',
         selfDeaf: 'selfDeaf',
+        texture: 'rawTexture',
+        textureHash: 'textureHash',
         comment: 'comment'
       }
       var ui = user.__ui = {
         model: user,
         talking: ko.observable('off'),
         channel: ko.observable()
+      }
+      ui.texture = ko.pureComputed(() => {
+        let raw = ui.rawTexture()
+        if (!raw || raw.offset >= raw.limit) return null
+        return 'data:image/*;base64,' + raw.toBase64()
+      })
+      ui.show_avatar = () => {
+        let setting = this.settings.showAvatars()
+        switch (setting) {
+          case 'always':
+            break
+          case 'own_channel':
+            if (this.thisUser().channel() !== ui.channel()) return false
+            break
+          case 'linked_channel':
+            if (!ui.channel().linked()) return false
+            break
+          case 'minimal_only':
+            if (!this.minimalView()) return false
+            if (this.thisUser().channel() !== ui.channel()) return false
+            break
+          case 'never':
+          default: return false
+        }
+        if (!ui.texture()) {
+          if (ui.textureHash()) {
+            // The user has an avatar set but it's of sufficient size to not be
+            // included by default, so we need to fetch it explicitly now.
+            // mumble-client should make sure we only send one request per hash
+            user.requestTexture()
+          }
+          return false
+        }
+        return true
       }
       Object.entries(simpleProperties).forEach(key => {
         ui[key[1]] = ko.observable(user[key[0]])
@@ -326,6 +366,11 @@ class GlobalBindings {
           ui.channel().users.push(ui)
           ui.channel().users.sort(compareUsers)
           this._updateLinks()
+        }
+        if (properties.textureHash !== undefined) {
+          // Invalidate avatar texture when its hash has changed
+          // If the avatar is still visible, this will trigger a fetch of the new one.
+          ui.rawTexture(null)
         }
       }).on('remove', () => {
         if (ui.channel()) {
