@@ -394,8 +394,7 @@ class GlobalBindings {
         // return this.thisUser() === ui // TODO check for perms
       }
       ui.canChangeAvatar = () => {
-        return false // TODO implement changing of avatar
-        // return this.thisUser() === ui // TODO check for perms
+        return this.thisUser() === ui // TODO check for perms
       }
       ui.toggleMute = () => {
         if (ui.selfMute()) {
@@ -413,6 +412,21 @@ class GlobalBindings {
       }
       ui.viewAvatar = () => {
         this.avatarView(ui.texture())
+      }
+      ui.changeAvatar = () => {
+        let input = document.createElement('input')
+        input.type = 'file'
+        input.addEventListener('change', () => {
+          let reader = new window.FileReader()
+          reader.onload = () => {
+            this.client.setSelfTexture(reader.result)
+          }
+          reader.readAsArrayBuffer(input.files[0])
+        })
+        input.click()
+      }
+      ui.removeAvatar = () => {
+        user.clearTexture()
       }
       Object.entries(simpleProperties).forEach(key => {
         ui[key[1]] = ko.observable(user[key[0]])

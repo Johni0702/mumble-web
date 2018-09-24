@@ -223,11 +223,13 @@
           View Avatar
         </li>
         <!-- ko if: $data === $root.thisUser() -->
-        <li data-bind="css: { disabled: !canChangeAvatar() }, visible: true">
+        <li data-bind="css: { disabled: !canChangeAvatar() }, visible: true,
+                       click: changeAvatar">
           Change Avatar
         </li>
         <!-- /ko -->
-        <li data-bind="css: { disabled: !canChangeAvatar() }, visible: texture">
+        <li data-bind="css: { disabled: !canChangeAvatar() }, visible: texture,
+                       click: removeAvatar">
           Reset Avatar
         </li>
 
