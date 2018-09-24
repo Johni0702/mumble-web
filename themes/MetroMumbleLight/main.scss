@@ -6,6 +6,7 @@ $bg-color: #eee !default
 $white: #fff !default
 
 $font-color: $black !default
+$font-disabled-color: $gray !default
 $panel-bg-color: $white !default
 $panel-border-color: $lightgray !default
 $channel-tree-color: $lightgray !default
@@ -38,6 +39,9 @@ $dialog-button-color: $dialog-color !default
 $dialog-input-border-color: $darkgray !default
 $dialog-input-bg-color: $white !default
 $dialog-input-color: $dialog-color !default
+$context-menu-bg-color: $bg-color !default
+$context-menu-border-color: $panel-border-color !default
+$context-menu-hover-bg-color: $toolbar-hover-bg-color !default
 
 $tooltip-bg-color: $panel-bg-color !default
 $channels-bg-color: $panel-bg-color !default
@@ -218,6 +222,36 @@ html, body {
   padding: 10px;
   position: absolute;
   z-index: 100;
+}
+.context-menu {
+  position: absolute;
+  z-index: 50;
+  background: $context-menu-bg-color;
+  border: 1px solid $context-menu-border-color;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  & > li {
+    padding: 5px 20px;
+    padding-left: 10px;
+    &::before {
+      display: inline-block;
+      width: 10px;
+      padding-right: 5px;
+      content: '';
+    }
+    &.checked::before {
+      content: '✓';
+    }
+    &:hover {
+      background: $context-menu-hover-bg-color;
+    }
+    &.disabled {
+      background: $context-menu-bg-color;
+      color: $font-disabled-color;
+    }
+  }
 }
 .toolbar {
   display: flex;

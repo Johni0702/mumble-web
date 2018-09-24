@@ -179,6 +179,129 @@
           </form>
         </div>
       <!-- /ko -->
+      <!-- ko with: userContextMenu -->
+      <ul class="context-menu" data-bind="if: target,
+                                          style: { left: posX() + 'px',
+                                                   top:  posY() + 'px' }">
+
+        <!-- ko with: target -->
+        <li data-bind="css: { disabled: !canChangeMute() }">
+          Mute
+        </li>
+        <li data-bind="css: { disabled: !canChangeDeafen() }">
+          Deafen
+        </li>
+        <li data-bind="css: { disabled: !canChangePrioritySpeaker() }">
+          Priority Speaker
+        </li>
+
+        <li data-bind="css: { disabled: !canLocalMute() }">
+          Local Mute
+        </li>
+        <li data-bind="css: { disabled: !canIgnoreMessages() }">
+          Ignore Messages
+        </li>
+
+        <li data-bind="css: { disabled: !canChangeComment() }, visible: comment">
+          View Comment
+        </li>
+        <!-- ko if: $data === $root.thisUser() -->
+        <li data-bind="css: { disabled: !canChangeComment() }, visible: true">
+          Change Comment
+        </li>
+        <!-- /ko -->
+        <!-- ko if: $data !== $root.thisUser() -->
+        <li data-bind="css: { disabled: !canChangeComment() }, visible: comment">
+          Reset Comment
+        </li>
+        <!-- /ko -->
+
+        <li data-bind="css: { disabled: !canChangeAvatar() }, visible: texture">
+          View Avatar
+        </li>
+        <!-- ko if: $data === $root.thisUser() -->
+        <li data-bind="css: { disabled: !canChangeAvatar() }, visible: true">
+          Change Avatar
+        </li>
+        <!-- /ko -->
+        <li data-bind="css: { disabled: !canChangeAvatar() }, visible: texture">
+          Reset Avatar
+        </li>
+
+        <li data-bind="css: { disabled: true }, visible: true">
+          Send Message
+        </li>
+        <li data-bind="css: { disabled: true }, visible: true">
+          Information
+        </li>
+
+        <li data-bind="visible: $data === $root.thisUser(),
+                       css: { checked: selfMute },
+                       click: toggleMute">
+          Self Mute
+        </li>
+        <li data-bind="visible: $data === $root.thisUser(),
+                       css: { checked: selfDeaf },
+                       click: toggleDeaf">
+          Self Deafen
+        </li>
+
+        <!-- ko if: $data !== $root.thisUser() -->
+        <li data-bind="css: { disabled: true }, visible: true">
+          Add Friend
+        </li>
+        <li data-bind="css: { disabled: true }, visible: false">
+          Remove Friend
+        </li>
+        <!-- /ko -->
+
+        <!-- /ko -->
+      </ul>
+      <!-- /ko -->
+      <!-- ko with: channelContextMenu -->
+      <ul class="context-menu" data-bind="if: target,
+                                          style: { left: posX() + 'px',
+                                                   top:  posY() + 'px' }">
+
+        <!-- ko with: target -->
+        <li data-bind="visible: users.indexOf($root.thisUser()) === -1,
+                       css: { disabled: !canJoin() },
+                       click: $root.requestMove.bind($root, $root.thisUser())">
+          Join Channel
+        </li>
+        <li data-bind="css: { disabled: !canAdd() }">
+          Add
+        </li>
+        <li data-bind="css: { disabled: !canEdit() }">
+          Edit
+        </li>
+        <li data-bind="css: { disabled: !canRemove() }">
+          Remove
+        </li>
+
+        <li data-bind="css: { disabled: !canLink() }">
+          Link
+        </li>
+        <li data-bind="css: { disabled: !canUnlink() }">
+          Unlink
+        </li>
+        <li data-bind="css: { disabled: !canUnlink() }">
+          Unlink All
+        </li>
+
+        <li data-bind="css: { disabled: true }">
+          Copy Mumble URL
+        </li>
+        <li data-bind="css: { disabled: true }">
+          Copy Mumble-Web URL
+        </li>
+        <li data-bind="css: { disabled: !canSendMessage() }">
+          Send Message
+        </li>
+
+        <!-- /ko -->
+      </ul>
+      <!-- /ko -->
       <script type="text/html" id="user-tag">
         <span class="user-tag" data-bind="text: name"></span>
       </script>
@@ -265,6 +388,7 @@
         <div class="channel" data-bind="
             click: $root.select, 
             event: {
+              contextmenu: openContextMenu,
               dblclick: $root.requestMove.bind($root, $root.thisUser())
             },
             css: {
@@ -292,6 +416,9 @@
           <div class="user-tree"></div>
           <div class="user" data-bind="
                 click: $root.select,
+                event: {
+                  contextmenu: openContextMenu
+                },
                 css: {
                   thisClient: $root.thisUser() === $data,
                   selected: $root.selected() === $data

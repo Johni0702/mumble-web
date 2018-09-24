@@ -19,7 +19,33 @@ function sanitize (html) {
   })
 }
 
+function openContextMenu (event, contextMenu, target) {
+  contextMenu.posX(event.clientX)
+  contextMenu.posY(event.clientY)
+  contextMenu.target(target)
+
+  const closeListener = (event) => {
+    // Always close, no matter where they clicked
+    setTimeout(() => { // delay to allow click to be actually processed
+      contextMenu.target(null)
+      unregister()
+    })
+  }
+  const unregister = () => document.removeEventListener('click', closeListener)
+  document.addEventListener('click', closeListener)
+
+  event.stopPropagation()
+  event.preventDefault()
+}
+
 // GUI
+
+function ContextMenu () {
+  var self = this
+  self.posX = ko.observable()
+  self.posY = ko.observable()
+  self.target = ko.observable()
+}
 
 function ConnectDialog () {
   var self = this
@@ -152,6 +178,8 @@ class GlobalBindings {
   constructor () {
     this.settings = new Settings()
     this.client = null
+    this.userContextMenu = new ContextMenu()
+    this.channelContextMenu = new ContextMenu()
     this.connectDialog = new ConnectDialog()
     this.connectErrorDialog = new ConnectErrorDialog(this.connectDialog)
     this.connectionInfo = new ConnectionInfo()
@@ -342,6 +370,46 @@ class GlobalBindings {
         }
         return true
       }
+      ui.openContextMenu = (_, event) => openContextMenu(event, this.userContextMenu, ui)
+      ui.canChangeMute = () => {
+        return false // TODO check for perms and implement
+      }
+      ui.canChangeDeafen = () => {
+        return false // TODO check for perms and implement
+      }
+      ui.canChangePrioritySpeaker = () => {
+        return false // TODO check for perms and implement
+      }
+      ui.canLocalMute = () => {
+        return false // TODO implement local mute
+        // return this.thisUser() !== ui
+      }
+      ui.canIgnoreMessages = () => {
+        return false // TODO implement ignore messages
+        // return this.thisUser() !== ui
+      }
+      ui.canChangeComment = () => {
+        return false // TODO implement changing of comments
+        // return this.thisUser() === ui // TODO check for perms
+      }
+      ui.canChangeAvatar = () => {
+        return false // TODO implement changing of avatar
+        // return this.thisUser() === ui // TODO check for perms
+      }
+      ui.toggleMute = () => {
+        if (ui.selfMute()) {
+          this.requestUnmute(ui)
+        } else {
+          this.requestMute(ui)
+        }
+      }
+      ui.toggleDeaf = () => {
+        if (ui.selfDeaf()) {
+          this.requestUndeaf(ui)
+        } else {
+          this.requestDeaf(ui)
+        }
+      }
       Object.entries(simpleProperties).forEach(key => {
         ui[key[1]] = ko.observable(user[key[0]])
       })
@@ -420,6 +488,28 @@ class GlobalBindings {
         channels: ko.observableArray(),
         users: ko.observableArray(),
         linked: ko.observable(false)
+      }
+      ui.openContextMenu = (_, event) => openContextMenu(event, this.channelContextMenu, ui)
+      ui.canJoin = () => {
+        return true // TODO check for perms
+      }
+      ui.canAdd = () => {
+        return false // TODO check for perms and implement
+      }
+      ui.canEdit = () => {
+        return false // TODO check for perms and implement
+      }
+      ui.canRemove = () => {
+        return false // TODO check for perms and implement
+      }
+      ui.canLink = () => {
+        return false // TODO check for perms and implement
+      }
+      ui.canUnlink = () => {
+        return false // TODO check for perms and implement
+      }
+      ui.canSendMessage = () => {
+        return false // TODO check for perms and implement
       }
       Object.entries(simpleProperties).forEach(key => {
         ui[key[1]] = ko.observable(channel[key[0]])
