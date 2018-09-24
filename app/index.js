@@ -800,6 +800,33 @@ window.onload = function () {
   if (queryParams.password) {
     ui.connectDialog.password(queryParams.password)
   }
+  if (queryParams.avatarurl) {
+    // Download the avatar and upload it to the mumble server when connected
+    let url = queryParams.avatarurl
+    console.log('Fetching avatar from', url)
+    let req = new window.XMLHttpRequest()
+    req.open('GET', url, true)
+    req.responseType = 'arraybuffer'
+    req.onload = () => {
+      let upload = (avatar) => {
+        if (req.response) {
+          console.log('Uploading user avatar to server')
+          ui.client.setSelfTexture(req.response)
+        }
+      }
+      // On any future connections
+      ui.thisUser.subscribe((thisUser) => {
+        if (thisUser) {
+          upload()
+        }
+      })
+      // And the current one (if already connected)
+      if (ui.thisUser()) {
+        upload()
+      }
+    }
+    req.send()
+  }
   ui.connectDialog.joinOnly(useJoinDialog)
   ko.applyBindings(ui)
 }
