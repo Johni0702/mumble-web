@@ -1,5 +1,6 @@
 import 'stream-browserify' // see https://github.com/ericgundrum/pouch-websocket-sync-example/commit/2a4437b013092cc7b2cd84cf1499172c84a963a3
 import url from 'url'
+import MumbleClient from 'mumble-client'
 import mumbleConnect from 'mumble-client-websocket'
 import CodecsBrowser from 'mumble-client-codecs-browser'
 import BufferQueueNode from 'web-audio-buffer-queue'
@@ -105,6 +106,17 @@ class SettingsDialog {
     this.testVadLevel = ko.observable(0)
     this.testVadActive = ko.observable(false)
     this.showAvatars = ko.observable(settings.showAvatars())
+    // Need to wrap this in a pureComputed to make sure it's always numeric
+    let audioBitrate = ko.observable(settings.audioBitrate)
+    this.audioBitrate = ko.pureComputed({
+      read: audioBitrate,
+      write: (value) => audioBitrate(Number(value))
+    })
+    this.samplesPerPacket = ko.observable(settings.samplesPerPacket)
+    this.msPerPacket = ko.pureComputed({
+      read: () => this.samplesPerPacket() / 48,
+      write: (value) => this.samplesPerPacket(value * 48)
+    })
 
     this._setupTestVad()
     this.vadLevel.subscribe(() => this._setupTestVad())
@@ -128,6 +140,8 @@ class SettingsDialog {
     settings.pttKey = this.pttKey()
     settings.vadLevel = this.vadLevel()
     settings.showAvatars(this.showAvatars())
+    settings.audioBitrate = this.audioBitrate()
+    settings.samplesPerPacket = this.samplesPerPacket()
   }
 
   end () {
@@ -153,6 +167,30 @@ class SettingsDialog {
     }
     keyboardjs.bind('', keydown, keyup)
     this.pttKeyDisplay('> ? <')
+  }
+
+  totalBandwidth () {
+    return MumbleClient.calcEnforcableBandwidth(
+      this.audioBitrate(),
+      this.samplesPerPacket(),
+      true
+    )
+  }
+
+  positionBandwidth () {
+    return this.totalBandwidth() - MumbleClient.calcEnforcableBandwidth(
+      this.audioBitrate(),
+      this.samplesPerPacket(),
+      false
+    )
+  }
+
+  overheadBandwidth () {
+    return MumbleClient.calcEnforcableBandwidth(
+      0,
+      this.samplesPerPacket(),
+      false
+    )
   }
 }
 

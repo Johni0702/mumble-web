@@ -161,6 +161,38 @@
                   </td>
                 </tr>
                 <tr>
+                  <td>Audio Quality</td>
+                  <td><span data-bind="text: (audioBitrate()/1000).toFixed(1)"></span> kbit/s</td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <input type="range" min="8000" max="96000" step="8"
+                           data-bind="value: audioBitrate, valueUpdate: 'input'">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Audio per packet</td>
+                  <td><span data-bind="text: msPerPacket"></span> ms</td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <input type="range" min="10" max="60" step="10"
+                           data-bind="value: msPerPacket, valueUpdate: 'input'">
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="bandwidth-info">
+                    <span data-bind="text: (totalBandwidth()/1000).toFixed(1)"></span>
+                    kbit/s
+                    (Audio
+                    <span data-bind="text: (audioBitrate()/1000).toFixed(1)"></span>,
+                    Position
+                    <span data-bind="text: (positionBandwidth()/1000).toFixed(1)"></span>,
+                    Overhead
+                    <span data-bind="text: (overheadBandwidth()/1000).toFixed(1)"></span>)
+                  </td>
+                </tr>
+                <tr>
                   <td>Show Avatars</td>
                   <td>
                     <select data-bind='value: showAvatars'>
