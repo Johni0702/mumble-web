@@ -9,9 +9,10 @@ import vad from 'voice-activity-detection'
 import DropStream from 'drop-stream'
 
 class VoiceHandler extends Writable {
-  constructor (client) {
+  constructor (client, settings) {
     super({ objectMode: true })
     this._client = client
+    this._settings = settings
     this._outbound = null
     this._mute = false
   }
@@ -47,7 +48,7 @@ class VoiceHandler extends Writable {
       })
 
       this._outbound
-        .pipe(chunker(4 * 480))
+        .pipe(chunker(4 * this._settings.samplesPerPacket))
         .pipe(buffer2Float32Array)
         .pipe(this._client.createVoiceStream())
 
@@ -71,8 +72,8 @@ class VoiceHandler extends Writable {
 }
 
 export class ContinuousVoiceHandler extends VoiceHandler {
-  constructor (client) {
-    super(client)
+  constructor (client, settings) {
+    super(client, settings)
   }
 
   _write (data, _, callback) {
@@ -85,9 +86,9 @@ export class ContinuousVoiceHandler extends VoiceHandler {
 }
 
 export class PushToTalkVoiceHandler extends VoiceHandler {
-  constructor (client, key) {
-    super(client)
-    this._key = key
+  constructor (client, settings) {
+    super(client, settings)
+    this._key = settings.pttKey
     this._pushed = false
     this._keydown_handler = () => this._pushed = true
     this._keyup_handler = () => {
@@ -114,8 +115,9 @@ export class PushToTalkVoiceHandler extends VoiceHandler {
 }
 
 export class VADVoiceHandler extends VoiceHandler {
-  constructor (client, level) {
-    super(client)
+  constructor (client, settings) {
+    super(client, settings)
+    let level = settings.vadLevel
     const self = this
     this._vad = vad(audioContext, theUserMedia, {
       onVoiceStart () {

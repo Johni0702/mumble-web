@@ -114,7 +114,9 @@ class SettingsDialog {
     if (this._testVad) {
       this._testVad.end()
     }
-    this._testVad = new VADVoiceHandler(null, this.vadLevel())
+    let dummySettings = new Settings()
+    this.applyTo(dummySettings)
+    this._testVad = new VADVoiceHandler(null, dummySettings)
     this._testVad.on('started_talking', () => this.testVadActive(true))
                  .on('stopped_talking', () => this.testVadActive(false))
                  .on('level', level => this.testVadLevel(level))
@@ -162,6 +164,8 @@ class Settings {
     this.vadLevel = load('vadLevel') || 0.3
     this.toolbarVertical = load('toolbarVertical') || false
     this.showAvatars = ko.observable(load('showAvatars') || 'always')
+    this.audioBitrate = Number(load('audioBitrate')) || 40000
+    this.samplesPerPacket = Number(load('samplesPerPacket')) || 960
   }
 
   save () {
@@ -171,6 +175,8 @@ class Settings {
     save('vadLevel', this.vadLevel)
     save('toolbarVertical', this.toolbarVertical)
     save('showAvatars', this.showAvatars())
+    save('audioBitrate', this.audioBitrate)
+    save('samplesPerPacket', this.samplesPerPacket)
   }
 }
 
@@ -584,11 +590,11 @@ class GlobalBindings {
       }
       let mode = this.settings.voiceMode
       if (mode === 'cont') {
-        voiceHandler = new ContinuousVoiceHandler(this.client)
+        voiceHandler = new ContinuousVoiceHandler(this.client, this.settings)
       } else if (mode === 'ptt') {
-        voiceHandler = new PushToTalkVoiceHandler(this.client, this.settings.pttKey)
+        voiceHandler = new PushToTalkVoiceHandler(this.client, this.settings)
       } else if (mode === 'vad') {
-        voiceHandler = new VADVoiceHandler(this.client, this.settings.vadLevel)
+        voiceHandler = new VADVoiceHandler(this.client, this.settings)
       } else {
         log('Unknown voice mode:', mode)
         return
@@ -606,6 +612,11 @@ class GlobalBindings {
       if (this.selfMute()) {
         voiceHandler.setMute(true)
       }
+
+      this.client.setAudioQuality(
+        this.settings.audioBitrate,
+        this.settings.samplesPerPacket
+      )
     }
 
     this.messageBoxHint = ko.pureComputed(() => {
