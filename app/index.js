@@ -81,11 +81,52 @@ function ConnectErrorDialog (connectDialog) {
   }
 }
 
-function ConnectionInfo () {
-  var self = this
-  self.visible = ko.observable(false)
-  self.show = function () {
-    self.visible(true)
+class ConnectionInfo {
+  constructor (ui) {
+    this._ui = ui
+    this.visible = ko.observable(false)
+    this.serverVersion = ko.observable()
+    this.latencyMs = ko.observable(NaN)
+    this.latencyDeviation = ko.observable(NaN)
+    this.remoteHost = ko.observable()
+    this.remotePort = ko.observable()
+    this.maxBitrate = ko.observable(NaN)
+    this.currentBitrate = ko.observable(NaN)
+    this.maxBandwidth = ko.observable(NaN)
+    this.currentBandwidth = ko.observable(NaN)
+    this.codec = ko.observable()
+
+    this.show = () => {
+      if (!ui.thisUser()) return
+      this.update()
+      this.visible(true)
+    }
+    this.hide = () => this.visible(false)
+  }
+
+  update () {
+    let client = this._ui.client
+
+    this.serverVersion(client.serverVersion)
+
+    let dataStats = client.dataStats
+    if (dataStats) {
+      this.latencyMs(dataStats.mean)
+      this.latencyDeviation(Math.sqrt(dataStats.variance))
+    }
+    this.remoteHost(this._ui.remoteHost())
+    this.remotePort(this._ui.remotePort())
+
+    let spp = this._ui.settings.samplesPerPacket
+    let maxBitrate = client.getMaxBitrate(spp, false)
+    let maxBandwidth = client.maxBandwidth
+    let actualBitrate = client.getActualBitrate(spp, false)
+    let actualBandwidth = MumbleClient.calcEnforcableBandwidth(actualBitrate, spp, false)
+    this.maxBitrate(maxBitrate)
+    this.currentBitrate(actualBitrate)
+    this.maxBandwidth(maxBandwidth)
+    this.currentBandwidth(actualBandwidth)
+    this.codec('Opus') // only one supported for sending
   }
 }
 
@@ -226,11 +267,13 @@ class GlobalBindings {
     this.channelContextMenu = new ContextMenu()
     this.connectDialog = new ConnectDialog()
     this.connectErrorDialog = new ConnectErrorDialog(this.connectDialog)
-    this.connectionInfo = new ConnectionInfo()
+    this.connectionInfo = new ConnectionInfo(this)
     this.commentDialog = new CommentDialog()
     this.settingsDialog = ko.observable()
     this.minimalView = ko.observable(false)
     this.log = ko.observableArray()
+    this.remoteHost = ko.observable()
+    this.remotePort = ko.observable()
     this.thisUser = ko.observable()
     this.root = ko.observable()
     this.avatarView = ko.observable()
@@ -284,6 +327,9 @@ class GlobalBindings {
 
     this.connect = (username, host, port, token, password) => {
       this.resetClient()
+
+      this.remoteHost(host)
+      this.remotePort(port)
 
       log('Connecting to server ', host)
 

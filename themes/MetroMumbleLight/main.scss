@@ -358,7 +358,7 @@ form {
 .message-content p {
   margin: 0;
 }
-.tb-information, .tb-record, .tb-comment {
+.tb-information.disabled, .tb-record, .tb-comment {
   filter: grayscale(100%);
 }
 .dialog-header {
@@ -470,6 +470,18 @@ form {
 .connect-dialog.error-dialog {
   width: 400px;
   left: calc(50% - 200px);
+}
+.connection-info-dialog {
+  width: 500px;
+  height: 400px;
+  top: calc(50% - 200px);
+  left: calc(50% - 250px);
+  h3 {
+    margin-bottom: 5px;
+  }
+  .dialog-content {
+    padding-left: 20px;
+  }
 }
 
 

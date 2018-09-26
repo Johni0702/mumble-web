@@ -126,6 +126,51 @@
           </form>
         </div>
       <!-- /ko -->
+      <!-- ko with: connectionInfo -->
+      <div class="connection-info-dialog dialog" data-bind="visible: visible">
+        <div class="dialog-header">
+          Connection Information
+        </div>
+        <div class="dialog-content">
+          <h3>Version</h3>
+          <!-- ko with: serverVersion -->
+          Protocol
+          <span data-bind="text: major + '.' + minor + '.' + patch"></span>.
+          <br>
+          <br>
+          <span data-bind="text: release"></span>
+          <br>
+          <span data-bind="text: os"></span>
+          <span data-bind="text: osVersion"></span>
+          <br>
+          <!-- /ko -->
+          <!-- ko if: !serverVersion() -->
+          Unknown
+          <!-- /ko -->
+
+          <h3>Control channel</h3>
+          <span data-bind="text: latencyMs().toFixed(2)"></span> ms average latency
+          (<span data-bind="text: latencyDeviation().toFixed(2)"></span> deviation)
+          <br>
+          <br>
+          Remote host <span data-bind="text: remoteHost"></span>
+          (port <span data-bind="text: remotePort"></span>)
+          <br>
+
+          <h3>Audio bandwidth</h3>
+          Maximum <span data-bind="text: (maxBitrate()/1000).toFixed(1)"></span> kbits/s
+          (<span data-bind="text: (maxBandwidth()/1000).toFixed(1)"></span> kbits/s with overhead)
+          <br>
+          Current <span data-bind="text: (currentBitrate()/1000).toFixed(1)"></span> kbits/s
+          (<span data-bind="text: (currentBandwidth()/1000).toFixed(1)"></span> kbits/s with overhead)
+          <br>
+          Codec: <span data-bind="text: codec"></span>
+        </div>
+        <div class="dialog-footer">
+          <input class="dialog-close" type="button" data-bind="click: hide" value="OK">
+        </div>
+      </div>
+      <!-- /ko -->
       <!-- ko with: settingsDialog -->
       <div class="settings-dialog dialog" data-bind="visible: $data">
           <div class="dialog-header">
@@ -354,8 +399,9 @@
         <img class="tb-connect" data-bind="visible: !connectDialog.joinOnly(),
                                            click: connectDialog.show"
                       rel="connect" src="/svg/applications-internet.svg">
-        <img class="tb-information" data-bind="click: connectionInfo.show"
-                      rel="information" src="/svg/information_icon.svg">
+        <img class="tb-information" rel="information" src="/svg/information_icon.svg"
+             data-bind="click: connectionInfo.show,
+                        css: { disabled: !thisUser() }">
         <div class="divider"></div>
         <img class="tb-mute" data-bind="visible: !selfMute(),
                               click: function () { requestMute(thisUser()) }"
