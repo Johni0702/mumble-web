@@ -6,6 +6,7 @@ $bg-color: #eee !default
 $white: #fff !default
 
 $font-color: $black !default
+$font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif !default
 $font-disabled-color: $gray !default
 $panel-bg-color: $white !default
 $panel-border-color: $lightgray !default
@@ -52,6 +53,7 @@ $chat-border-color: $panel-border-color !default
 html, body {
   background-color: $bg-color;
   color: $font-color;
+  font-family: $font-family;
   margin: 0;
   overflow: hidden;
   height: 100%
