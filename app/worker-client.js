@@ -181,6 +181,11 @@ class WorkerBasedMumbleClient extends EventEmitter {
     }
     defineDummyMethod('getMaxBitrate')
     defineDummyMethod('getActualBitrate')
+    let _setAudioQuality = this.setAudioQuality
+    this.setAudioQuality = function () {
+      this._dummyClient.setAudioQuality.apply(this._dummyClient, arguments)
+      _setAudioQuality.apply(this, arguments)
+    }
   }
 
   _user (id) {
