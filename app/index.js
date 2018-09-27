@@ -2,11 +2,9 @@ import 'stream-browserify' // see https://github.com/ericgundrum/pouch-websocket
 import url from 'url'
 import ByteBuffer from 'bytebuffer'
 import MumbleClient from 'mumble-client'
-import mumbleConnect from 'mumble-client-websocket'
-import CodecsBrowser from 'mumble-client-codecs-browser'
+import WorkerBasedMumbleConnector from './worker-client'
 import BufferQueueNode from 'web-audio-buffer-queue'
 import audioContext from 'audio-context'
-import Resampler from 'libsamplerate.js'
 import ko from 'knockout'
 import _dompurify from 'dompurify'
 import keyboardjs from 'keyboardjs'
@@ -263,6 +261,7 @@ class Settings {
 class GlobalBindings {
   constructor () {
     this.settings = new Settings()
+    this.connector = new WorkerBasedMumbleConnector(audioContext.sampleRate)
     this.client = null
     this.userContextMenu = new ContextMenu()
     this.channelContextMenu = new ContextMenu()
@@ -335,10 +334,9 @@ class GlobalBindings {
       log('Connecting to server ', host)
 
       // TODO: token
-      mumbleConnect(`wss://${host}:${port}`, {
+      this.connector.connect(`wss://${host}:${port}`, {
         username: username,
-        password: password,
-        codecs: CodecsBrowser
+        password: password
       }).done(client => {
         log('Connected!')
 
@@ -560,13 +558,6 @@ class GlobalBindings {
         })
         userNode.connect(audioContext.destination)
 
-        var resampler = new Resampler({
-          unsafe: true,
-          type: Resampler.Type.ZERO_ORDER_HOLD,
-          ratio: audioContext.sampleRate / 48000
-        })
-        resampler.pipe(userNode)
-
         stream.on('data', data => {
           if (data.target === 'normal') {
             ui.talking('on')
@@ -575,11 +566,11 @@ class GlobalBindings {
           } else if (data.target === 'whisper') {
             ui.talking('whisper')
           }
-          resampler.write(Buffer.from(data.pcm.buffer))
+          userNode.write(data.buffer)
         }).on('end', () => {
           console.log(`User ${user.username} stopped takling`)
           ui.talking('off')
-          resampler.end()
+          userNode.end()
         })
       })
     }

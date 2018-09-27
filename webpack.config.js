@@ -89,7 +89,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      webworkify: 'webworkify-webpack-dropin'
+      webworkify: 'webworkify-webpack'
     },
     root: [
       path.resolve('./themes/')

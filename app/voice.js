@@ -1,8 +1,6 @@
-import { Writable, Transform } from 'stream'
+import { Writable } from 'stream'
 import MicrophoneStream from 'microphone-stream'
 import audioContext from 'audio-context'
-import chunker from 'stream-chunker'
-import Resampler from 'libsamplerate.js'
 import getUserMedia from 'getusermedia'
 import keyboardjs from 'keyboardjs'
 import vad from 'voice-activity-detection'
@@ -34,23 +32,9 @@ class VoiceHandler extends Writable {
         this.emit('started_talking')
         return this._outbound
       }
-      this._outbound = new Resampler({
-        unsafe: true,
-        type: Resampler.Type.SINC_FASTEST,
-        ratio: 48000 / audioContext.sampleRate
-      })
 
-      const buffer2Float32Array = new Transform({
-        transform (data, _, callback) {
-          callback(null, new Float32Array(data.buffer, data.byteOffset, data.byteLength / 4))
-        },
-        readableObjectMode: true
-      })
-
-      this._outbound
-        .pipe(chunker(4 * this._settings.samplesPerPacket))
-        .pipe(buffer2Float32Array)
-        .pipe(this._client.createVoiceStream())
+      // Note: the samplesPerPacket argument is handled in worker.js and not passed on
+      this._outbound = this._client.createVoiceStream(this._settings.samplesPerPacket)
 
       this.emit('started_talking')
     }
