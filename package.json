@@ -42,6 +42,7 @@
     "regexp-replace-loader": "0.0.1",
     "sass-loader": "^4.1.1",
     "stream-chunker": "^1.2.8",
+    "subworkers": "^1.0.1",
     "to-arraybuffer": "^1.0.1",
     "transform-loader": "^0.2.3",
     "voice-activity-detection": "johni0702/voice-activity-detection#9f8bd90",

@@ -4,6 +4,9 @@ import toArrayBuffer from 'to-arraybuffer'
 import chunker from 'stream-chunker'
 import Resampler from 'libsamplerate.js'
 
+// Polyfill nested webworkers for https://bugs.chromium.org/p/chromium/issues/detail?id=31666
+import 'subworkers'
+
 // Monkey-patch to allow webworkify-webpack and codecs to work inside of web worker
 /* global URL */
 window.URL = URL
