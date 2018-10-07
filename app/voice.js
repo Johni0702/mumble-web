@@ -103,7 +103,7 @@ export class VADVoiceHandler extends VoiceHandler {
     super(client, settings)
     let level = settings.vadLevel
     const self = this
-    this._vad = vad(audioContext, theUserMedia, {
+    this._vad = vad(audioContext(), theUserMedia, {
       onVoiceStart () {
         console.log('vad: start')
         self._active = true

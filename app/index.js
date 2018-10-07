@@ -262,7 +262,7 @@ class Settings {
 class GlobalBindings {
   constructor () {
     this.settings = new Settings()
-    this.connector = new WorkerBasedMumbleConnector(audioContext.sampleRate)
+    this.connector = new WorkerBasedMumbleConnector()
     this.client = null
     this.userContextMenu = new ContextMenu()
     this.channelContextMenu = new ContextMenu()
@@ -333,6 +333,10 @@ class GlobalBindings {
       this.remotePort(port)
 
       log('Connecting to server ', host)
+
+      // Note: This call needs to be delayed until the user has interacted with
+      // the page in some way (which at this point they have), see: https://goo.gl/7K7WLu
+      this.connector.setSampleRate(audioContext().sampleRate)
 
       // TODO: token
       this.connector.connect(`wss://${host}:${port}`, {
@@ -555,9 +559,9 @@ class GlobalBindings {
       }).on('voice', stream => {
         console.log(`User ${user.username} started takling`)
         var userNode = new BufferQueueNode({
-          audioContext: audioContext
+          audioContext: audioContext()
         })
-        userNode.connect(audioContext.destination)
+        userNode.connect(audioContext().destination)
 
         stream.on('data', data => {
           if (data.target === 'normal') {

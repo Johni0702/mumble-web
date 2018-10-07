@@ -12,7 +12,7 @@ import worker from './worker'
  * Only stuff which we need in mumble-web is proxied, i.e. this is not a generic solution.
  */
 class WorkerBasedMumbleConnector {
-  constructor (sampleRate) {
+  constructor () {
     this._worker = webworkify(worker)
     this._worker.addEventListener('message', this._onMessage.bind(this))
     this._reqId = 1
@@ -20,7 +20,9 @@ class WorkerBasedMumbleConnector {
     this._clients = {}
     this._nextVoiceId = 1
     this._voiceStreams = {}
+  }
 
+  setSampleRate (sampleRate) {
     this._postMessage({
       method: '_init',
       sampleRate: sampleRate
