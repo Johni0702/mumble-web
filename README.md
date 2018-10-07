@@ -95,9 +95,40 @@ E.g. [this](https://voice.johni0702.de/?address=voice.johni0702.de&port=443/demo
 
 Custom themes can be created by deriving them from the MetroMumbleLight/Dark themes just like the MetroMumbleDark theme is derived from the MetroMumbleLight theme.
 
+### Matrix Widget
+mumble-web has specific support for running as a widget in a [Matrix] room.
+
+While just using the URL to a mumble-web instance in a Custom Widget should work for most cases, making full use of all supported features will require some additional trickery. Also note that audio may not be functioning properly on newer Chrome versions without these extra steps.
+
+This assumes you are using the Riot Web or Desktop client. Other clients will probably require different steps.
+1. Type `/devtools` into the message box of the room and press Enter
+2. Click on `Send Custom Event`
+3. Click on `Event` in the bottom right corner (it should change to `State Event`)
+4. Enter `im.vector.modular.widgets` for `Event Type`
+5. Enter `mumble` for `State Key` (this value may be arbitrary but must be unique per room)
+6. For `Event Content` enter (make sure to replace the example values):
+```
+{
+  "waitForIframeLoad": true,
+  "name": "Mumble",
+  "creatorUserId": "@your_user_id:your_home_server.example",
+  "url": "https://voice.johni0702.de/?address=voice.johni0702.de&port=443/mumble&matrix=true&username=$matrix_display_name&theme=$theme&avatarurl=$matrix_avatar_url",
+  "data": {},
+  "type": "jitsi",
+  "id": "mumble"
+}
+```
+The `$var` parts of the `url` are intentional and will be replaced by Riot whenever a widget is loaded (i.e. they will be different for every user). The `username` query parameter sets the default username to the user's Matrix display name, the `theme` parameter automatically uses the dark theme if it's used in Riot, and the `avatarurl` will automatically download the user's avatar on Matrix and upload it as the avatar in Mumble.
+Finally, the `matrix=true` query parameter replaces the whole `Connect to Server` dialog with a single `Join Conference` button, so make sure to remove it if you do not supply default values for all connection parameters as above.
+The `type` needs to be `jitsi` to allow the widget to use audio and to stay open when switching to a different room (this will hopefully change once Riot is able to ask for permission from the user by itself).
+The `id` should be the same as the `State Key` from step 5.
+See [here](https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit) for more information on the values of these fields.
+7. Press `Send`
+
 ### License
 ISC
 
 [Mumble]: https://wiki.mumble.info/wiki/Main_Page
 [websockify GitHub page]: https://github.com/novnc/websockify
 [MetroMumble]: https://github.com/xPoke/MetroMumble
+[Matrix]: https://matrix.org
