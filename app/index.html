@@ -32,11 +32,11 @@
             <table>
                 <tr>
                   <td>Address</td>
-                  <td><input id="address" type="text" data-bind="value: address"></td>
+                  <td><input id="address" type="text" data-bind="value: address" required></td>
                 </tr>
                 <tr>
                   <td>Port</td>
-                  <td><input id="port" type="text" data-bind="value: port"></td>
+                  <td><input id="port" type="text" data-bind="value: port" required></td>
                 </tr>
                 <tr>
                   <td>Token</td>
@@ -44,7 +44,7 @@
                 </tr>
                 <tr>
                   <td>Username</td>
-                  <td><input id="username" type="text" data-bind="value: username"></td>
+                  <td><input id="username" type="text" data-bind="value: username" required></td>
                 </tr>
 		<tr>
                   <td>Password</td>
@@ -109,13 +109,13 @@
                     "<span class="connect-error-reason" data-bind="text: reason"></span>"
                   </td>
                 </tr>
-                <tr data-bind="visible: type() == 2 || type() == 3 || type() == 5">
+                <tr data-bind="if: type() == 2 || type() == 3 || type() == 5">
                   <td>Username</td>
-                  <td><input id="username" type="text" data-bind="value: username"></td>
+                  <td><input id="username" type="text" data-bind="value: username" required></td>
                 </tr>
-                <tr data-bind="visible: type() == 3 || type() == 4">
+                <tr data-bind="if: type() == 3 || type() == 4">
                   <td>Password</td>
-                  <td><input id="password" type="password" data-bind="value: password"></td>
+                  <td><input id="password" type="password" data-bind="value: password" required></td>
                 </tr>
             </table>
             <div class="dialog-footer">
