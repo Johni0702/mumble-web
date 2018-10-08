@@ -249,6 +249,12 @@
                       <option value="never">Never</option>
                   </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="checkbox" data-bind="checked: userCountInChannelName">
+                        Show user count after channel name
+                    </td>
+                </tr>
             </table>
             <div class="dialog-footer">
               <input class="dialog-close" type="button" data-bind="click: $root.closeSettings" value="Cancel">
@@ -492,7 +498,12 @@
             data-bind="visible: $root.thisUser().channel() === $data">
           <img class="channel-icon-linked" src="/svg/channel_linked.svg"
             data-bind="visible: linked() && $root.thisUser().channel() !== $data">
-          <div class="channel-name" data-bind="text: name"></div>
+          <div class="channel-name">
+            <span data-bind="text: name"></span>
+            <!-- ko if: $root.settings.userCountInChannelName() && userCount() !== 0 -->
+            &nbsp;(<span data-bind="text: userCount()"></span>)
+            <!-- /ko -->
+          </div>
         </div>
         <!-- ko if: expanded -->
         <!-- ko foreach: users -->

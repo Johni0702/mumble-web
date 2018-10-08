@@ -147,6 +147,7 @@ class SettingsDialog {
     this.testVadLevel = ko.observable(0)
     this.testVadActive = ko.observable(false)
     this.showAvatars = ko.observable(settings.showAvatars())
+    this.userCountInChannelName = ko.observable(settings.userCountInChannelName())
     // Need to wrap this in a pureComputed to make sure it's always numeric
     let audioBitrate = ko.observable(settings.audioBitrate)
     this.audioBitrate = ko.pureComputed({
@@ -181,6 +182,7 @@ class SettingsDialog {
     settings.pttKey = this.pttKey()
     settings.vadLevel = this.vadLevel()
     settings.showAvatars(this.showAvatars())
+    settings.userCountInChannelName(this.userCountInChannelName())
     settings.audioBitrate = this.audioBitrate()
     settings.samplesPerPacket = this.samplesPerPacket()
   }
@@ -243,6 +245,7 @@ class Settings {
     this.vadLevel = load('vadLevel') || defaults.vadLevel
     this.toolbarVertical = load('toolbarVertical') || defaults.toolbarVertical
     this.showAvatars = ko.observable(load('showAvatars') || defaults.showAvatars)
+    this.userCountInChannelName = ko.observable(load('userCountInChannelName') || defaults.userCountInChannelName)
     this.audioBitrate = Number(load('audioBitrate')) || defaults.audioBitrate
     this.samplesPerPacket = Number(load('samplesPerPacket')) || defaults.samplesPerPacket
   }
@@ -254,6 +257,7 @@ class Settings {
     save('vadLevel', this.vadLevel)
     save('toolbarVertical', this.toolbarVertical)
     save('showAvatars', this.showAvatars())
+    save('userCountInChannelName', this.userCountInChannelName())
     save('audioBitrate', this.audioBitrate)
     save('samplesPerPacket', this.samplesPerPacket)
   }
@@ -594,6 +598,9 @@ class GlobalBindings {
         channels: ko.observableArray(),
         users: ko.observableArray(),
         linked: ko.observable(false)
+      }
+      ui.userCount = () => {
+        return ui.channels().reduce((acc, c) => acc + c.userCount(), ui.users().length)
       }
       ui.openContextMenu = (_, event) => openContextMenu(event, this.channelContextMenu, ui)
       ui.canJoin = () => {
