@@ -1,6 +1,6 @@
 {
   "name": "mumble-web",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "An HTML5 Mumble client.",
   "scripts": {
     "build": "webpack && [ -f dist/config.local.js ] || cp app/config.local.js dist/",
