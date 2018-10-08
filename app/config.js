@@ -3,6 +3,14 @@
 //       configuration options. Use the [config.local.js] file instead!
 
 window.mumbleWebConfig = {
+  // Which fields to show on the Connect to Server dialog
+  'connectDialog': {
+    'address': true,
+    'port': true,
+    'token': true,
+    'username': true,
+    'password': true
+  },
   // Default values (can be changed by passing a query parameter of the same name)
   'defaults': {
     // Connect Dialog

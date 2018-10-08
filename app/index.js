@@ -260,7 +260,8 @@ class Settings {
 }
 
 class GlobalBindings {
-  constructor () {
+  constructor (config) {
+    this.config = config
     this.settings = new Settings()
     this.connector = new WorkerBasedMumbleConnector()
     this.client = null
@@ -860,7 +861,7 @@ class GlobalBindings {
     }
   }
 }
-var ui = new GlobalBindings()
+var ui = new GlobalBindings(window.mumbleWebConfig)
 
 // Used only for debugging
 window.mumbleUi = ui
