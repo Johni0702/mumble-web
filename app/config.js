@@ -6,7 +6,7 @@ window.mumbleWebConfig = {
   // Default values (can be changed by passing a query parameter of the same name)
   'defaults': {
     // Connect Dialog
-    'address': '',
+    'address': window.location.hostname,
     'port': '443',
     'token': '',
     'username': '',
