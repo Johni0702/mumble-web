@@ -167,7 +167,7 @@ class SettingsDialog {
     if (this._testVad) {
       this._testVad.end()
     }
-    let dummySettings = new Settings()
+    let dummySettings = new Settings({})
     this.applyTo(dummySettings)
     this._testVad = new VADVoiceHandler(null, dummySettings)
     this._testVad.on('started_talking', () => this.testVadActive(true))
@@ -236,15 +236,15 @@ class SettingsDialog {
 }
 
 class Settings {
-  constructor () {
+  constructor (defaults) {
     const load = key => window.localStorage.getItem('mumble.' + key)
-    this.voiceMode = load('voiceMode') || 'vad'
-    this.pttKey = load('pttKey') || 'ctrl + shift'
-    this.vadLevel = load('vadLevel') || 0.3
-    this.toolbarVertical = load('toolbarVertical') || false
-    this.showAvatars = ko.observable(load('showAvatars') || 'always')
-    this.audioBitrate = Number(load('audioBitrate')) || 40000
-    this.samplesPerPacket = Number(load('samplesPerPacket')) || 960
+    this.voiceMode = load('voiceMode') || defaults.voiceMode
+    this.pttKey = load('pttKey') || defaults.pttKey
+    this.vadLevel = load('vadLevel') || defaults.vadLevel
+    this.toolbarVertical = load('toolbarVertical') || defaults.toolbarVertical
+    this.showAvatars = ko.observable(load('showAvatars') || defaults.showAvatars)
+    this.audioBitrate = Number(load('audioBitrate')) || defaults.audioBitrate
+    this.samplesPerPacket = Number(load('samplesPerPacket')) || defaults.samplesPerPacket
   }
 
   save () {
@@ -262,7 +262,7 @@ class Settings {
 class GlobalBindings {
   constructor (config) {
     this.config = config
-    this.settings = new Settings()
+    this.settings = new Settings(config.settings)
     this.connector = new WorkerBasedMumbleConnector()
     this.client = null
     this.userContextMenu = new ContextMenu()
