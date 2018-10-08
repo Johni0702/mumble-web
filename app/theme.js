@@ -8,7 +8,7 @@ var themes = {
   'light': 'MetroMumbleLight',
   'dark': 'MetroMumbleDark'
 }
-theme = themes[theme] || 'MetroMumbleLight'
+theme = themes[theme] || window.mumbleWebConfig.defaults.theme
 window.theme = theme
 
 var [loadingTheme, mainTheme] = {

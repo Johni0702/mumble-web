@@ -8,6 +8,7 @@ module.exports = {
       './app/index.js',
       './app/index.html'
     ],
+    config: './app/config.js',
     theme: './app/theme.js',
     matrix: './app/matrix.js'
   },

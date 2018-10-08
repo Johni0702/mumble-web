@@ -3,7 +3,7 @@
   "version": "0.4.1",
   "description": "An HTML5 Mumble client.",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack && [ -f dist/config.local.js ] || cp app/config.local.js dist/",
     "prepublish": "rm -rf dist && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

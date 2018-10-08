@@ -51,7 +51,7 @@ function ContextMenu () {
 function ConnectDialog () {
   var self = this
   self.address = ko.observable('')
-  self.port = ko.observable('443')
+  self.port = ko.observable('')
   self.token = ko.observable('')
   self.username = ko.observable('')
   self.password = ko.observable('')
@@ -867,6 +867,7 @@ window.mumbleUi = ui
 
 window.onload = function () {
   var queryParams = url.parse(document.location.href, true).query
+  queryParams = Object.assign({}, window.mumbleWebConfig.defaults, queryParams)
   var useJoinDialog = queryParams.joinDialog
   if (queryParams.matrix) {
     useJoinDialog = true

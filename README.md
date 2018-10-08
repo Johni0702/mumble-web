@@ -86,6 +86,10 @@ map $http_upgrade $connection_upgrade {
 }
 ```
 
+### Configuration
+The `app/config.js` file contains default values and descriptions for all configuration options.
+You can overwrite those by editing the `config.local.js` file within your `dist` folder. Make sure to back up and restore the file whenever you update to a new version.
+
 ### Themes
 The default theme of mumble-web tries to mimic the excellent [MetroMumble]Light theme.
 mumble-web also includes a dark version, named MetroMumbleDark, which is heavily inspired by [MetroMumble]'s dark version.
