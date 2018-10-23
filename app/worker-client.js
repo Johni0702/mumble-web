@@ -372,7 +372,7 @@ class WorkerBasedMumbleUser extends EventEmitter {
   }
 
   get channel () {
-    return this._client.channels[this._channelId]
+    return this._client._channels[this._channelId]
   }
 }
 export default WorkerBasedMumbleConnector
