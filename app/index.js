@@ -1,10 +1,8 @@
 import 'stream-browserify' // see https://github.com/ericgundrum/pouch-websocket-sync-example/commit/2a4437b013092cc7b2cd84cf1499172c84a963a3
-import 'subworkers' // polyfill for https://bugs.chromium.org/p/chromium/issues/detail?id=31666
 import url from 'url'
 import ByteBuffer from 'bytebuffer'
 import MumbleClient from 'mumble-client'
-import WorkerBasedMumbleConnector from './worker-client'
-import BufferQueueNode from 'web-audio-buffer-queue'
+import mumbleConnect from 'mumble-client-websocket'
 import audioContext from 'audio-context'
 import ko from 'knockout'
 import _dompurify from 'dompurify'
@@ -267,7 +265,7 @@ class GlobalBindings {
   constructor (config) {
     this.config = config
     this.settings = new Settings(config.settings)
-    this.connector = new WorkerBasedMumbleConnector()
+    this.connector = { connect: mumbleConnect }
     this.client = null
     this.userContextMenu = new ContextMenu()
     this.channelContextMenu = new ContextMenu()
@@ -339,14 +337,15 @@ class GlobalBindings {
 
       log('Connecting to server ', host)
 
-      // Note: This call needs to be delayed until the user has interacted with
-      // the page in some way (which at this point they have), see: https://goo.gl/7K7WLu
-      this.connector.setSampleRate(audioContext().sampleRate)
-
       // TODO: token
       this.connector.connect(`wss://${host}:${port}`, {
         username: username,
-        password: password
+        password: password,
+        webrtc: {
+          enabled: true,
+          mic: micStream,
+          audioContext: audioContext()
+        }
       }).done(client => {
         log('Connected!')
 
@@ -563,24 +562,18 @@ class GlobalBindings {
         }
       }).on('voice', stream => {
         console.log(`User ${user.username} started takling`)
-        var userNode = new BufferQueueNode({
-          audioContext: audioContext()
-        })
-        userNode.connect(audioContext().destination)
-
+        if (stream.target === 'normal') {
+          ui.talking('on')
+        } else if (stream.target === 'shout') {
+          ui.talking('shout')
+        } else if (stream.target === 'whisper') {
+          ui.talking('whisper')
+        }
         stream.on('data', data => {
-          if (data.target === 'normal') {
-            ui.talking('on')
-          } else if (data.target === 'shout') {
-            ui.talking('shout')
-          } else if (data.target === 'whisper') {
-            ui.talking('whisper')
-          }
-          userNode.write(data.buffer)
+          // mumble-client is in WebRTC mode, no pcm data should arrive this way
         }).on('end', () => {
           console.log(`User ${user.username} stopped takling`)
           ui.talking('off')
-          userNode.end()
         })
       })
     }
@@ -929,7 +922,9 @@ window.onload = function () {
     req.send()
   }
   ui.connectDialog.joinOnly(useJoinDialog)
-  ko.applyBindings(ui)
+  userMediaPromise.then(() => {
+    ko.applyBindings(ui)
+  })
 }
 
 window.onresize = () => ui.updateSize()
@@ -981,10 +976,11 @@ function userToState () {
   return flags.join(', ')
 }
 
+var micStream
 var voiceHandler
 var testVoiceHandler
 
-initVoice(data => {
+var userMediaPromise = initVoice(data => {
   if (testVoiceHandler) {
     testVoiceHandler.write(data)
   }
@@ -996,6 +992,8 @@ initVoice(data => {
   } else if (voiceHandler) {
     voiceHandler.write(data)
   }
+}).then(userMedia => {
+  micStream = userMedia
 }, err => {
-  log('Cannot initialize user media. Microphone will not work:', err)
+  window.alert('Failed to initialize user media\nRefresh page to retry.\n' + err)
 })

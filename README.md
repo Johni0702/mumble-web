@@ -1,15 +1,16 @@
 # mumble-web
 
+Note: This WebRTC branch is not backwards compatible with the current release, i.e. it expects the server/proxy to support WebRTC which neither websockify nor Grumble do. Also note that it requires an extension to the Mumble protocol which has not yet been stabilized and as such may change at any time, so make sure to keep mumble-web and mumble-web-proxy in sync.
+
 mumble-web is an HTML5 [Mumble] client for use in modern browsers.
 
-A live demo is running [here](https://voice.johni0702.de/?address=voice.johni0702.de&port=443/demo).
+A live demo is running [here](https://voice.johni0702.de/webrtc/?address=voice.johni0702.de&port=443/demo).
 
 The Mumble protocol uses TCP for control and UDP for voice.
 Running in a browser, both are unavailable to this client.
-Instead Websockets are used for all communications.
+Instead Websockets are used for control and WebRTC is used for voice.
 
-libopus, libcelt (0.7.1) and libsamplerate, compiled to JS via emscripten, are used for audio decoding.
-Therefore, at the moment only the Opus and CELT Alpha codecs are supported.
+Therefore, only the Opus codec is supported.
 
 Quite a few features, most noticeably all
 administrative functionallity, are still missing.
@@ -18,10 +19,10 @@ administrative functionallity, are still missing.
 
 #### Download
 mumble-web can either be installed directly from npm with `npm install -g mumble-web`
-or from git:
+or from git (webrtc branch only from git for now):
 
 ```
-git clone https://github.com/johni0702/mumble-web
+git clone -b webrtc https://github.com/johni0702/mumble-web
 cd mumble-web
 npm install
 npm run build
@@ -34,30 +35,11 @@ Either way you will end up with a `dist` folder that contains the static page.
 
 #### Setup
 At the time of writing this there do not seem to be any Mumble servers
-which natively support Websockets. To use this client with any standard mumble
-server, websockify must be set up (preferably on the same machine that the
+which natively support Websockets+WebRTC. To use this client with any standard mumble
+server, [mumble-web-proxy] must be set up (preferably on the same machine that the
 Mumble server is running on).
 
-You can install websockify via your package manager `apt install websockify` or
-manually from the [websockify GitHub page]. Note that while some versions might
-function better than others, the python version generally seems to be the best.
-
-There are two basic ways you can use websockify with mumble-web:
-- Standalone, use websockify for both, websockets and serving static files
-- Proxied, let your favorite web server serve static files and proxy websocket connections to websockify
-
-##### Standalone
-This is the simplest but at the same time least flexible configuration.
-```
-websockify --cert=mycert.crt --key=mykey.key --ssl-only --ssl-target --web=path/to/dist 443 mumbleserver:64738
-```
-
-##### Proxied
-This configuration allows you to run websockify on a machine that already has
-another webserver running.
-```
-websockify --ssl-target 64737 mumbleserver:64738
-```
+Additionally you will need some web server to serve static files and terminate the secure websocket connection (mumble-web-proxy only supports insecure ones).
 
 A sample configuration for nginx that allows access to mumble-web at 
 `https://voice.example.com/` and connecting at `wss://voice.example.com/demo`
@@ -73,7 +55,7 @@ server {
                 root /path/to/dist;
         }
         location /demo {
-                proxy_pass http://websockify:64737;
+                proxy_pass http://proxybox:64737;
                 proxy_http_version 1.1;
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection $connection_upgrade;
@@ -85,6 +67,11 @@ map $http_upgrade $connection_upgrade {
         '' close;
 }
 ```
+where `proxybox` is the machine running mumble-web-proxy (may be `localhost`):
+```
+mumble-web-proxy --listen-ws 64737 --server mumbleserver:64738
+```
+If your mumble-web-proxy is running behind a NAT or firewall, take note of the respective section in its README.
 
 ### Configuration
 The `app/config.js` file contains default values and descriptions for all configuration options.
@@ -133,6 +120,6 @@ See [here](https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFR
 ISC
 
 [Mumble]: https://wiki.mumble.info/wiki/Main_Page
-[websockify GitHub page]: https://github.com/novnc/websockify
+[mumble-web-proxy]: https://github.com/johni0702/mumble-web-proxy
 [MetroMumble]: https://github.com/xPoke/MetroMumble
 [Matrix]: https://matrix.org
