@@ -46,6 +46,6 @@
     "voice-activity-detection": "johni0702/voice-activity-detection#9f8bd90",
     "webpack": "^1.13.3",
     "mumble-client-websocket": "^1.0.0",
-    "mumble-client": "github:johni0702/mumble-client#8124ee7"
+    "mumble-client": "github:johni0702/mumble-client#b81a3bd"
   }
 }
