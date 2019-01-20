@@ -47,22 +47,23 @@ There are two basic ways you can use websockify with mumble-web:
 - Proxied, let your favorite web server serve static files and proxy websocket connections to websockify
 
 ##### Standalone
-This is the simplest but at the same time least flexible configuration.
+This is the simplest but at the same time least flexible configuration. Replace `<mumbleserver>` with the URI of your mumble server. If `websockify` is running on the same machine as `mumble-server`, use `localhost`.
 ```
-websockify --cert=mycert.crt --key=mykey.key --ssl-only --ssl-target --web=path/to/dist 443 mumbleserver:64738
+websockify --cert=mycert.crt --key=mykey.key --ssl-only --ssl-target --web=path/to/dist 443 <mumbleserver>:64738
 ```
 
 ##### Proxied
 This configuration allows you to run websockify on a machine that already has
-another webserver running.
+another webserver running. Replace `<mumbleserver>` with the URI of your mumble server. If `websockify` is running on the same machine as `mumble-server`, use `localhost`.
+
 ```
-websockify --ssl-target 64737 mumbleserver:64738
+websockify --ssl-target 64737 <mumbleserver>:64738
 ```
 
-A sample configuration for nginx that allows access to mumble-web at 
-`https://voice.example.com/` and connecting at `wss://voice.example.com/demo`
-(similar to the demo server) looks like this:
-```
+Here are two web server configuration files (one for [NGINX](https://www.nginx.com/) and one for [Caddy server](https://caddyserver.com/)) which will serve the mumble-web interface at `https://voice.example.com` and allow the websocket to connect at `wss://voice.example.com/demo` (similar to the demo server). Replace `<websockify>` with the URI to the machine where `websockify` is running. If `websockify` is running on the same machine as your web server, use `localhost`.
+
+* NGINX configuration file
+```Nginx
 server {
         listen 443 ssl;
         server_name voice.example.com;
@@ -73,7 +74,7 @@ server {
                 root /path/to/dist;
         }
         location /demo {
-                proxy_pass http://websockify:64737;
+                proxy_pass http://<websockify>:64737;
                 proxy_http_version 1.1;
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection $connection_upgrade;
@@ -85,6 +86,23 @@ map $http_upgrade $connection_upgrade {
         '' close;
 }
 ```
+
+* Caddy configuration file (`Caddyfile`)
+```
+http://voice.example.com {
+  redir https://voice.example.com
+}
+
+https://voice.example.com {
+  tls "/etc/letsencrypt/live/voice.example.com/fullchain.pem" "/etc/letsencrypt/live/voice.example.com/privkey.pem"
+  root /path/to/dist
+  proxy /demo http://<websockify>:64737 {
+    websocket
+  }
+}
+```
+
+Make sure that your Mumble server is running. You may now open may now open `https://voice.example.com` in a web browser. You will be prompted for server details: choose either `address: voice.example.com/demo` with `port: 443` or `address: voice.example.com` with `port: 443/demo`. You may prefill these values by appending `?address=voice.example.com/demo&port=443`. Choose a username, and click `Connect`: you should now be able to talk and use the chat.
 
 ### Configuration
 The `app/config.js` file contains default values and descriptions for all configuration options.
