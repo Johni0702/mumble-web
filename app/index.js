@@ -337,14 +337,22 @@ class GlobalBindings {
 
       log('Connecting to server ', host)
 
+      let ctx = audioContext()
+      if (!this._delayedMicNode) {
+        this._micNode = ctx.createMediaStreamSource(this._micStream)
+        this._delayNode = ctx.createDelay()
+        this._delayNode.delayTime.value = 0.15
+        this._delayedMicNode = ctx.createMediaStreamDestination()
+      }
+
       // TODO: token
       this.connector.connect(`wss://${host}:${port}`, {
         username: username,
         password: password,
         webrtc: {
           enabled: true,
-          mic: micStream,
-          audioContext: audioContext()
+          mic: this._delayedMicNode.stream,
+          audioContext: ctx
         }
       }).done(client => {
         log('Connected!')
@@ -695,6 +703,15 @@ class GlobalBindings {
         voiceHandler.setMute(true)
       }
 
+      this._micNode.disconnect()
+      this._delayNode.disconnect()
+      if (mode === 'vad') {
+        this._micNode.connect(this._delayNode)
+        this._delayNode.connect(this._delayedMicNode)
+      } else {
+        this._micNode.connect(this._delayedMicNode)
+      }
+
       this.client.setAudioQuality(
         this.settings.audioBitrate,
         this.settings.samplesPerPacket
@@ -976,7 +993,6 @@ function userToState () {
   return flags.join(', ')
 }
 
-var micStream
 var voiceHandler
 var testVoiceHandler
 
@@ -993,7 +1009,7 @@ var userMediaPromise = initVoice(data => {
     voiceHandler.write(data)
   }
 }).then(userMedia => {
-  micStream = userMedia
+  ui._micStream = userMedia
 }, err => {
   window.alert('Failed to initialize user media\nRefresh page to retry.\n' + err)
 })
