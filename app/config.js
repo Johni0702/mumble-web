@@ -9,7 +9,8 @@ window.mumbleWebConfig = {
     'port': true,
     'token': true,
     'username': true,
-    'password': true
+    'password': true,
+    'channelName': false
   },
   // Default values for user settings
   // You can see your current value by typing `localStorage.getItem('mumble.$setting')` in the web console.
