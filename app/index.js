@@ -362,15 +362,14 @@ class GlobalBindings {
         window.matrixWidget.setAlwaysOnScreen(true)
 
         // Register all channels, recursively
-        const registerChannel = channel => {
+        const registerChannel = (channel, channelPath) => {
           this._newChannel(channel)
-	  // join channel  
-          if (channel.name === channelName) {
+          if(channelPath === channelName) {
             client.self.setChannel(channel)
           }
-          channel.children.forEach(registerChannel)
+          channel.children.forEach(ch => registerChannel(ch, channelPath+"/"+ch.name))
         }
-        registerChannel(client.root)
+        registerChannel(client.root, "")
 
         // Register all users
         client.users.forEach(user => this._newUser(user))
