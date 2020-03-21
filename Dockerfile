@@ -23,7 +23,7 @@ RUN cd /home/node && \
 
 USER root
 
-RUN apk del gcc git make g++
+RUN apk del gcc git
 
 USER node
 
