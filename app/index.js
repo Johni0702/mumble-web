@@ -55,13 +55,14 @@ function ConnectDialog () {
   self.token = ko.observable('')
   self.username = ko.observable('')
   self.password = ko.observable('')
+  self.channelName = ko.observable('')
   self.joinOnly = ko.observable(false)
   self.visible = ko.observable(true)
   self.show = self.visible.bind(self.visible, true)
   self.hide = self.visible.bind(self.visible, false)
   self.connect = function () {
     self.hide()
-    ui.connect(self.username(), self.address(), self.port(), self.token(), self.password())
+    ui.connect(self.username(), self.address(), self.port(), self.token(), self.password(), self.channelName())
   }
 }
 
@@ -331,7 +332,7 @@ class GlobalBindings {
       return '[' + new Date().toLocaleTimeString('en-US') + ']'
     }
 
-    this.connect = (username, host, port, token, password) => {
+    this.connect = (username, host, port, token, password, channelName = "") => {
       this.resetClient()
 
       this.remoteHost(host)
@@ -361,11 +362,14 @@ class GlobalBindings {
         window.matrixWidget.setAlwaysOnScreen(true)
 
         // Register all channels, recursively
-        const registerChannel = channel => {
+        const registerChannel = (channel, channelPath) => {
           this._newChannel(channel)
-          channel.children.forEach(registerChannel)
+          if(channelPath === channelName) {
+            client.self.setChannel(channel)
+          }
+          channel.children.forEach(ch => registerChannel(ch, channelPath+"/"+ch.name))
         }
-        registerChannel(client.root)
+        registerChannel(client.root, "")
 
         // Register all users
         client.users.forEach(user => this._newUser(user))
@@ -900,6 +904,9 @@ window.onload = function () {
   }
   if (queryParams.password) {
     ui.connectDialog.password(queryParams.password)
+  }
+  if (queryParams.channelName) {
+    ui.connectDialog.channelName(queryParams.channelName)
   }
   if (queryParams.avatarurl) {
     // Download the avatar and upload it to the mumble server when connected
