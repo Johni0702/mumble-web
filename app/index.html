@@ -41,9 +41,22 @@
                   <td><input id="port" type="text" data-bind="value: port" required></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.token">
-                  <td>Token</td>
-                  <td><input id="token" type="text" data-bind="value: token"></td>
+                  <td>Tokens</td>
+                  <td>
+                      <input type="text" data-bind='value: tokenToAdd, valueUpdate: "afterkeydown"'>
+                  </td>
                 </tr>
+                <tr data-bind="if: $root.config.connectDialog.token">
+                      <td></td>
+		      <td>
+                        <button class="dialog-submit" type="button" data-bind="enable: selectedTokens().length > 0, click: removeSelectedTokens()">Remove</button>
+                        <button class="dialog-submit" type="button" data-bind="enable: tokenToAdd().length > 0, click: addToken()">Add</button>
+  		      </td>
+                </tr>
+		<tr data-bind="if: $root.config.connectDialog.token">
+		  <td></td>
+		  <td><select id="token" multiple="multiple" height="5" data-bind="options:tokens, selectedOptions:selectedTokens, valueUpdate: 'afterkeydown', event: { keypress: $root.config.connectDialog.deleteSelectedTokensKey}"></select></td>
+		</tr>
                 <tr data-bind="if: $root.config.connectDialog.username">
                   <td>Username</td>
                   <td><input id="username" type="text" data-bind="value: username" required></td>

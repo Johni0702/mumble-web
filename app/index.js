@@ -52,7 +52,9 @@ function ConnectDialog () {
   var self = this
   self.address = ko.observable('')
   self.port = ko.observable('')
-  self.token = ko.observable('')
+  self.tokenToAdd = ko.observable('')
+  self.selectedTokens = ko.observableArray([])
+  self.tokens = ko.observableArray([])
   self.username = ko.observable('')
   self.password = ko.observable('')
   self.channelName = ko.observable('')
@@ -62,7 +64,25 @@ function ConnectDialog () {
   self.hide = self.visible.bind(self.visible, false)
   self.connect = function () {
     self.hide()
-    ui.connect(self.username(), self.address(), self.port(), self.token(), self.password(), self.channelName())
+    ui.connect(self.username(), self.address(), self.port(), self.tokens(), self.password(), self.channelName())
+  }
+
+  self.addToken = function() {
+    if ((self.tokenToAdd() != "") && (self.tokens.indexOf(self.tokenToAdd()) < 0)) {
+      self.tokens.push(self.tokenToAdd())
+    }
+    self.tokenToAdd("")
+  }
+
+  self.removeSelectedTokensKey = function(data, event) {
+    if (event.keyCode == 46) {
+      sefl.removeSelectedTokens()
+    }
+  }
+  self.removeSelectedTokens = function() {
+    console.log("gogog")
+      this.tokens.removeAll(this.selectedTokens())
+      this.selectedTokens([])
   }
 }
 
@@ -332,7 +352,7 @@ class GlobalBindings {
       return '[' + new Date().toLocaleTimeString('en-US') + ']'
     }
 
-    this.connect = (username, host, port, token, password, channelName = "") => {
+    this.connect = (username, host, port, tokens = [], password, channelName = "") => {
       this.resetClient()
 
       this.remoteHost(host)
@@ -347,7 +367,8 @@ class GlobalBindings {
       // TODO: token
       this.connector.connect(`wss://${host}:${port}`, {
         username: username,
-        password: password
+        password: password,
+	tokens: tokens
       }).done(client => {
         log('Connected!')
 
@@ -364,7 +385,9 @@ class GlobalBindings {
         // Register all channels, recursively
         const registerChannel = (channel, channelPath) => {
           this._newChannel(channel)
+ 	  console.log(channelPath)
           if(channelPath === channelName) {
+		console.log(channel)
             client.self.setChannel(channel)
           }
           channel.children.forEach(ch => registerChannel(ch, channelPath+"/"+ch.name))
@@ -894,8 +917,8 @@ window.onload = function () {
   } else {
     useJoinDialog = false
   }
-  if (queryParams.token) {
-    ui.connectDialog.token(queryParams.token)
+  if (queryParams.tokens) {
+    ui.connectDialog.tokens(queryParams.tokens.split(","))
   }
   if (queryParams.username) {
     ui.connectDialog.username(queryParams.username)

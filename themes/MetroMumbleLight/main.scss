@@ -444,7 +444,7 @@ form {
   top: calc(50% - 10px);
   left: calc(50% - 100px);
 }
-.connect-dialog input[type=text] {
+.connect-dialog input[type=text], select {
   font-size: 15px;
   border: 1px $dialog-input-border-color solid;
   border-radius: 3px;
