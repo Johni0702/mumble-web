@@ -923,6 +923,9 @@ window.onload = function () {
   if (queryParams.tokens) {
     ui.connectDialog.tokens(queryParams.tokens.split(","))
   }
+  if (queryParams.token) {
+    ui.connectDialog.token(queryParams.token.split(","))
+  }
   if (queryParams.username) {
     ui.connectDialog.username(queryParams.username)
   } else {
