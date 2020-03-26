@@ -74,11 +74,6 @@ function ConnectDialog () {
     self.tokenToAdd("")
   }
 
-  self.removeSelectedTokensKey = function(data, event) {
-    if (event.keyCode == 46) {
-      self.removeSelectedTokens()
-    }
-  }
   self.removeSelectedTokens = function() {
       this.tokens.removeAll(this.selectedTokens())
       this.selectedTokens([])
