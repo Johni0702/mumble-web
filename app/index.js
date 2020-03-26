@@ -384,7 +384,6 @@ class GlobalBindings {
         const registerChannel = (channel, channelPath) => {
           this._newChannel(channel)
           if(channelPath === channelName) {
-		console.log(channel)
             client.self.setChannel(channel)
           }
           channel.children.forEach(ch => registerChannel(ch, channelPath+"/"+ch.name))
