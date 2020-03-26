@@ -376,8 +376,7 @@ class GlobalBindings {
         // Make sure we stay open if we're running as Matrix widget
         window.matrixWidget.setAlwaysOnScreen(true)
 
-        // Register all channels, recursively
-	  
+        // Register all channels, recursively 
         if(channelName.indexOf("/") != 0) {
           channelName = "/"+channelName;
         }
@@ -913,11 +912,12 @@ window.onload = function () {
   } else {
     useJoinDialog = false
   }
-  if (queryParams.tokens) {
-    ui.connectDialog.tokens(queryParams.tokens.split(","))
-  }
   if (queryParams.token) {
-    ui.connectDialog.tokens(queryParams.token.split(","))
+    var tokens = queryParams.token
+    if (!Array.isArray(tokens)) {
+      tokens = [tokens]
+    }
+    ui.connectDialog.tokens(tokens)
   }
   if (queryParams.username) {
     ui.connectDialog.username(queryParams.username)
