@@ -382,6 +382,10 @@ class GlobalBindings {
         window.matrixWidget.setAlwaysOnScreen(true)
 
         // Register all channels, recursively
+	  
+	if(channelName.indexOf("/") != 0) {
+	  channelName = "/"+channelName;
+	}
         const registerChannel = (channel, channelPath) => {
           this._newChannel(channel)
  	  console.log(channelPath)
