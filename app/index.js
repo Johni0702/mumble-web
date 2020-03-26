@@ -362,7 +362,7 @@ class GlobalBindings {
       this.connector.connect(`wss://${host}:${port}`, {
         username: username,
         password: password,
-	tokens: tokens
+        tokens: tokens
       }).done(client => {
         log('Connected!')
 
@@ -378,12 +378,11 @@ class GlobalBindings {
 
         // Register all channels, recursively
 	  
-	if(channelName.indexOf("/") != 0) {
-	  channelName = "/"+channelName;
-	}
+        if(channelName.indexOf("/") != 0) {
+          channelName = "/"+channelName;
+        }
         const registerChannel = (channel, channelPath) => {
           this._newChannel(channel)
- 	  console.log(channelPath)
           if(channelPath === channelName) {
 		console.log(channel)
             client.self.setChannel(channel)
