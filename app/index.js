@@ -919,7 +919,7 @@ window.onload = function () {
     ui.connectDialog.tokens(queryParams.tokens.split(","))
   }
   if (queryParams.token) {
-    ui.connectDialog.token(queryParams.token.split(","))
+    ui.connectDialog.tokens(queryParams.token.split(","))
   }
   if (queryParams.username) {
     ui.connectDialog.username(queryParams.username)
