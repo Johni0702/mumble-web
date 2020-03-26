@@ -76,11 +76,10 @@ function ConnectDialog () {
 
   self.removeSelectedTokensKey = function(data, event) {
     if (event.keyCode == 46) {
-      sefl.removeSelectedTokens()
+      self.removeSelectedTokens()
     }
   }
   self.removeSelectedTokens = function() {
-    console.log("gogog")
       this.tokens.removeAll(this.selectedTokens())
       this.selectedTokens([])
   }
