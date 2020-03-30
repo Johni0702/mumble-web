@@ -1,3 +1,4 @@
+var theme = '../themes/MetroMumbleLight'
 var path = require('path');
 
 module.exports = {
@@ -29,12 +30,21 @@ module.exports = {
       {
         test: /\.html$/,
         use: [
-          'file-loader?name=[name].[ext]',
-          'extract-loader',
-          'html-loader?' + JSON.stringify({
-            attrs: ['img:src', 'link:href'],
-            interpolate: 'require'
-          })
+          {
+            loader: 'file-loader',
+            options: { 'name': '[name].[ext]' }
+          },
+          {
+            loader: "extract-loader"
+          },
+          {
+            loader: 'html-loader',
+            options: {
+              attrs: ['img:src', 'link:href'],
+              //interpolate: 'require',
+              root: theme
+            }
+          }
         ]
       },
       {
@@ -46,17 +56,21 @@ module.exports = {
         ]
       },
       {
+        type: 'javascript/auto',
         test: /manifest\.json$|\.xml$/,
         use: [
           'file-loader',
           'extract-loader',
-          'regexp-replace-loader?' + JSON.stringify({
-            match: {
-              pattern: "#require\\('([^']*)'\\)",
-              flags: 'g'
-            },
-            replaceWith: '"+require("$1")+"'
-          }),
+          {
+            loader: 'regexp-replace-loader',
+            options: {
+              match: {
+                pattern: "#require\\('([^']*)'\\)",
+                flags: 'g'
+              },
+              replaceWith: '"+require("$1")+"'
+            }
+          },
           'raw-loader'
         ]
       },
