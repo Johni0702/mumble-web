@@ -42,7 +42,7 @@
     "node-sass": "^4.9.3",
     "raw-loader": "^4.0.0",
     "regexp-replace-loader": "1.0.1",
-    "sass-loader": "^4.1.1",
+    "sass-loader": "^8.0.2",
     "stream-chunker": "^1.2.8",
     "subworkers": "^1.0.1",
     "to-arraybuffer": "^1.0.1",

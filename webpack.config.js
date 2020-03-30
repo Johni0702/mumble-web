@@ -8,7 +8,9 @@ module.exports = {
       './app/index.js',
       './app/index.html'
     ],
-    config: './app/config.js'
+    config: './app/config.js',
+    theme: './app/theme.js',
+    matrix: './app/matrix.js'
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -53,6 +55,15 @@ module.exports = {
           'file-loader',
           'extract-loader',
           'css-loader'
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'file-loader?name=[hash].css',
+          'extract-loader',
+          'css-loader',
+          'sass-loader'
         ]
       },
       {
