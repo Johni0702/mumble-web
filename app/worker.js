@@ -8,22 +8,11 @@ import CodecsBrowser from 'mumble-client-codecs-browser'
 // Polyfill nested webworkers for https://bugs.chromium.org/p/chromium/issues/detail?id=31666
 import 'subworkers'
 
-// Monkey-patch to allow webworkify-webpack and codecs to work inside of web worker
-/* global URL */
-//if (typeof window === 'undefined')  global.window = {}
-//window.URL = URL
-
-// Using require to ensure ordering relative to monkey-patch above
-//let CodecsBrowser = require('mumble-client-codecs-browser')
-
-
   let sampleRate
   let nextClientId = 1
   let nextVoiceId = 1
   let voiceStreams = []
   let clients = []
-
-  console.log('worker created!')
 
   function postMessage (msg, transfer) {
     try {
