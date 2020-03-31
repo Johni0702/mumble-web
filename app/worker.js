@@ -16,12 +16,14 @@ import 'subworkers'
 // Using require to ensure ordering relative to monkey-patch above
 //let CodecsBrowser = require('mumble-client-codecs-browser')
 
-export default function (self) {
+
   let sampleRate
   let nextClientId = 1
   let nextVoiceId = 1
   let voiceStreams = []
   let clients = []
+
+  console.log('worker created!')
 
   function postMessage (msg, transfer) {
     try {
@@ -286,4 +288,5 @@ export default function (self) {
       console.error('exception during message event', ev.data, ex)
     }
   })
-}
+
+  export default null

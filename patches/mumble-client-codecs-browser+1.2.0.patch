@@ -1,3 +1,33 @@
+diff --git a/node_modules/mumble-client-codecs-browser/lib/decode-worker.js b/node_modules/mumble-client-codecs-browser/lib/decode-worker.js
+index 3925f29..be9af92 100644
+--- a/node_modules/mumble-client-codecs-browser/lib/decode-worker.js
++++ b/node_modules/mumble-client-codecs-browser/lib/decode-worker.js
+@@ -1,10 +1,6 @@
+ 'use strict';
+ 
+-Object.defineProperty(exports, "__esModule", {
+-  value: true
+-});
+ 
+-exports.default = function (self) {
+   var opusDecoder, celt7Decoder;
+   self.addEventListener('message', function (e) {
+     var data = e.data;
+@@ -55,10 +51,12 @@ exports.default = function (self) {
+       }, [_decoded.buffer]);
+     }
+   });
+-};
++
+ 
+ var _libopus = require('libopus.js');
+ 
+ var _libcelt = require('libcelt7.js');
+ 
+ var MUMBLE_SAMPLE_RATE = 48000;
++
++export default null
+\ No newline at end of file
 diff --git a/node_modules/mumble-client-codecs-browser/lib/decoder-stream.js b/node_modules/mumble-client-codecs-browser/lib/decoder-stream.js
 index 6cfda8b..eed6fa3 100644
 --- a/node_modules/mumble-client-codecs-browser/lib/decoder-stream.js
@@ -41,6 +71,37 @@ index 6cfda8b..eed6fa3 100644
 \ No newline at end of file
 +//exports.default = DecoderStream;
 +export default DecoderStream
+\ No newline at end of file
+diff --git a/node_modules/mumble-client-codecs-browser/lib/encode-worker.js b/node_modules/mumble-client-codecs-browser/lib/encode-worker.js
+index f7187ab..c2ebaa3 100644
+--- a/node_modules/mumble-client-codecs-browser/lib/encode-worker.js
++++ b/node_modules/mumble-client-codecs-browser/lib/encode-worker.js
+@@ -1,10 +1,6 @@
+ 'use strict';
+ 
+-Object.defineProperty(exports, "__esModule", {
+-  value: true
+-});
+ 
+-exports.default = function (self) {
+   var opusEncoder, celt7Encoder;
+   var bitrate;
+   self.addEventListener('message', function (e) {
+@@ -70,7 +66,7 @@ exports.default = function (self) {
+       }, [_buffer]);
+     }
+   });
+-};
++
+ 
+ var _libopus = require('libopus.js');
+ 
+@@ -83,3 +79,5 @@ var _toArraybuffer2 = _interopRequireDefault(_toArraybuffer);
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ 
+ var MUMBLE_SAMPLE_RATE = 48000;
++
++export default null
 \ No newline at end of file
 diff --git a/node_modules/mumble-client-codecs-browser/lib/encoder-stream.js b/node_modules/mumble-client-codecs-browser/lib/encoder-stream.js
 index 021f131..853a99e 100644

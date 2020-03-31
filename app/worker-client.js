@@ -15,6 +15,7 @@ import Worker from './worker'
 class WorkerBasedMumbleConnector {
   constructor () {
     this._worker = new Worker() //work(require.resolve('./worker'))
+    console.log(this._worker)
     this._worker.addEventListener('message', this._onMessage.bind(this))
     this._reqId = 1
     this._requests = {}
