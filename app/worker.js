@@ -3,16 +3,18 @@ import mumbleConnect from 'mumble-client-websocket'
 import toArrayBuffer from 'to-arraybuffer'
 import chunker from 'stream-chunker'
 import Resampler from 'libsamplerate.js'
+import CodecsBrowser from 'mumble-client-codecs-browser'
 
 // Polyfill nested webworkers for https://bugs.chromium.org/p/chromium/issues/detail?id=31666
 import 'subworkers'
 
 // Monkey-patch to allow webworkify-webpack and codecs to work inside of web worker
 /* global URL */
-window.URL = URL
+//if (typeof window === 'undefined')  global.window = {}
+//window.URL = URL
 
 // Using require to ensure ordering relative to monkey-patch above
-let CodecsBrowser = require('mumble-client-codecs-browser')
+//let CodecsBrowser = require('mumble-client-codecs-browser')
 
 export default function (self) {
   let sampleRate

@@ -1,0 +1,89 @@
+diff --git a/node_modules/mumble-client-codecs-browser/lib/decoder-stream.js b/node_modules/mumble-client-codecs-browser/lib/decoder-stream.js
+index 6cfda8b..eed6fa3 100644
+--- a/node_modules/mumble-client-codecs-browser/lib/decoder-stream.js
++++ b/node_modules/mumble-client-codecs-browser/lib/decoder-stream.js
+@@ -1,9 +1,5 @@
+ 'use strict';
+ 
+-Object.defineProperty(exports, "__esModule", {
+-  value: true
+-});
+-
+ var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+ 
+ var _stream = require('stream');
+@@ -20,9 +16,9 @@ var _toArraybuffer = require('to-arraybuffer');
+ 
+ var _toArraybuffer2 = _interopRequireDefault(_toArraybuffer);
+ 
+-var _decodeWorker = require('./decode-worker');
++//var _decodeWorker = require('./decode-worker');
+ 
+-var _decodeWorker2 = _interopRequireDefault(_decodeWorker);
++import _decodeWorker2 from './decode-worker';
+ 
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ 
+@@ -33,7 +29,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
+ function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+ 
+ var pool = (0, _reusePool2.default)(function () {
+-  return (0, _webworkify2.default)(_decodeWorker2.default);
++  return new _decodeWorker2();
+ });
+ // Prepare first worker
+ pool.recycle(pool.get());
+@@ -112,4 +108,5 @@ var DecoderStream = function (_Transform) {
+   return DecoderStream;
+ }(_stream.Transform);
+ 
+-exports.default = DecoderStream;
+\ No newline at end of file
++//exports.default = DecoderStream;
++export default DecoderStream
+\ No newline at end of file
+diff --git a/node_modules/mumble-client-codecs-browser/lib/encoder-stream.js b/node_modules/mumble-client-codecs-browser/lib/encoder-stream.js
+index 021f131..853a99e 100644
+--- a/node_modules/mumble-client-codecs-browser/lib/encoder-stream.js
++++ b/node_modules/mumble-client-codecs-browser/lib/encoder-stream.js
+@@ -1,9 +1,5 @@
+ 'use strict';
+ 
+-Object.defineProperty(exports, "__esModule", {
+-  value: true
+-});
+-
+ var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+ 
+ var _stream = require('stream');
+@@ -16,9 +12,10 @@ var _webworkify = require('webworkify');
+ 
+ var _webworkify2 = _interopRequireDefault(_webworkify);
+ 
+-var _encodeWorker = require('./encode-worker');
++//var _encodeWorker = require('./encode-worker');
+ 
+-var _encodeWorker2 = _interopRequireDefault(_encodeWorker);
++//var _encodeWorker2 = _interopRequireDefault(_encodeWorker);
++import _encodeWorker2 from './encode-worker'
+ 
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ 
+@@ -29,7 +26,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
+ function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+ 
+ var pool = (0, _reusePool2.default)(function () {
+-  return (0, _webworkify2.default)(_encodeWorker2.default);
++  return new _encodeWorker2();
+ });
+ // Prepare first worker
+ pool.recycle(pool.get());
+@@ -96,4 +93,5 @@ var EncoderStream = function (_Transform) {
+   return EncoderStream;
+ }(_stream.Transform);
+ 
+-exports.default = EncoderStream;
+\ No newline at end of file
++//exports.default = EncoderStream;
++export default EncoderStream
+\ No newline at end of file

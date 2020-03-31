@@ -4,8 +4,9 @@ import EventEmitter from 'events'
 import { Writable, PassThrough } from 'stream'
 import toArrayBuffer from 'to-arraybuffer'
 import ByteBuffer from 'bytebuffer'
-import webworkify from 'webworkify'
-import worker from './worker'
+//import work from 'webworkify-webpack'
+//import worker from './worker'
+import Worker from './worker'
 
 /**
  * Creates proxy MumbleClients to a real ones running on a web worker.
@@ -13,7 +14,7 @@ import worker from './worker'
  */
 class WorkerBasedMumbleConnector {
   constructor () {
-    this._worker = webworkify(worker)
+    this._worker = new Worker() //work(require.resolve('./worker'))
     this._worker.addEventListener('message', this._onMessage.bind(this))
     this._reqId = 1
     this._requests = {}

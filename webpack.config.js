@@ -12,6 +12,7 @@ module.exports = {
     theme: './app/theme.js',
     matrix: './app/matrix.js'
   },
+  devtool: "cheap-source-map",
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js'
@@ -92,6 +93,10 @@ module.exports = {
         ]
       },
       {
+        test: /worker\.js$/,
+        use: { loader: 'worker-loader' }
+      },
+      {
         enforce: 'post',
         test: /mumble-streams\/lib\/data.js/,
         use: [
@@ -99,11 +104,6 @@ module.exports = {
         ]
       }
     ]
-  },
-  resolve: {
-    alias: {
-      webworkify: 'webworkify-webpack'
-    }
   },
   target: 'web'
 }
