@@ -60,10 +60,15 @@ function ConnectDialog () {
   self.channelName = ko.observable('')
   self.joinOnly = ko.observable(false)
   self.visible = ko.observable(true)
+  self.loading = ko.observable(false)
   self.show = self.visible.bind(self.visible, true)
   self.hide = self.visible.bind(self.visible, false)
   self.connect = function () {
-    self.hide()
+    self.loading(true)
+    if( !ui.config.defaults.easyMode) {
+      // hide the dialog when loading is done
+      self.loading.subscribe(loading => !loading ? self.hide() : null)
+    }
     ui.connect(self.username(), self.address(), self.port(), self.tokens(), self.password(), self.channelName())
   }
 
@@ -367,6 +372,7 @@ class GlobalBindings {
         log('Connected!')
 
         this.client = client
+        this.connectDialog.loading(false)
         // Prepare for connection errors
         client.on('error', (err) => {
           log('Connection error:', err)
