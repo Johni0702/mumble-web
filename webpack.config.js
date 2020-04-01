@@ -44,7 +44,6 @@ module.exports = {
             loader: 'html-loader',
             options: {
               attrs: ['img:src', 'link:href'],
-              //interpolate: 'require',
               root: theme
             }
           }
