@@ -1014,17 +1014,41 @@ function userToState () {
 var voiceHandler
 var testVoiceHandler
 
+/**
+ * @author svartoyg
+ */
+function translatePiece(selector, kind, parameters, key) {
+  let element = document.querySelector(selector);
+  if (element !== null) {
+    const translation = translate(key);
+    switch (kind) {
+      default:
+        console.warn('unhandled dom translation kind "' + kind + '"');
+        break;
+      case 'textcontent':
+        element.textContent = translation;
+        break;
+      case 'attribute':
+        element.setAttribute(parameters.name || 'value', translation);
+        break;
+    }
+  }
+}
+
+/**
+ * @author svartoyg
+ */
 function translateEverything() {
-  document.querySelector('#connect-dialog_title').textContent = translate('connectdialog.title');
-  document.querySelector('#connect-dialog_input_address').textContent = translate('connectdialog.address');
-  document.querySelector('#connect-dialog_input_port').textContent = translate('connectdialog.port');
-  document.querySelector('#connect-dialog_input_username').textContent = translate('connectdialog.username');
-  document.querySelector('#connect-dialog_input_password').textContent = translate('connectdialog.password');
-  document.querySelector('#connect-dialog_input_tokens').textContent = translate('connectdialog.tokens');
-  document.querySelector('#connect-dialog_controls_remove').textContent = translate('connectdialog.remove');
-  document.querySelector('#connect-dialog_controls_add').textContent = translate('connectdialog.add');
-  document.querySelector('#connect-dialog_controls_cancel').setAttribute('value', translate('connectdialog.cancel'));
-  document.querySelector('#connect-dialog_controls_connect').setAttribute('value', translate('connectdialog.connect'));
+  translatePiece('#connect-dialog_title', 'textcontent', {}, 'connectdialog.title');
+  translatePiece('#connect-dialog_input_address', 'textcontent', {}, 'connectdialog.address');
+  translatePiece('#connect-dialog_input_port', 'textcontent', {}, 'connectdialog.port');
+  translatePiece('#connect-dialog_input_username', 'textcontent', {}, 'connectdialog.username');
+  translatePiece('#connect-dialog_input_password', 'textcontent', {}, 'connectdialog.password');
+  translatePiece('#connect-dialog_input_tokens', 'textcontent', {}, 'connectdialog.tokens');
+  translatePiece('#connect-dialog_controls_remove', 'textcontent', {}, 'connectdialog.remove');
+  translatePiece('#connect-dialog_controls_add', 'textcontent', {}, 'connectdialog.add');
+  translatePiece('#connect-dialog_controls_cancel', 'attribute', {'name': 'value'}, 'connectdialog.cancel');
+  translatePiece('#connect-dialog_controls_connect', 'attribute', {'name': 'value'}, 'connectdialog.connect');
 }
 
 async function main() {
