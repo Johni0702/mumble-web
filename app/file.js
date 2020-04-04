@@ -3,7 +3,7 @@
  * @param {string} path
  * @return Promise<string>
  * @todo use Util.fetch instead?
- * @author fenris
+ * @author svartoyg
  */
 export async function read (path) {
   return (

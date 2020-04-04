@@ -3,7 +3,7 @@ export /*abstract */class Cache {
   /**
    * @param {string} key
    * @return {boolean}
-   * @author fenris
+   * @author svartoyg
    */
   /*protected */has(key) {
     throw (new Error('not implemented'));
@@ -12,7 +12,7 @@ export /*abstract */class Cache {
   /**
    * @param {string} key
    * @return {any}
-   * @author fenris
+   * @author svartoyg
    */
   /*protected */fetch(key) {
     throw (new Error('not implemented'));
@@ -21,7 +21,7 @@ export /*abstract */class Cache {
   /**
    * @param {string} key
    * @param {any} value
-   * @author fenris
+   * @author svartoyg
    */
   /*protected */store(key, value) {
     throw (new Error('not implemented'));
@@ -31,7 +31,7 @@ export /*abstract */class Cache {
    * @param {string} key
    * @param {()=>Promise<any>} retrieve
    * @return {Promise<any>}
-   * @author fenris
+   * @author svartoyg
    */
   /*public */async get(key, retrieve) {
     if (this.has(key)) {
@@ -47,32 +47,32 @@ export /*abstract */class Cache {
 
 
 /**
- * @author fenris
+ * @author svartoyg
  */
 class CacheNone extends Cache {
   /**
-   * @author fenris
+   * @author svartoyg
    */
   /*public */constructor() {
     super();
   }
   
   /**
-   * @author fenris
+   * @author svartoyg
    */
   /*protected */has(key) {
     return false;
   }
   
   /**
-   * @author fenris
+   * @author svartoyg
    */
   /*protected */fetch(key) {
     throw (new Error('not possible'));
   }
   
   /**
-   * @author fenris
+   * @author svartoyg
    */
   /*protected */store(key, value) {
   }
@@ -80,12 +80,12 @@ class CacheNone extends Cache {
 
 
 /**
- * @author fenris
+ * @author svartoyg
  */
 export class CacheLocalstorage extends Cache {
   /**
    * @param {string} [corner] for separating the cache instance from others
-   * @author fenris
+   * @author svartoyg
    */
   /*public */constructor(corner = null) {
     super();
@@ -93,21 +93,21 @@ export class CacheLocalstorage extends Cache {
   }
   
   /**
-   * @author fenris
+   * @author svartoyg
    */
   /*private */augmentKey(key) {
     return ((this.corner === null) ? key : (this.corner + '/' + key));
   }
   
   /**
-   * @author fenris
+   * @author svartoyg
    */
   /*protected */has(key) {
     return (window.localStorage.getItem(this.augmentKey(key)) !== null);
   }
   
   /**
-   * @author fenris
+   * @author svartoyg
    */
   /*protected */fetch(key) {
     const valueRaw = window.localStorage.getItem(this.augmentKey(key));
@@ -116,7 +116,7 @@ export class CacheLocalstorage extends Cache {
   }
   
   /**
-   * @author fenris
+   * @author svartoyg
    */
   /*protected */store(key, value) {
     const valueRaw = JSON.stringify(value);

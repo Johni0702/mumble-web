@@ -7,7 +7,7 @@ import {read as fileRead} from './file';
  * the relative path to the directory containing the JSON localization files
  * 
  * @var {string}
- * @author fenris
+ * @author svartoyg
  */
 var _directory = 'loc';
 
@@ -16,7 +16,7 @@ var _directory = 'loc';
  * the default language to use
  * 
  * @var {string}
- * @author fenris
+ * @author svartoyg
  */
 var _languageDefault = null;
 
@@ -25,14 +25,14 @@ var _languageDefault = null;
  * the fallback language to use
  * 
  * @var {string}
- * @author fenris
+ * @author svartoyg
  */
 var _languageFallback = null;
 
 
 /**
  * @var {Cache}
- * @author fenris
+ * @author svartoyg
  */
 var _cache = null;
 
@@ -41,7 +41,7 @@ var _cache = null;
  * two level map with ISO-639-1 code as first key and translation id as second key
  * 
  * @var {Map<string,Map<string,string>>}
- * @author fenris
+ * @author svartoyg
  */
 var _data = {};
 
@@ -49,7 +49,7 @@ var _data = {};
 /**
  * @param {string} language
  * @return Promise<Map<string,string>>
- * @author fenris
+ * @author svartoyg
  */
 async function retrieveData (language) {
   const regexp = (new RegExp("^([a-z]{2})$"));
@@ -77,7 +77,7 @@ async function retrieveData (language) {
 /**
  * @param {string} languageDefault
  * @param {string} [languageFallback]
- * @author fenris
+ * @author svartoyg
  */
 export async function initialize (languageDefault, languageFallback = 'en') {
   _cache = new CacheLocalstorage('loc');
@@ -103,7 +103,7 @@ export async function initialize (languageDefault, languageFallback = 'en') {
  * @param {string} key
  * @param {string} [languageChosen]
  * @return {string}
- * @author fenris
+ * @author svartoyg
  */
 export function translate (key, languageChosen = _languageDefault) {
   let result = undefined;
