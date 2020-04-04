@@ -1,0 +1,13 @@
+{
+  "connectdialog.title": "Verbindung herstellen",
+  "connectdialog.address": "Adresse",
+  "connectdialog.port": "Port",
+  "connectdialog.username": "Nutzername",
+  "connectdialog.password": "Passwort",
+  "connectdialog.tokens": "Tokens",
+  "connectdialog.remove": "Entfernen",
+  "connectdialog.add": "Hinzufügen",
+  "connectdialog.cancel": "Abbrechen",
+  "connectdialog.connect": "Verbinden"
+}
+

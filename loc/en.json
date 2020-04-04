@@ -1,0 +1,13 @@
+{
+  "connectdialog.title": "Connect to Server",
+  "connectdialog.address": "Address",
+  "connectdialog.port": "Port",
+  "connectdialog.username": "Username",
+  "connectdialog.password": "Password",
+  "connectdialog.tokens": "Tokens",
+  "connectdialog.remove": "Remove",
+  "connectdialog.add": "Add",
+  "connectdialog.cancel": "Cancel",
+  "connectdialog.connect": "Connect"
+}
+

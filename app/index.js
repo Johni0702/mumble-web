@@ -1015,6 +1015,16 @@ var voiceHandler
 var testVoiceHandler
 
 function translateEverything() {
+  document.querySelector('#connect-dialog_title').textContent = translate('connectdialog.title');
+  document.querySelector('#connect-dialog_input_address').textContent = translate('connectdialog.address');
+  document.querySelector('#connect-dialog_input_port').textContent = translate('connectdialog.port');
+  document.querySelector('#connect-dialog_input_username').textContent = translate('connectdialog.username');
+  document.querySelector('#connect-dialog_input_password').textContent = translate('connectdialog.password');
+  document.querySelector('#connect-dialog_input_tokens').textContent = translate('connectdialog.tokens');
+  document.querySelector('#connect-dialog_controls_remove').textContent = translate('connectdialog.remove');
+  document.querySelector('#connect-dialog_controls_add').textContent = translate('connectdialog.add');
+  document.querySelector('#connect-dialog_controls_cancel').setAttribute('value', translate('connectdialog.cancel'));
+  document.querySelector('#connect-dialog_controls_connect').setAttribute('value', translate('connectdialog.connect'));
 }
 
 async function main() {

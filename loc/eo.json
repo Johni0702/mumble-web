@@ -1,0 +1,13 @@
+{
+  "connectdialog.title": "Konektado",
+  "connectdialog.address": "Adreso",
+  "connectdialog.port": "Pordo",
+  "connectdialog.username": "Uzantnomo",
+  "connectdialog.password": "Pasvorto",
+  "connectdialog.tokens": "Ĵetonoj",
+  "connectdialog.remove": "Forigi",
+  "connectdialog.add": "Aldoni",
+  "connectdialog.cancel": "Nuligi",
+  "connectdialog.connect": "Konekti"
+}
+

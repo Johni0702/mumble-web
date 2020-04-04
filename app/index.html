@@ -27,29 +27,29 @@
                                                          css: { minimal: minimalView }">
       <!-- ko with: connectDialog --> 
       <div class="connect-dialog dialog" data-bind="visible: visible() && !joinOnly()">
-          <div class="dialog-header">
+          <div id="connect-dialog_title" class="dialog-header">
             Connect to Server
           </div>
           <form data-bind="submit: connect">
             <table>
                 <tr data-bind="if: $root.config.connectDialog.address">
-                  <td>Address</td>
+                  <td id="connect-dialog_input_address">Address</td>
                   <td><input id="address" type="text" data-bind="value: address" required></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.port">
-                  <td>Port</td>
+                  <td id="connect-dialog_input_port">Port</td>
                   <td><input id="port" type="text" data-bind="value: port" required></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.username">
-                  <td>Username</td>
+                  <td id="connect-dialog_input_username">Username</td>
                   <td><input id="username" type="text" data-bind="value: username" required></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.password">
-                  <td>Password</td>
+                  <td id="connect-dialog_input_password">Password</td>
                   <td><input id="password" type="password" data-bind="value: password"></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.token">
-                  <td>Tokens</td>
+                  <td id="connect-dialog_input_tokens">Tokens</td>
                   <td>
                       <input type="text" data-bind='value: tokenToAdd, valueUpdate: "afterkeydown"'>
                   </td>
@@ -57,8 +57,8 @@
                 <tr data-bind="if: $root.config.connectDialog.token">
                       <td></td>
                       <td>
-                        <button class="dialog-submit" type="button" data-bind="enable: selectedTokens().length > 0, click: removeSelectedTokens()">Remove</button>
-                        <button class="dialog-submit" type="button" data-bind="enable: tokenToAdd().length > 0, click: addToken()">Add</button>
+                        <button id="connect-dialog_controls_remove" class="dialog-submit" type="button" data-bind="enable: selectedTokens().length > 0, click: removeSelectedTokens()">Remove</button>
+                        <button id="connect-dialog_controls_add" class="dialog-submit" type="button" data-bind="enable: tokenToAdd().length > 0, click: addToken()">Add</button>
                      </td>
                 </tr>
                <tr data-bind="if: $root.config.connectDialog.token, visible: tokens().length > 0">
@@ -71,8 +71,8 @@
                 </tr>
             </table>
             <div class="dialog-footer">
-              <input class="dialog-close" type="button" data-bind="click: hide" value="Cancel">
-              <input class="dialog-submit" type="submit" value="Connect">
+              <input id="connect-dialog_controls_cancel" class="dialog-close" type="button" data-bind="click: hide" value="Cancel">
+              <input id="connect-dialog_controls_connect" class="dialog-submit" type="submit" value="Connect">
             </div>
           </form>
         </div>
