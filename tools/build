@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+npm run build
+
+## loc
+mkdir -p dist/loc
+cp -ruv loc/* dist/loc/
+

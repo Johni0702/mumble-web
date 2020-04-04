@@ -11,6 +11,7 @@ import _dompurify from 'dompurify'
 import keyboardjs from 'keyboardjs'
 
 import { ContinuousVoiceHandler, PushToTalkVoiceHandler, VADVoiceHandler, initVoice } from './voice'
+import {initialize as localizationInitialize, translate} from './loc';
 
 const dompurify = _dompurify(window)
 
@@ -1013,18 +1014,28 @@ function userToState () {
 var voiceHandler
 var testVoiceHandler
 
-initVoice(data => {
-  if (testVoiceHandler) {
-    testVoiceHandler.write(data)
-  }
-  if (!ui.client) {
-    if (voiceHandler) {
-      voiceHandler.end()
+function translateEverything() {
+}
+
+async function main() {
+  await localizationInitialize(navigator.language);
+  translateEverything();
+  initVoice(data => {
+    if (testVoiceHandler) {
+      testVoiceHandler.write(data)
     }
-    voiceHandler = null
-  } else if (voiceHandler) {
-    voiceHandler.write(data)
-  }
-}, err => {
-  log('Cannot initialize user media. Microphone will not work:', err)
-})
+    if (!ui.client) {
+      if (voiceHandler) {
+        voiceHandler.end()
+      }
+      voiceHandler = null
+    } else if (voiceHandler) {
+      voiceHandler.write(data)
+    }
+  }, err => {
+    log('Cannot initialize user media. Microphone will not work:', err)
+  })
+}
+
+main();
+
