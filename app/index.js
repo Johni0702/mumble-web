@@ -784,6 +784,11 @@ class GlobalBindings {
     this.requestMove = (user, channel) => {
       if (this.connected()) {
         user.model.setChannel(channel.model)
+        // reflect this change in URL
+        let currentUrl = url.parse(document.location.href, true)
+        currentUrl.query.channelName = channel.name()
+        delete currentUrl.search
+        window.history.pushState(null, channel.name(), url.format(currentUrl))
       }
     }
 
