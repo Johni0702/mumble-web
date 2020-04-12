@@ -49,7 +49,7 @@ export /*abstract */class Cache {
 /**
  * @author svartoyg
  */
-class CacheNone extends Cache {
+export class CacheNone extends Cache {
   /**
    * @author svartoyg
    */

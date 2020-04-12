@@ -24,6 +24,7 @@ window.mumbleWebConfig = {
     'audioBitrate': 40000, // bits per second
     'samplesPerPacket': 960
   },
+  'cacheLocalization': 'none', // cache mecanism for localization strings (either "none" or "localStorage"
   // Default values (can be changed by passing a query parameter of the same name)
   'defaults': {
     // Connect Dialog

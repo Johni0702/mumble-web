@@ -1,4 +1,4 @@
-import {CacheLocalstorage} from './cache';
+import {CacheNone, CacheLocalstorage} from './cache';
 import {read as fileRead} from './file';
 // import {Util} from 'util';
 
@@ -80,7 +80,7 @@ async function retrieveData (language) {
  * @author svartoyg
  */
 export async function initialize (languageDefault, languageFallback = 'en') {
-  _cache = new CacheLocalstorage('loc');
+  _cache = window.mumbleWebConfig.cacheLocalization == 'none' ? new CacheNone('loc') : new CacheLocalstorage('loc');
   _languageFallback = languageFallback;
   _languageDefault = languageDefault;
   for (const language of [_languageFallback, _languageDefault]) {
