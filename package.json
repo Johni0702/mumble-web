@@ -4,6 +4,7 @@
   "description": "An HTML5 Mumble client.",
   "scripts": {
     "build": "webpack && [ -f dist/config.local.js ] || cp app/config.local.js dist/",
+    "watch": "webpack --watch",
     "prepare": "rm -rf dist && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "patch-package"
