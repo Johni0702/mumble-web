@@ -90,17 +90,14 @@ import 'subworkers'
   function setupChannel (id, channel) {
     id = Object.assign({}, id, { channel: channel.id })
 
-    registerEventProxy(id, channel, 'update', (actor, props) => {
-      if (actor) {
-        actor = actor.id
-      }
+    registerEventProxy(id, channel, 'update', (props) => {
       if (props.parent) {
         props.parent = props.parent.id
       }
       if (props.links) {
         props.links = props.links.map((it) => it.id)
       }
-      return [actor, props]
+      return [props]
     })
     registerEventProxy(id, channel, 'remove')
 
