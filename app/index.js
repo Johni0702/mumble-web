@@ -408,6 +408,14 @@ class GlobalBindings {
           })
         })
 
+        // Log permission denied error messages
+        client.on('denied', (type) => {
+          ui.log.push({
+            type: 'generic',
+            value: 'Permission denied : '+ type
+          })
+        })
+
         // Set own user and root channel
         this.thisUser(client.self.__ui)
         this.root(client.root.__ui)
