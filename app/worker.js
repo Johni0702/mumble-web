@@ -184,6 +184,7 @@ import 'subworkers'
     id = { client: id }
 
     registerEventProxy(id, client, 'error')
+    registerEventProxy(id, client, 'denied', it => [it])
     registerEventProxy(id, client, 'newChannel', (it) => [setupChannel(id, it)])
     registerEventProxy(id, client, 'newUser', (it) => [setupUser(id, it)])
     registerEventProxy(id, client, 'message', (sender, message, users, channels, trees) => {
