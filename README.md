@@ -24,6 +24,7 @@ or from git:
 git clone https://github.com/johni0702/mumble-web
 cd mumble-web
 npm install
+npm run postinstall
 npm run build
 ```
 
