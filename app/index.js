@@ -784,9 +784,18 @@ class GlobalBindings {
     this.requestMove = (user, channel) => {
       if (this.connected()) {
         user.model.setChannel(channel.model)
+
+        // get full channel path
+        let path = channel.name()
+        let parent = channel.parent()
+        while( parent.name && parent.name() != 'Root' ){
+          path = parent.name() + '/' + path
+          parent = parent.parent()
+        }
         // reflect this change in URL
         let currentUrl = url.parse(document.location.href, true)
-        currentUrl.query.channelName = channel.name()
+        currentUrl.query.channelName = path
+        // delete search param so that query one can be taken into account
         delete currentUrl.search
         window.history.pushState(null, channel.name(), url.format(currentUrl))
       }
