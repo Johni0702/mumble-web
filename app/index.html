@@ -25,8 +25,53 @@
     </div>
     <div id="container" style="display: none" data-bind="visible: true,
                                                          css: { minimal: minimalView }">
+
+      <div class="dialog-overlay" data-bind="visible: connectDialog.visible() && config.defaults.easyMode">
+        <div class="startup-dialog dialog">
+          <div class="dialog-header" data-bind="text: connected() ? 'Connecté' : 'Préparation'"></div>
+          <form data-bind="submit: connectDialog.connect">
+             <!-- ko if: !connected() -->
+            <fieldset>
+              <legend>Rejoindre l'appel sur le salon <br/>"<span data-bind="text: connectDialog.channelName"></span>"</legend>
+                  <label data-bind="visible: !connectDialog.loading()">
+                    Quel est ton nom ?
+                    <input type="text" data-bind="textInput: connectDialog.username" required autofocus>
+                  </label>
+                  <div data-bind="visible: connectDialog.loading()">
+                    Connexion en tant que <span data-bind="text: connectDialog.username"></span>,
+                    merci de patienter ...
+                    <div class="small"><div class="loading-container">
+                      <div class="loading-circle"><div></div><div><div></div></div></div>
+                    </div></div>
+                  </div>
+              <input class="dialog-submit" type="submit" data-bind="{
+                value: !connected() && !connectDialog.loading() ? 'Participer' : 'Connexion...',
+                disable: !connectDialog.username() || connectDialog.loading()
+              }">
+            </fieldset>
+            <!-- /ko -->
+            <!-- ko if: connected() -->
+            <fieldset>
+              Bonjour <span data-bind="text: thisUser().name()"></span>,
+              te voilà connecté sur le salon <span data-bind="text: thisUser().channel().name()"></span>.
+              <!-- ko if: thisUser().channel() -->
+              <p>Il y a <span data-bind="text: thisUser().channel().users().length"></span> participants à ce salon</p>
+              <!-- /ko -->
+              <ul data-bind="foreach: thisUser().channel().users()" style="text-align: left">
+                <li>
+                  <span data-bind="{text: name, style: {fontWeight: name() == $parent.thisUser().name() ? 'bold': 'normal'}}"></span>
+                  <div data-bind="{class: talking, text: talking}" class="talking"></div>
+                </li>
+              </ul>
+              <button class="dialog-submit" data-bind="click: connectDialog.hide">Interface complète</button>
+            </fieldset>
+            <!-- /ko -->
+          </form>
+        </div>
+      </div>
+
       <!-- ko with: connectDialog --> 
-      <div class="connect-dialog dialog" data-bind="visible: visible() && !joinOnly()">
+      <div class="connect-dialog dialog" data-bind="visible: visible() && !joinOnly() && !config.defaults.easyMode">
           <div class="dialog-header">
             Connect to Server
           </div>
