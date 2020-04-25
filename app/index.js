@@ -785,18 +785,24 @@ class GlobalBindings {
       if (this.connected()) {
         user.model.setChannel(channel.model)
 
-        // get full channel path
-        let path = channel.name()
-        let parent = channel.parent()
-        while( parent.name && parent.name() != 'Root' ){
-          path = parent.name() + '/' + path
-          parent = parent.parent()
-        }
-        // reflect this change in URL
         let currentUrl = url.parse(document.location.href, true)
-        currentUrl.query.channelName = path
         // delete search param so that query one can be taken into account
         delete currentUrl.search
+
+        // get full channel path
+        if( channel.parent() ){ // in case this channel is not Root
+          let parent = channel.parent()
+          currentUrl.query.channelName = channel.name()
+          while( parent.parent() ){
+            currentUrl.query.channelName = parent.name() + '/' + currentUrl.query.channelName
+            parent = parent.parent()
+          }
+        } else {
+          // there is no channelName as we moved to Root
+          delete currentUrl.query.channelName
+        }
+
+        // reflect this change in URL
         window.history.pushState(null, channel.name(), url.format(currentUrl))
       }
     }
