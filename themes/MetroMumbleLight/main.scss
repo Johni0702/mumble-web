@@ -110,7 +110,7 @@ html, body {
   height: 19px;
 }
 .branch {
-  float: left;
+  position: absolute;
   padding-top: 3px;
   padding-bottom: 3px;
   background-color: $channels-bg-color;
@@ -129,7 +129,7 @@ html, body {
 }
 .channel-tree,
 .user-tree {
-  float: left;
+  position: absolute;
 }
 .channel-tree::before,
 .user-tree::before {
