@@ -31,7 +31,11 @@ var _data = {};
  * @author svartoyg
  */
 async function retrieveData (language) {
-  return (await import(`../loc/${language}.json`)).default
+  try {
+    return (await import(`../loc/${language}.json`)).default
+  } catch (exception) {
+    return (await import(`../loc/${language.substr(0, language.indexOf('-'))}.json`)).default
+  }
 }
 
 
