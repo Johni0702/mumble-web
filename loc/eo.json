@@ -1,0 +1,15 @@
+{
+  "connectdialog": {
+    "title": "Konektado",
+    "address": "Adreso",
+    "port": "Pordo",
+    "username": "Uzantnomo",
+    "password": "Pasvorto",
+    "tokens": "Ĵetonoj",
+    "remove": "Forigi",
+    "add": "Aldoni",
+    "cancel": "Nuligi",
+    "connect": "Konekti"
+  }
+}
+

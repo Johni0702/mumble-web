@@ -27,29 +27,29 @@
                                                          css: { minimal: minimalView }">
       <!-- ko with: connectDialog --> 
       <div class="connect-dialog dialog" data-bind="visible: visible() && !joinOnly()">
-          <div class="dialog-header">
+          <div id="connect-dialog_title" class="dialog-header">
             Connect to Server
           </div>
           <form data-bind="submit: connect">
             <table>
                 <tr data-bind="if: $root.config.connectDialog.address">
-                  <td>Address</td>
+                  <td id="connect-dialog_input_address">Address</td>
                   <td><input id="address" type="text" data-bind="value: address" required></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.port">
-                  <td>Port</td>
+                  <td id="connect-dialog_input_port">Port</td>
                   <td><input id="port" type="text" data-bind="value: port" required></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.username">
-                  <td>Username</td>
+                  <td id="connect-dialog_input_username">Username</td>
                   <td><input id="username" type="text" data-bind="value: username" required></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.password">
-                  <td>Password</td>
+                  <td id="connect-dialog_input_password">Password</td>
                   <td><input id="password" type="password" data-bind="value: password"></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.token">
-                  <td>Tokens</td>
+                  <td id="connect-dialog_input_tokens">Tokens</td>
                   <td>
                       <input type="text" data-bind='value: tokenToAdd, valueUpdate: "afterkeydown"'>
                   </td>
@@ -57,8 +57,8 @@
                 <tr data-bind="if: $root.config.connectDialog.token">
                       <td></td>
                       <td>
-                        <button class="dialog-submit" type="button" data-bind="enable: selectedTokens().length > 0, click: removeSelectedTokens()">Remove</button>
-                        <button class="dialog-submit" type="button" data-bind="enable: tokenToAdd().length > 0, click: addToken()">Add</button>
+                        <button id="connect-dialog_controls_remove" class="dialog-submit" type="button" data-bind="enable: selectedTokens().length > 0, click: removeSelectedTokens()">Remove</button>
+                        <button id="connect-dialog_controls_add" class="dialog-submit" type="button" data-bind="enable: tokenToAdd().length > 0, click: addToken()">Add</button>
                      </td>
                 </tr>
                <tr data-bind="if: $root.config.connectDialog.token, visible: tokens().length > 0">
@@ -71,8 +71,8 @@
                 </tr>
             </table>
             <div class="dialog-footer">
-              <input class="dialog-close" type="button" data-bind="click: hide" value="Cancel">
-              <input class="dialog-submit" type="submit" value="Connect">
+              <input id="connect-dialog_controls_cancel" class="dialog-close" type="button" data-bind="click: hide" value="Cancel">
+              <input id="connect-dialog_controls_connect" class="dialog-submit" type="submit" value="Connect">
             </div>
           </form>
         </div>
@@ -94,46 +94,64 @@
           </div>
           <form data-bind="submit: connect">
             <table>
-                <tr>
+                <tr class="reason">
                   <td colspan=2>
                     <!-- ko if: type() == 0 || type() == 8 -->
-                    The connection has been refused.
+                    <span class="refused">
+                      The connection has been refused.
+                    </span>
                     <!-- /ko -->
                     <!-- ko if: type() == 1 -->
-                    The server uses an incompatible version.
+                    <span class="version">
+                      The server uses an incompatible version.
+                    </span>
                     <!-- /ko -->
                     <!-- ko if: type() == 2 -->
-                    Your user name was rejected. Maybe try a different one?
+                    <span class="username">
+                      Your user name was rejected. Maybe try a different one?
+                    </span>
                     <!-- /ko -->
                     <!-- ko if: type() == 3 -->
-                    The given password is incorrect.
-                    The user name you have chosen requires a special one.
+                    <span class="userpassword">
+                      The given password is incorrect.
+                      The user name you have chosen requires a special one.
+                    </span>
                     <!-- /ko -->
                     <!-- ko if: type() == 4 -->
-                    The given password is incorrect.
+                    <span class="serverpassword">
+                      The given password is incorrect.
+                    </span>
                     <!-- /ko -->
                     <!-- ko if: type() == 5 -->
-                    The user name you have chosen is already in use.
+                    <span class="username-in-use">
+                      The user name you have chosen is already in use.
+                    </span>
                     <!-- /ko -->
                     <!-- ko if: type() == 6 -->
-                    The server is full.
+                    <span class="full">
+                      The server is full.
+                    </span>
                     <!-- /ko -->
                     <!-- ko if: type() == 7 -->
-                    The server requires you to provide a client certificate
-                    which is not supported by this web application.
+                    <span class="clientcert">
+                      The server requires you to provide a client certificate
+                      which is not supported by this web application.
+                    </span>
                     <!-- /ko -->
                     <br>
-                    The server reports:
+                    <span class="server">
+                      The server reports:
+                    </span>
                     <br>
                     "<span class="connect-error-reason" data-bind="text: reason"></span>"
                   </td>
                 </tr>
                 <tr data-bind="if: type() == 2 || type() == 3 || type() == 5">
-                  <td>Username</td>
+                  <td class="alternate-username">Username</td>
                   <td><input id="username" type="text" data-bind="value: username" required></td>
                 </tr>
                 <tr data-bind="if: type() == 3 || type() == 4">
-                  <td>Password</td>
+                  <td class="alternate-password">Password</td>
                   <td><input id="password" type="password" data-bind="value: password" required></td>
                 </tr>
             </table>
@@ -284,80 +302,97 @@
       <img class="avatar-view" data-bind="visible: avatarView, attr: { src: avatarView },
                                           click: function () { avatarView(null) }"></img>
       <!-- ko with: userContextMenu -->
-      <ul class="context-menu" data-bind="if: target,
+      <ul class="context-menu user-context-menu" data-bind="if: target,
                                           style: { left: posX() + 'px',
                                                    top:  posY() + 'px' }">
 
         <!-- ko with: target -->
-        <li data-bind="css: { disabled: !canChangeMute() }">
+        <li data-bind="css: { disabled: !canChangeMute() }"
+            class="mute">
           Mute
         </li>
-        <li data-bind="css: { disabled: !canChangeDeafen() }">
+        <li data-bind="css: { disabled: !canChangeDeafen() }"
+            class="deafen">
           Deafen
         </li>
-        <li data-bind="css: { disabled: !canChangePrioritySpeaker() }">
+        <li data-bind="css: { disabled: !canChangePrioritySpeaker() }"
+            class="priority-speaker">
           Priority Speaker
         </li>
 
-        <li data-bind="css: { disabled: !canLocalMute() }">
+        <li data-bind="css: { disabled: !canLocalMute() }"
+            class="local-mute">
           Local Mute
         </li>
-        <li data-bind="css: { disabled: !canIgnoreMessages() }">
+        <li data-bind="css: { disabled: !canIgnoreMessages() }"
+            class="ignore-messages">
           Ignore Messages
         </li>
 
-        <li data-bind="css: { disabled: !canChangeComment() }, visible: comment">
+        <li data-bind="css: { disabled: !canChangeComment() }, visible: comment"
+            class="view-comment">
           View Comment
         </li>
         <!-- ko if: $data === $root.thisUser() -->
-        <li data-bind="css: { disabled: !canChangeComment() }, visible: true">
+        <li data-bind="css: { disabled: !canChangeComment() }, visible: true"
+            class="change-comment">
           Change Comment
         </li>
         <!-- /ko -->
         <!-- ko if: $data !== $root.thisUser() -->
-        <li data-bind="css: { disabled: !canChangeComment() }, visible: comment">
+        <li data-bind="css: { disabled: !canChangeComment() }, visible: comment"
+            class="reset-comment">
           Reset Comment
         </li>
         <!-- /ko -->
 
         <li data-bind="css: { disabled: !canChangeAvatar() }, visible: texture,
-                       click: viewAvatar">
+                       click: viewAvatar"
+            class="view-avatar">
           View Avatar
         </li>
         <!-- ko if: $data === $root.thisUser() -->
         <li data-bind="css: { disabled: !canChangeAvatar() }, visible: true,
-                       click: changeAvatar">
+                       click: changeAvatar"
+            class="change-avatar">
           Change Avatar
         </li>
         <!-- /ko -->
         <li data-bind="css: { disabled: !canChangeAvatar() }, visible: texture,
-                       click: removeAvatar">
+                       click: removeAvatar",
+            class="reset-avatar">
           Reset Avatar
         </li>
 
-        <li data-bind="css: { disabled: true }, visible: true">
+        <li data-bind="css: { disabled: true }, visible: true"
+            class="send-message">
           Send Message
         </li>
-        <li data-bind="css: { disabled: true }, visible: true">
+        <li data-bind="css: { disabled: true }, visible: true"
+            class="information">
           Information
         </li>
 
         <li data-bind="visible: $data === $root.thisUser(),
                        css: { checked: selfMute },
-                       click: toggleMute">
+                       click: toggleMute"
+            class="self-mute">
           Self Mute
         </li>
         <li data-bind="visible: $data === $root.thisUser(),
                        css: { checked: selfDeaf },
-                       click: toggleDeaf">
+                       click: toggleDeaf"
+            class="self-deafen">
           Self Deafen
         </li>
 
         <!-- ko if: $data !== $root.thisUser() -->
-        <li data-bind="css: { disabled: true }, visible: true">
+        <li data-bind="css: { disabled: true }, visible: true"
+            class="add-friend">
           Add Friend
         </li>
-        <li data-bind="css: { disabled: true }, visible: false">
+        <li data-bind="css: { disabled: true }, visible: false"
+            class="remove-friend">
           Remove Friend
         </li>
         <!-- /ko -->
@@ -366,43 +401,53 @@
       </ul>
       <!-- /ko -->
       <!-- ko with: channelContextMenu -->
-      <ul class="context-menu" data-bind="if: target,
+      <ul class="context-menu channel-context-menu" data-bind="if: target,
                                           style: { left: posX() + 'px',
                                                    top:  posY() + 'px' }">
 
         <!-- ko with: target -->
         <li data-bind="visible: users.indexOf($root.thisUser()) === -1,
                        css: { disabled: !canJoin() },
-                       click: $root.requestMove.bind($root, $root.thisUser())">
+                       click: $root.requestMove.bind($root, $root.thisUser())"
+            class="join">
           Join Channel
         </li>
-        <li data-bind="css: { disabled: !canAdd() }">
+        <li data-bind="css: { disabled: !canAdd() }"
+            class="add">
           Add
         </li>
-        <li data-bind="css: { disabled: !canEdit() }">
+        <li data-bind="css: { disabled: !canEdit() }"
+            class="edit">
           Edit
         </li>
-        <li data-bind="css: { disabled: !canRemove() }">
+        <li data-bind="css: { disabled: !canRemove() }"
+            class="remove">
           Remove
         </li>
 
-        <li data-bind="css: { disabled: !canLink() }">
+        <li data-bind="css: { disabled: !canLink() }"
+            class="link">
           Link
         </li>
-        <li data-bind="css: { disabled: !canUnlink() }">
+        <li data-bind="css: { disabled: !canUnlink() }"
+            class="unlink">
           Unlink
         </li>
-        <li data-bind="css: { disabled: !canUnlink() }">
+        <li data-bind="css: { disabled: !canUnlink() }"
+            class="unlink-all">
           Unlink All
         </li>
 
-        <li data-bind="css: { disabled: true }">
+        <li data-bind="css: { disabled: true }"
+            class="copy-mumble-url">
           Copy Mumble URL
         </li>
-        <li data-bind="css: { disabled: true }">
+        <li data-bind="css: { disabled: true }"
+            class="copy-mumble-web-url">
           Copy Mumble-Web URL
         </li>
-        <li data-bind="css: { disabled: !canSendMessage() }">
+        <li data-bind="css: { disabled: !canSendMessage() }"
+            class="send-message">
           Send Message
         </li>
 

@@ -11,6 +11,7 @@ import _dompurify from 'dompurify'
 import keyboardjs from 'keyboardjs'
 
 import { ContinuousVoiceHandler, PushToTalkVoiceHandler, VADVoiceHandler, initVoice } from './voice'
+import {initialize as localizationInitialize, translate} from './loc';
 
 const dompurify = _dompurify(window)
 
@@ -923,7 +924,7 @@ var ui = new GlobalBindings(window.mumbleWebConfig)
 // Used only for debugging
 window.mumbleUi = ui
 
-window.onload = function () {
+function initializeUI () {
   var queryParams = url.parse(document.location.href, true).query
   queryParams = Object.assign({}, window.mumbleWebConfig.defaults, queryParams)
   var useJoinDialog = queryParams.joinDialog
@@ -987,10 +988,10 @@ window.onload = function () {
   }
   ui.connectDialog.joinOnly(useJoinDialog)
   ko.applyBindings(ui)
-}
 
-window.onresize = () => ui.updateSize()
-ui.updateSize()
+  window.onresize = () => ui.updateSize()
+  ui.updateSize()
+}
 
 function log () {
   console.log.apply(console, arguments)
@@ -1041,18 +1042,108 @@ function userToState () {
 var voiceHandler
 var testVoiceHandler
 
-initVoice(data => {
-  if (testVoiceHandler) {
-    testVoiceHandler.write(data)
-  }
-  if (!ui.client) {
-    if (voiceHandler) {
-      voiceHandler.end()
+/**
+ * @author svartoyg
+ */
+function translatePiece(selector, kind, parameters, key) {
+  let element = document.querySelector(selector);
+  if (element !== null) {
+    const translation = translate(key);
+    switch (kind) {
+      default:
+        console.warn('unhandled dom translation kind "' + kind + '"');
+        break;
+      case 'textcontent':
+        element.textContent = translation;
+        break;
+      case 'attribute':
+        element.setAttribute(parameters.name || 'value', translation);
+        break;
     }
-    voiceHandler = null
-  } else if (voiceHandler) {
-    voiceHandler.write(data)
+  } else {
+    console.warn(`translation selector "${selector}" for "${key}" did not match any element`)
   }
-}, err => {
-  log('Cannot initialize user media. Microphone will not work:', err)
-})
+}
+
+/**
+ * @author svartoyg
+ */
+function translateEverything() {
+  translatePiece('#connect-dialog_title', 'textcontent', {}, 'connectdialog.title');
+  translatePiece('#connect-dialog_input_address', 'textcontent', {}, 'connectdialog.address');
+  translatePiece('#connect-dialog_input_port', 'textcontent', {}, 'connectdialog.port');
+  translatePiece('#connect-dialog_input_username', 'textcontent', {}, 'connectdialog.username');
+  translatePiece('#connect-dialog_input_password', 'textcontent', {}, 'connectdialog.password');
+  translatePiece('#connect-dialog_input_tokens', 'textcontent', {}, 'connectdialog.tokens');
+  translatePiece('#connect-dialog_controls_remove', 'textcontent', {}, 'connectdialog.remove');
+  translatePiece('#connect-dialog_controls_add', 'textcontent', {}, 'connectdialog.add');
+  translatePiece('#connect-dialog_controls_cancel', 'attribute', {'name': 'value'}, 'connectdialog.cancel');
+  translatePiece('#connect-dialog_controls_connect', 'attribute', {'name': 'value'}, 'connectdialog.connect');
+  translatePiece('.connect-dialog.error-dialog .dialog-header', 'textcontent', {}, 'connectdialog.error.title');
+  translatePiece('.connect-dialog.error-dialog .reason .refused', 'textcontent', {}, 'connectdialog.error.reason.refused');
+  translatePiece('.connect-dialog.error-dialog .reason .version', 'textcontent', {}, 'connectdialog.error.reason.version');
+  translatePiece('.connect-dialog.error-dialog .reason .username', 'textcontent', {}, 'connectdialog.error.reason.username');
+  translatePiece('.connect-dialog.error-dialog .reason .userpassword', 'textcontent', {}, 'connectdialog.error.reason.userpassword');
+  translatePiece('.connect-dialog.error-dialog .reason .serverpassword', 'textcontent', {}, 'connectdialog.error.reason.serverpassword');
+  translatePiece('.connect-dialog.error-dialog .reason .username-in-use', 'textcontent', {}, 'connectdialog.error.reason.username_in_use');
+  translatePiece('.connect-dialog.error-dialog .reason .full', 'textcontent', {}, 'connectdialog.error.reason.full');
+  translatePiece('.connect-dialog.error-dialog .reason .clientcert', 'textcontent', {}, 'connectdialog.error.reason.clientcert');
+  translatePiece('.connect-dialog.error-dialog .reason .server', 'textcontent', {}, 'connectdialog.error.reason.server');
+  translatePiece('.connect-dialog.error-dialog .alternate-username', 'textcontent', {}, 'connectdialog.username');
+  translatePiece('.connect-dialog.error-dialog .alternate-password', 'textcontent', {}, 'connectdialog.password');
+  translatePiece('.connect-dialog.error-dialog .dialog-submit', 'attribute', {'name': 'value'}, 'connectdialog.error.retry');
+  translatePiece('.connect-dialog.error-dialog .dialog-close', 'attribute', {'name': 'value'}, 'connectdialog.error.cancel');
+  translatePiece('.join-dialog .dialog-header', 'textcontent', {}, 'joindialog.title');
+  translatePiece('.join-dialog .dialog-submit', 'attribute', {'name': 'value'}, 'joindialog.connect');
+  translatePiece('.user-context-menu .mute', 'textcontent', {}, 'contextmenu.mute');
+  translatePiece('.user-context-menu .deafen', 'textcontent', {}, 'contextmenu.deafen');
+  translatePiece('.user-context-menu .priority-speaker', 'textcontent', {}, 'usercontextmenu.priority_speaker');
+  translatePiece('.user-context-menu .local-mute', 'textcontent', {}, 'usercontextmenu.local_mute');
+  translatePiece('.user-context-menu .ignore-messages', 'textcontent', {}, 'usercontextmenu.ignore_messages');
+  translatePiece('.user-context-menu .view-comment', 'textcontent', {}, 'usercontextmenu.view_comment');
+  translatePiece('.user-context-menu .change-comment', 'textcontent', {}, 'usercontextmenu.change_comment');
+  translatePiece('.user-context-menu .reset-comment', 'textcontent', {}, 'usercontextmenu.reset_comment');
+  translatePiece('.user-context-menu .view-avatar', 'textcontent', {}, 'usercontextmenu.view_avatar');
+  translatePiece('.user-context-menu .change-avatar', 'textcontent', {}, 'usercontextmenu.change_avatar');
+  translatePiece('.user-context-menu .reset-avatar', 'textcontent', {}, 'usercontextmenu.reset_avatar');
+  translatePiece('.user-context-menu .send-message', 'textcontent', {}, 'usercontextmenu.send_message');
+  translatePiece('.user-context-menu .information', 'textcontent', {}, 'usercontextmenu.information');
+  translatePiece('.user-context-menu .self-mute', 'textcontent', {}, 'usercontextmenu.self_mute');
+  translatePiece('.user-context-menu .self-deafen', 'textcontent', {}, 'usercontextmenu.self_deafen');
+  translatePiece('.user-context-menu .add-friend', 'textcontent', {}, 'usercontextmenu.add_friend');
+  translatePiece('.user-context-menu .remove-friend', 'textcontent', {}, 'usercontextmenu.remove_friend');
+  translatePiece('.channel-context-menu .join', 'textcontent', {}, 'channelcontextmenu.join');
+  translatePiece('.channel-context-menu .add', 'textcontent', {}, 'channelcontextmenu.add');
+  translatePiece('.channel-context-menu .edit', 'textcontent', {}, 'channelcontextmenu.edit');
+  translatePiece('.channel-context-menu .remove', 'textcontent', {}, 'channelcontextmenu.remove');
+  translatePiece('.channel-context-menu .link', 'textcontent', {}, 'channelcontextmenu.link');
+  translatePiece('.channel-context-menu .unlink', 'textcontent', {}, 'channelcontextmenu.unlink');
+  translatePiece('.channel-context-menu .unlink-all', 'textcontent', {}, 'channelcontextmenu.unlink_all');
+  translatePiece('.channel-context-menu .copy-mumble-url', 'textcontent', {}, 'channelcontextmenu.copy_mumble_url');
+  translatePiece('.channel-context-menu .copy-mumble-web-url', 'textcontent', {}, 'channelcontextmenu.copy_mumble_web_url');
+  translatePiece('.channel-context-menu .send-message', 'textcontent', {}, 'channelcontextmenu.send_message');
+}
+
+async function main() {
+  await localizationInitialize(navigator.language);
+  translateEverything();
+  initializeUI();
+  initVoice(data => {
+    if (testVoiceHandler) {
+      testVoiceHandler.write(data)
+    }
+    if (!ui.client) {
+      if (voiceHandler) {
+        voiceHandler.end()
+      }
+      voiceHandler = null
+    } else if (voiceHandler) {
+      voiceHandler.write(data)
+    }
+  }, err => {
+    log('Cannot initialize user media. Microphone will not work:', err)
+  })
+}
+
+window.onload = main
+
