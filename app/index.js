@@ -1032,6 +1032,8 @@ function translatePiece(selector, kind, parameters, key) {
         element.setAttribute(parameters.name || 'value', translation);
         break;
     }
+  } else {
+    console.warn(`translation selector "${selector}" for "${key}" did not match any element`)
   }
 }
 
