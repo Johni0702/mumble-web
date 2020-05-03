@@ -1,17 +1,3 @@
-import {CacheLocalstorage} from './cache';
-import {read as fileRead} from './file';
-// import {Util} from 'util';
-
-
-/**
- * the relative path to the directory containing the JSON localization files
- * 
- * @var {string}
- * @author svartoyg
- */
-var _directory = 'loc';
-
-
 /**
  * the default language to use
  * 
@@ -28,13 +14,6 @@ var _languageDefault = null;
  * @author svartoyg
  */
 var _languageFallback = null;
-
-
-/**
- * @var {Cache}
- * @author svartoyg
- */
-var _cache = null;
 
 
 /**
@@ -56,20 +35,7 @@ async function retrieveData (language) {
   if (regexp.exec(language) === null) {
     return Promise.reject(new Error('invalid language code "' + language + '"'));
   } else {
-    const path = (_directory + '/' + language + '.json');
-    let content;
-    try {
-      content = await fileRead(path);
-    } catch (exception) {
-      return Promise.reject(new Error('could not load localization data for language "' + language + '": ' + error.toString()));
-    }
-    let data;
-    try {
-      data = JSON.parse(content);
-    } catch (exception) {
-      return Promise.reject(new Error('invalid JSON localization data for language "' + language + '": ' + exception.toString()));
-    }
-    return Promise.resolve(data);
+    return (await import(`../loc/${language}.json`)).default
   }
 }
 
@@ -80,7 +46,6 @@ async function retrieveData (language) {
  * @author svartoyg
  */
 export async function initialize (languageDefault, languageFallback = 'en') {
-  _cache = new CacheLocalstorage('loc');
   _languageFallback = languageFallback;
   _languageDefault = languageDefault;
   for (const language of [_languageFallback, _languageDefault]) {
@@ -88,7 +53,7 @@ export async function initialize (languageDefault, languageFallback = 'en') {
     console.log('--', 'loading localization data for language "' + language + '" ...');
     let data;
     try {
-      data = await _cache.get(language, () => retrieveData(language));
+      data = await retrieveData(language);
     } catch (exception) {
       console.warn(exception.toString());
     }
