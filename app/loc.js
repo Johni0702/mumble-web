@@ -31,12 +31,7 @@ var _data = {};
  * @author svartoyg
  */
 async function retrieveData (language) {
-  const regexp = (new RegExp("^([a-z]{2})$"));
-  if (regexp.exec(language) === null) {
-    return Promise.reject(new Error('invalid language code "' + language + '"'));
-  } else {
-    return (await import(`../loc/${language}.json`)).default
-  }
+  return (await import(`../loc/${language}.json`)).default
 }
 
 
