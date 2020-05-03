@@ -896,7 +896,7 @@ var ui = new GlobalBindings(window.mumbleWebConfig)
 // Used only for debugging
 window.mumbleUi = ui
 
-window.onload = function () {
+function initializeUI () {
   var queryParams = url.parse(document.location.href, true).query
   queryParams = Object.assign({}, window.mumbleWebConfig.defaults, queryParams)
   var useJoinDialog = queryParams.joinDialog
@@ -960,10 +960,10 @@ window.onload = function () {
   }
   ui.connectDialog.joinOnly(useJoinDialog)
   ko.applyBindings(ui)
-}
 
-window.onresize = () => ui.updateSize()
-ui.updateSize()
+  window.onresize = () => ui.updateSize()
+  ui.updateSize()
+}
 
 function log () {
   console.log.apply(console, arguments)
@@ -1054,6 +1054,7 @@ function translateEverything() {
 async function main() {
   await localizationInitialize(navigator.language);
   translateEverything();
+  initializeUI();
   initVoice(data => {
     if (testVoiceHandler) {
       testVoiceHandler.write(data)
@@ -1071,5 +1072,5 @@ async function main() {
   })
 }
 
-main();
+window.onload = main
 
