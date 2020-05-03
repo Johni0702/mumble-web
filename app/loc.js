@@ -31,10 +31,24 @@ var _data = {};
  * @author svartoyg
  */
 async function retrieveData (language) {
+  let json
   try {
-    return (await import(`../loc/${language}.json`)).default
+    json = (await import(`../loc/${language}.json`)).default
   } catch (exception) {
-    return (await import(`../loc/${language.substr(0, language.indexOf('-'))}.json`)).default
+    json = (await import(`../loc/${language.substr(0, language.indexOf('-'))}.json`)).default
+  }
+  const map = {}
+  flatten(json, '', map)
+  return map
+}
+
+function flatten (tree, prefix, result) {
+  for (const [key, value] of Object.entries(tree)) {
+    if (typeof value === 'string') {
+      result[prefix + key] = value
+    } else {
+      flatten(value, prefix + key + '.', result)
+    }
   }
 }
 
