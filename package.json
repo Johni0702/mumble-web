@@ -38,7 +38,7 @@
     "knockout": "^3.5.1",
     "lodash.assign": "^4.2.0",
     "microphone-stream": "^5.0.1",
-    "mumble-client": "github:johni0702/mumble-client#ddf8424",
+    "mumble-client": "github:johni0702/mumble-client#f73a08b",
     "mumble-client-websocket": "^1.0.0",
     "node-sass": "^4.13.1",
     "raw-loader": "^4.0.0",
