@@ -1,0 +1,66 @@
+{
+  "connectdialog": {
+    "title": "Connect to Server",
+    "address": "Address",
+    "port": "Port",
+    "username": "Username",
+    "password": "Password",
+    "tokens": "Tokens",
+    "remove": "Remove",
+    "add": "Add",
+    "cancel": "Cancel",
+    "connect": "Connect",
+    "error": {
+      "title": "Failed to connect",
+      "reason": {
+        "refused": "The connection has been refused.",
+        "version": "The server uses an incompatible version.",
+        "username": "Your user name was rejected. Maybe try a different one?",
+        "userpassword": "The given password is incorrect.\nThe user name you have chosen requires a special one.",
+        "serverpassword": "The given password is incorrect.",
+        "username_in_use": "The user name you have chosen is already in use.",
+        "full": "The server is full.",
+        "clientcert": "The server requires you to provide a client certificate which is not supported by this web application.",
+        "server": "The server reports:"
+      },
+      "retry": "Retry",
+      "cancel": "Cancel"
+    }
+  },
+  "joindialog": {
+    "title": "Mumble Voice Conference",
+    "connect": "Join Conference"
+  },
+  "usercontextmenu": {
+    "mute": "Mute",
+    "deafen": "Deafen",
+    "priority_speaker": "Priority Speaker",
+    "local_mute": "Local Mute",
+    "ignore_messages": "Ignore Messages",
+    "view_comment": "View Comment",
+    "change_comment": "Change Comment",
+    "reset_comment": "Reset Comment",
+    "view_avatar": "View Avatar",
+    "change_avatar": "Change Avatar",
+    "reset_avatar": "Reset Avatar",
+    "send_message": "Send Message",
+    "information": "Information",
+    "self_mute": "Self Mute",
+    "self_deafen": "Self Deafen",
+    "add_friend": "Add Friend",
+    "remove_friend": "Remove Friend"
+  },
+  "channelcontextmenu": {
+    "channelcontextmenu.join": "Join Channel",
+    "channelcontextmenu.add": "Add",
+    "channelcontextmenu.edit": "Edit",
+    "channelcontextmenu.remove": "Remove",
+    "channelcontextmenu.link": "Link",
+    "channelcontextmenu.unlink": "Unlink",
+    "channelcontextmenu.unlink_all": "Unlink All",
+    "channelcontextmenu.copy_mumble_url": "Copy Mumble URL",
+    "channelcontextmenu.copy_mumble_web_url": "Copy Mumble-Web URL",
+    "channelcontextmenu.send_message": "Send Message"
+  }
+}
+

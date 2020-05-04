@@ -23,7 +23,7 @@ RUN cd /home/node && \
 
 USER root
 
-RUN apk del gcc git make g++
+RUN apk del gcc git
 
 USER node
 
@@ -31,5 +31,5 @@ EXPOSE 8080
 ENV MUMBLE_SERVER=mumble.aventer.biz:64738
 
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD websockify --ssl-target --web /home/node/dist 8080 "$MUMBLE_SERVER"
+CMD websockify --ssl-target --web=/home/node/dist 8080 "$MUMBLE_SERVER"
 

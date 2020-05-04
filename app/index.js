@@ -9,6 +9,7 @@ import _dompurify from 'dompurify'
 import keyboardjs from 'keyboardjs'
 
 import { ContinuousVoiceHandler, PushToTalkVoiceHandler, VADVoiceHandler, initVoice } from './voice'
+import {initialize as localizationInitialize, translate} from './loc';
 
 const dompurify = _dompurify(window)
 
@@ -50,16 +51,31 @@ function ConnectDialog () {
   var self = this
   self.address = ko.observable('')
   self.port = ko.observable('')
-  self.token = ko.observable('')
+  self.tokenToAdd = ko.observable('')
+  self.selectedTokens = ko.observableArray([])
+  self.tokens = ko.observableArray([])
   self.username = ko.observable('')
   self.password = ko.observable('')
+  self.channelName = ko.observable('')
   self.joinOnly = ko.observable(false)
   self.visible = ko.observable(true)
   self.show = self.visible.bind(self.visible, true)
   self.hide = self.visible.bind(self.visible, false)
   self.connect = function () {
     self.hide()
-    ui.connect(self.username(), self.address(), self.port(), self.token(), self.password())
+    ui.connect(self.username(), self.address(), self.port(), self.tokens(), self.password(), self.channelName())
+  }
+
+  self.addToken = function() {
+    if ((self.tokenToAdd() != "") && (self.tokens.indexOf(self.tokenToAdd()) < 0)) {
+      self.tokens.push(self.tokenToAdd())
+    }
+    self.tokenToAdd("")
+  }
+
+  self.removeSelectedTokens = function() {
+      this.tokens.removeAll(this.selectedTokens())
+      this.selectedTokens([])
   }
 }
 
@@ -329,7 +345,7 @@ class GlobalBindings {
       return '[' + new Date().toLocaleTimeString('en-US') + ']'
     }
 
-    this.connect = (username, host, port, token, password) => {
+    this.connect = (username, host, port, tokens = [], password, channelName = "") => {
       this.resetClient()
 
       this.remoteHost(host)
@@ -353,7 +369,8 @@ class GlobalBindings {
           enabled: true,
           mic: this._delayedMicNode.stream,
           audioContext: ctx
-        }
+        },
+        tokens: tokens
       }).done(client => {
         log('Connected!')
 
@@ -367,12 +384,18 @@ class GlobalBindings {
         // Make sure we stay open if we're running as Matrix widget
         window.matrixWidget.setAlwaysOnScreen(true)
 
-        // Register all channels, recursively
-        const registerChannel = channel => {
-          this._newChannel(channel)
-          channel.children.forEach(registerChannel)
+        // Register all channels, recursively 
+        if(channelName.indexOf("/") != 0) {
+          channelName = "/"+channelName;
         }
-        registerChannel(client.root)
+        const registerChannel = (channel, channelPath) => {
+          this._newChannel(channel)
+          if(channelPath === channelName) {
+            client.self.setChannel(channel)
+          }
+          channel.children.forEach(ch => registerChannel(ch, channelPath+"/"+ch.name))
+        }
+        registerChannel(client.root, "")
 
         // Register all users
         client.users.forEach(user => this._newUser(user))
@@ -390,6 +413,14 @@ class GlobalBindings {
             user: sender.__ui,
             channel: channels.length > 0,
             message: sanitize(message)
+          })
+        })
+
+        // Log permission denied error messages
+        client.on('denied', (type) => {
+          ui.log.push({
+            type: 'generic',
+            value: 'Permission denied : '+ type
           })
         })
 
@@ -772,6 +803,26 @@ class GlobalBindings {
     this.requestMove = (user, channel) => {
       if (this.connected()) {
         user.model.setChannel(channel.model)
+
+        let currentUrl = url.parse(document.location.href, true)
+        // delete search param so that query one can be taken into account
+        delete currentUrl.search
+
+        // get full channel path
+        if( channel.parent() ){ // in case this channel is not Root
+          let parent = channel.parent()
+          currentUrl.query.channelName = channel.name()
+          while( parent.parent() ){
+            currentUrl.query.channelName = parent.name() + '/' + currentUrl.query.channelName
+            parent = parent.parent()
+          }
+        } else {
+          // there is no channelName as we moved to Root
+          delete currentUrl.query.channelName
+        }
+
+        // reflect this change in URL
+        window.history.pushState(null, channel.name(), url.format(currentUrl))
       }
     }
 
@@ -883,7 +934,7 @@ var ui = new GlobalBindings(window.mumbleWebConfig)
 // Used only for debugging
 window.mumbleUi = ui
 
-window.onload = function () {
+function initializeUI () {
   var queryParams = url.parse(document.location.href, true).query
   queryParams = Object.assign({}, window.mumbleWebConfig.defaults, queryParams)
   var useJoinDialog = queryParams.joinDialog
@@ -901,7 +952,11 @@ window.onload = function () {
     useJoinDialog = false
   }
   if (queryParams.token) {
-    ui.connectDialog.token(queryParams.token)
+    var tokens = queryParams.token
+    if (!Array.isArray(tokens)) {
+      tokens = [tokens]
+    }
+    ui.connectDialog.tokens(tokens)
   }
   if (queryParams.username) {
     ui.connectDialog.username(queryParams.username)
@@ -910,6 +965,9 @@ window.onload = function () {
   }
   if (queryParams.password) {
     ui.connectDialog.password(queryParams.password)
+  }
+  if (queryParams.channelName) {
+    ui.connectDialog.channelName(queryParams.channelName)
   }
   if (queryParams.avatarurl) {
     // Download the avatar and upload it to the mumble server when connected
@@ -939,13 +997,11 @@ window.onload = function () {
     req.send()
   }
   ui.connectDialog.joinOnly(useJoinDialog)
-  userMediaPromise.then(() => {
-    ko.applyBindings(ui)
-  })
-}
+  ko.applyBindings(ui)
 
-window.onresize = () => ui.updateSize()
-ui.updateSize()
+  window.onresize = () => ui.updateSize()
+  ui.updateSize()
+}
 
 function log () {
   console.log.apply(console, arguments)
@@ -996,20 +1052,111 @@ function userToState () {
 var voiceHandler
 var testVoiceHandler
 
-var userMediaPromise = initVoice(data => {
-  if (testVoiceHandler) {
-    testVoiceHandler.write(data)
-  }
-  if (!ui.client) {
-    if (voiceHandler) {
-      voiceHandler.end()
+/**
+ * @author svartoyg
+ */
+function translatePiece(selector, kind, parameters, key) {
+  let element = document.querySelector(selector);
+  if (element !== null) {
+    const translation = translate(key);
+    switch (kind) {
+      default:
+        console.warn('unhandled dom translation kind "' + kind + '"');
+        break;
+      case 'textcontent':
+        element.textContent = translation;
+        break;
+      case 'attribute':
+        element.setAttribute(parameters.name || 'value', translation);
+        break;
     }
-    voiceHandler = null
-  } else if (voiceHandler) {
-    voiceHandler.write(data)
+  } else {
+    console.warn(`translation selector "${selector}" for "${key}" did not match any element`)
   }
-}).then(userMedia => {
-  ui._micStream = userMedia
-}, err => {
-  window.alert('Failed to initialize user media\nRefresh page to retry.\n' + err)
-})
+}
+
+/**
+ * @author svartoyg
+ */
+function translateEverything() {
+  translatePiece('#connect-dialog_title', 'textcontent', {}, 'connectdialog.title');
+  translatePiece('#connect-dialog_input_address', 'textcontent', {}, 'connectdialog.address');
+  translatePiece('#connect-dialog_input_port', 'textcontent', {}, 'connectdialog.port');
+  translatePiece('#connect-dialog_input_username', 'textcontent', {}, 'connectdialog.username');
+  translatePiece('#connect-dialog_input_password', 'textcontent', {}, 'connectdialog.password');
+  translatePiece('#connect-dialog_input_tokens', 'textcontent', {}, 'connectdialog.tokens');
+  translatePiece('#connect-dialog_controls_remove', 'textcontent', {}, 'connectdialog.remove');
+  translatePiece('#connect-dialog_controls_add', 'textcontent', {}, 'connectdialog.add');
+  translatePiece('#connect-dialog_controls_cancel', 'attribute', {'name': 'value'}, 'connectdialog.cancel');
+  translatePiece('#connect-dialog_controls_connect', 'attribute', {'name': 'value'}, 'connectdialog.connect');
+  translatePiece('.connect-dialog.error-dialog .dialog-header', 'textcontent', {}, 'connectdialog.error.title');
+  translatePiece('.connect-dialog.error-dialog .reason .refused', 'textcontent', {}, 'connectdialog.error.reason.refused');
+  translatePiece('.connect-dialog.error-dialog .reason .version', 'textcontent', {}, 'connectdialog.error.reason.version');
+  translatePiece('.connect-dialog.error-dialog .reason .username', 'textcontent', {}, 'connectdialog.error.reason.username');
+  translatePiece('.connect-dialog.error-dialog .reason .userpassword', 'textcontent', {}, 'connectdialog.error.reason.userpassword');
+  translatePiece('.connect-dialog.error-dialog .reason .serverpassword', 'textcontent', {}, 'connectdialog.error.reason.serverpassword');
+  translatePiece('.connect-dialog.error-dialog .reason .username-in-use', 'textcontent', {}, 'connectdialog.error.reason.username_in_use');
+  translatePiece('.connect-dialog.error-dialog .reason .full', 'textcontent', {}, 'connectdialog.error.reason.full');
+  translatePiece('.connect-dialog.error-dialog .reason .clientcert', 'textcontent', {}, 'connectdialog.error.reason.clientcert');
+  translatePiece('.connect-dialog.error-dialog .reason .server', 'textcontent', {}, 'connectdialog.error.reason.server');
+  translatePiece('.connect-dialog.error-dialog .alternate-username', 'textcontent', {}, 'connectdialog.username');
+  translatePiece('.connect-dialog.error-dialog .alternate-password', 'textcontent', {}, 'connectdialog.password');
+  translatePiece('.connect-dialog.error-dialog .dialog-submit', 'attribute', {'name': 'value'}, 'connectdialog.error.retry');
+  translatePiece('.connect-dialog.error-dialog .dialog-close', 'attribute', {'name': 'value'}, 'connectdialog.error.cancel');
+  translatePiece('.join-dialog .dialog-header', 'textcontent', {}, 'joindialog.title');
+  translatePiece('.join-dialog .dialog-submit', 'attribute', {'name': 'value'}, 'joindialog.connect');
+  translatePiece('.user-context-menu .mute', 'textcontent', {}, 'contextmenu.mute');
+  translatePiece('.user-context-menu .deafen', 'textcontent', {}, 'contextmenu.deafen');
+  translatePiece('.user-context-menu .priority-speaker', 'textcontent', {}, 'usercontextmenu.priority_speaker');
+  translatePiece('.user-context-menu .local-mute', 'textcontent', {}, 'usercontextmenu.local_mute');
+  translatePiece('.user-context-menu .ignore-messages', 'textcontent', {}, 'usercontextmenu.ignore_messages');
+  translatePiece('.user-context-menu .view-comment', 'textcontent', {}, 'usercontextmenu.view_comment');
+  translatePiece('.user-context-menu .change-comment', 'textcontent', {}, 'usercontextmenu.change_comment');
+  translatePiece('.user-context-menu .reset-comment', 'textcontent', {}, 'usercontextmenu.reset_comment');
+  translatePiece('.user-context-menu .view-avatar', 'textcontent', {}, 'usercontextmenu.view_avatar');
+  translatePiece('.user-context-menu .change-avatar', 'textcontent', {}, 'usercontextmenu.change_avatar');
+  translatePiece('.user-context-menu .reset-avatar', 'textcontent', {}, 'usercontextmenu.reset_avatar');
+  translatePiece('.user-context-menu .send-message', 'textcontent', {}, 'usercontextmenu.send_message');
+  translatePiece('.user-context-menu .information', 'textcontent', {}, 'usercontextmenu.information');
+  translatePiece('.user-context-menu .self-mute', 'textcontent', {}, 'usercontextmenu.self_mute');
+  translatePiece('.user-context-menu .self-deafen', 'textcontent', {}, 'usercontextmenu.self_deafen');
+  translatePiece('.user-context-menu .add-friend', 'textcontent', {}, 'usercontextmenu.add_friend');
+  translatePiece('.user-context-menu .remove-friend', 'textcontent', {}, 'usercontextmenu.remove_friend');
+  translatePiece('.channel-context-menu .join', 'textcontent', {}, 'channelcontextmenu.join');
+  translatePiece('.channel-context-menu .add', 'textcontent', {}, 'channelcontextmenu.add');
+  translatePiece('.channel-context-menu .edit', 'textcontent', {}, 'channelcontextmenu.edit');
+  translatePiece('.channel-context-menu .remove', 'textcontent', {}, 'channelcontextmenu.remove');
+  translatePiece('.channel-context-menu .link', 'textcontent', {}, 'channelcontextmenu.link');
+  translatePiece('.channel-context-menu .unlink', 'textcontent', {}, 'channelcontextmenu.unlink');
+  translatePiece('.channel-context-menu .unlink-all', 'textcontent', {}, 'channelcontextmenu.unlink_all');
+  translatePiece('.channel-context-menu .copy-mumble-url', 'textcontent', {}, 'channelcontextmenu.copy_mumble_url');
+  translatePiece('.channel-context-menu .copy-mumble-web-url', 'textcontent', {}, 'channelcontextmenu.copy_mumble_web_url');
+  translatePiece('.channel-context-menu .send-message', 'textcontent', {}, 'channelcontextmenu.send_message');
+}
+
+async function main() {
+  await localizationInitialize(navigator.language);
+  translateEverything();
+  try {
+    const userMedia = await initVoice(data => {
+      if (testVoiceHandler) {
+        testVoiceHandler.write(data)
+      }
+      if (!ui.client) {
+        if (voiceHandler) {
+          voiceHandler.end()
+        }
+        voiceHandler = null
+      } else if (voiceHandler) {
+        voiceHandler.write(data)
+      }
+    })
+    ui._micStream = userMedia
+  } catch (err) {
+    window.alert('Failed to initialize user media\nRefresh page to retry.\n' + err)
+    return
+  }
+  initializeUI();
+}
+
+window.onload = main

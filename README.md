@@ -25,8 +25,8 @@ or from git (webrtc branch only from git for now):
 git clone -b webrtc https://github.com/johni0702/mumble-web
 cd mumble-web
 npm install
-npm run build
 ```
+Note that npm should not be ran as root, use an unprivileged user account instead.
 
 The npm version is prebuilt and ready to use whereas the git version allows you
 to e.g. customize the theme before building it.
@@ -41,10 +41,11 @@ Mumble server is running on).
 
 Additionally you will need some web server to serve static files and terminate the secure websocket connection (mumble-web-proxy only supports insecure ones).
 
-A sample configuration for nginx that allows access to mumble-web at 
-`https://voice.example.com/` and connecting at `wss://voice.example.com/demo`
-(similar to the demo server) looks like this:
-```
+Here are two web server configuration files (one for [NGINX](https://www.nginx.com/) and one for [Caddy server](https://caddyserver.com/)) which will serve the mumble-web interface at `https://voice.example.com` and allow the websocket to connect at `wss://voice.example.com/demo` (similar to the demo server).
+Replace `<proxybox>` with the host name of the machine where `mumble-web-proxy` is running. If `mumble-web-proxy` is running on the same machine as your web server, use `localhost`.
+
+* NGINX configuration file
+```Nginx
 server {
         listen 443 ssl;
         server_name voice.example.com;
@@ -55,7 +56,7 @@ server {
                 root /path/to/dist;
         }
         location /demo {
-                proxy_pass http://proxybox:64737;
+                proxy_pass http://<proxybox>:64737;
                 proxy_http_version 1.1;
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection $connection_upgrade;
@@ -67,11 +68,54 @@ map $http_upgrade $connection_upgrade {
         '' close;
 }
 ```
-where `proxybox` is the machine running mumble-web-proxy (may be `localhost`):
+
+* Caddy configuration file (`Caddyfile`)
 ```
-mumble-web-proxy --listen-ws 64737 --server mumbleserver:64738
+http://voice.example.com {
+  redir https://voice.example.com
+}
+
+https://voice.example.com {
+  tls "/etc/letsencrypt/live/voice.example.com/fullchain.pem" "/etc/letsencrypt/live/voice.example.com/privkey.pem"
+  root /path/to/dist
+  proxy /demo http://<proxybox>:64737 {
+    websocket
+  }
+}
+```
+
+To run `mumble-web-proxy`, execute the following command. Replace `<mumbleserver>` with the host name of your Mumble server (the one you connect to using the normal Mumble client).
+Note that even if your Mumble server is running on the same machine as your `mumble-web-proxy`, you should use the external name because (by default, for disabling see its README) `mumble-web-proxy` will try to verify the certificate provided by the Mumble server and fail if it does not match the given host name.
+```
+mumble-web-proxy --listen-ws 64737 --server <mumbleserver>:64738
 ```
 If your mumble-web-proxy is running behind a NAT or firewall, take note of the respective section in its README.
+
+Make sure that your Mumble server is running. You may now open `https://voice.example.com` in a web browser. You will be prompted for server details: choose either `address: voice.example.com/demo` with `port: 443` or `address: voice.example.com` with `port: 443/demo`. You may prefill these values by appending `?address=voice.example.com/demo&port=443`. Choose a username, and click `Connect`: you should now be able to talk and use the chat.
+
+Here is an example of systemd service, put it in `/etc/systemd/system/mumble-web.service` and adapt it to your needs:
+```
+[Unit]
+Description=Mumble web interface
+Documentation=https://github.com/johni0702/mumble-web
+Requires=network.target mumble-server.service
+After=network.target mumble-server.service
+
+[Service]
+Type=simple
+User=www-data
+ExecStart=/usr/bin/websockify --web=/usr/lib/node_modules/mumble-web/dist --ssl-target localhost:64737 localhost:64738
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then
+```
+systemctl daemon-reload
+systemctl start mumble-web
+systemctl enable mumble-web
+```
 
 ### Configuration
 The `app/config.js` file contains default values and descriptions for all configuration options.

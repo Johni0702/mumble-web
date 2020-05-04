@@ -4,8 +4,7 @@ import EventEmitter from 'events'
 import { Writable, PassThrough } from 'stream'
 import toArrayBuffer from 'to-arraybuffer'
 import ByteBuffer from 'bytebuffer'
-import webworkify from 'webworkify'
-import worker from './worker'
+import Worker from './worker'
 
 /**
  * Creates proxy MumbleClients to a real ones running on a web worker.
@@ -13,7 +12,7 @@ import worker from './worker'
  */
 class WorkerBasedMumbleConnector {
   constructor () {
-    this._worker = webworkify(worker)
+    this._worker = new Worker()
     this._worker.addEventListener('message', this._onMessage.bind(this))
     this._reqId = 1
     this._requests = {}
@@ -266,7 +265,7 @@ class WorkerBasedMumbleChannel extends EventEmitter {
 
   _dispatchEvent (name, args) {
     if (name === 'update') {
-      let [actor, props] = args
+      let [props] = args
       Object.entries(props).forEach((entry) => {
         this._setProp(entry[0], entry[1])
       })
@@ -277,7 +276,6 @@ class WorkerBasedMumbleChannel extends EventEmitter {
         props.links = this.links
       }
       args = [
-        this._client._user(actor),
         props
       ]
     } else if (name === 'remove') {

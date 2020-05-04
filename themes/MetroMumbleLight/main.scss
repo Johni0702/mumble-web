@@ -110,7 +110,7 @@ html, body {
   height: 19px;
 }
 .branch {
-  float: left;
+  position: absolute;
   padding-top: 3px;
   padding-bottom: 3px;
   background-color: $channels-bg-color;
@@ -129,7 +129,7 @@ html, body {
 }
 .channel-tree,
 .user-tree {
-  float: left;
+  position: absolute;
 }
 .channel-tree::before,
 .user-tree::before {
@@ -432,10 +432,10 @@ form {
   height: 100%;
 }
 .join-dialog {
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0px;
+  width: 300px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
 }
 .join-dialog .dialog-submit {
   float: none;
@@ -444,7 +444,7 @@ form {
   top: calc(50% - 10px);
   left: calc(50% - 100px);
 }
-.connect-dialog input[type=text] {
+.connect-dialog input[type=text], select {
   font-size: 15px;
   border: 1px $dialog-input-border-color solid;
   border-radius: 3px;

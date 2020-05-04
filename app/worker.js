@@ -3,18 +3,11 @@ import mumbleConnect from 'mumble-client-websocket'
 import toArrayBuffer from 'to-arraybuffer'
 import chunker from 'stream-chunker'
 import Resampler from 'libsamplerate.js'
+import CodecsBrowser from 'mumble-client-codecs-browser'
 
 // Polyfill nested webworkers for https://bugs.chromium.org/p/chromium/issues/detail?id=31666
 import 'subworkers'
 
-// Monkey-patch to allow webworkify-webpack and codecs to work inside of web worker
-/* global URL */
-window.URL = URL
-
-// Using require to ensure ordering relative to monkey-patch above
-let CodecsBrowser = require('mumble-client-codecs-browser')
-
-export default function (self) {
   let sampleRate
   let nextClientId = 1
   let nextVoiceId = 1
@@ -97,17 +90,14 @@ export default function (self) {
   function setupChannel (id, channel) {
     id = Object.assign({}, id, { channel: channel.id })
 
-    registerEventProxy(id, channel, 'update', (actor, props) => {
-      if (actor) {
-        actor = actor.id
-      }
+    registerEventProxy(id, channel, 'update', (props) => {
       if (props.parent) {
         props.parent = props.parent.id
       }
       if (props.links) {
         props.links = props.links.map((it) => it.id)
       }
-      return [actor, props]
+      return [props]
     })
     registerEventProxy(id, channel, 'remove')
 
@@ -194,6 +184,7 @@ export default function (self) {
     id = { client: id }
 
     registerEventProxy(id, client, 'error')
+    registerEventProxy(id, client, 'denied', it => [it])
     registerEventProxy(id, client, 'newChannel', (it) => [setupChannel(id, it)])
     registerEventProxy(id, client, 'newUser', (it) => [setupUser(id, it)])
     registerEventProxy(id, client, 'message', (sender, message, users, channels, trees) => {
@@ -284,4 +275,5 @@ export default function (self) {
       console.error('exception during message event', ev.data, ex)
     }
   })
-}
+
+  export default null
