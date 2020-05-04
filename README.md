@@ -1,8 +1,3 @@
-**If you do not have specific requirements, please consider using the `webrtc` version instead: https://github.com/Johni0702/mumble-web/tree/webrtc (note that setup instructions differ significantly).
-It should be near identical in features but less susceptible to performance issues. If you are having trouble with the `webrtc` version, please let us know.**
-
-PRs, unless webrtc-specific, should still target `master`.
-
 # mumble-web
 
 Note: This WebRTC branch is not backwards compatible with the current release, i.e. it expects the server/proxy to support WebRTC which neither websockify nor Grumble do. Also note that it requires an extension to the Mumble protocol which has not yet been stabilized and as such may change at any time, so make sure to keep mumble-web and mumble-web-proxy in sync.
