@@ -51,16 +51,16 @@
     "remove_friend": "Eliminar amigo"
   },
   "channelcontextmenu": {
-    "channelcontextmenu.join": "Unirse al canal",
-    "channelcontextmenu.add": "Añadir",
-    "channelcontextmenu.edit": "Editar",
-    "channelcontextmenu.remove": "Eliminar",
-    "channelcontextmenu.link": "Link",
-    "channelcontextmenu.unlink": "Unlink",
-    "channelcontextmenu.unlink_all": "Unlink All",
-    "channelcontextmenu.copy_mumble_url": "Copiar Mumble URL",
-    "channelcontextmenu.copy_mumble_web_url": "Copiar Mumble-Web URL",
-    "channelcontextmenu.send_message": "Enviar mensaje"
+    "join": "Unirse al canal",
+    "add": "Añadir",
+    "edit": "Editar",
+    "remove": "Eliminar",
+    "link": "Link",
+    "unlink": "Unlink",
+    "unlink_all": "Unlink All",
+    "copy_mumble_url": "Copiar Mumble URL",
+    "copy_mumble_web_url": "Copiar Mumble-Web URL",
+    "send_message": "Enviar mensaje"
   }
 }
 
