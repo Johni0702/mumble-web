@@ -51,15 +51,15 @@
     "remove_friend": "Tirar dels amics"
   },
   "channelcontextmenu": {
-    "channelcontextmenu.join": "Rejónher la sala",
-    "channelcontextmenu.add": "Ajustar",
-    "channelcontextmenu.edit": "Modificar",
-    "channelcontextmenu.remove": "Suprimir",
-    "channelcontextmenu.link": "Associar",
-    "channelcontextmenu.unlink": "Desassociar",
-    "channelcontextmenu.unlink_all": "Tot desassociar",
-    "channelcontextmenu.copy_mumble_url": "Copair l’URL Mumble",
-    "channelcontextmenu.copy_mumble_web_url": "Copiar l’URL Mumble-Web",
-    "channelcontextmenu.send_message": "Enviar messatge"
+    "join": "Rejónher la sala",
+    "add": "Ajustar",
+    "edit": "Modificar",
+    "remove": "Suprimir",
+    "link": "Associar",
+    "unlink": "Desassociar",
+    "unlink_all": "Tot desassociar",
+    "copy_mumble_url": "Copair l’URL Mumble",
+    "copy_mumble_web_url": "Copiar l’URL Mumble-Web",
+    "send_message": "Enviar messatge"
   }
 }
