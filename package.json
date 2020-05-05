@@ -39,7 +39,7 @@
     "lodash.assign": "^4.2.0",
     "microphone-stream": "^5.0.1",
     "mumble-client": "github:johni0702/mumble-client#f73a08b",
-    "mumble-client-websocket": "^1.0.0",
+    "mumble-client-websocket": "github:johni0702/mumble-client-websocket#5b0ed8d",
     "node-sass": "^4.13.1",
     "raw-loader": "^4.0.0",
     "regexp-replace-loader": "1.0.1",
