@@ -276,6 +276,7 @@ html, body {
   padding: 2px;
   border: 1px solid transparent;
   border-radius: 3px;
+  cursor: pointer;
 }
 .toolbar img:hover {
   border: 1px solid $toolbar-hover-bg-color;
@@ -387,6 +388,7 @@ form {
   background-color: $dialog-button-bg-color;
   color: $dialog-button-color;
   padding: 1px;
+  cursor: pointer;
 }
 .connect-dialog table {
   text-align: center;
