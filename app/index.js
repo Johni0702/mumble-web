@@ -1095,8 +1095,8 @@ function translateEverything() {
   translatePiece('.connect-dialog.error-dialog .dialog-close', 'attribute', {'name': 'value'}, 'connectdialog.error.cancel');
   translatePiece('.join-dialog .dialog-header', 'textcontent', {}, 'joindialog.title');
   translatePiece('.join-dialog .dialog-submit', 'attribute', {'name': 'value'}, 'joindialog.connect');
-  translatePiece('.user-context-menu .mute', 'textcontent', {}, 'contextmenu.mute');
-  translatePiece('.user-context-menu .deafen', 'textcontent', {}, 'contextmenu.deafen');
+  translatePiece('.user-context-menu .mute', 'textcontent', {}, 'usercontextmenu.mute');
+  translatePiece('.user-context-menu .deafen', 'textcontent', {}, 'usercontextmenu.deafen');
   translatePiece('.user-context-menu .priority-speaker', 'textcontent', {}, 'usercontextmenu.priority_speaker');
   translatePiece('.user-context-menu .local-mute', 'textcontent', {}, 'usercontextmenu.local_mute');
   translatePiece('.user-context-menu .ignore-messages', 'textcontent', {}, 'usercontextmenu.ignore_messages');
