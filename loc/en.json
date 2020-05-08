@@ -61,6 +61,17 @@
     "copy_mumble_url": "Copy Mumble URL",
     "copy_mumble_web_url": "Copy Mumble-Web URL",
     "send_message": "Send Message"
+  },
+  "logentry": {
+    "connecting": "Connecting to server",
+    "connected": "Connected!",
+    "connection_error": "Connection error:",
+    "unknown_voice_mode": "Unknown voice mode:",
+    "mic_init_error": "Cannot initialize user media. Microphone will not work:"
+  },
+  "chat": {
+    "channel_message_placeholder": "Type message to channel '%1' here",
+    "user_message_placeholder": "Type message to user '%1' here"
   }
 }
 

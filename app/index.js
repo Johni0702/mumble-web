@@ -353,7 +353,7 @@ class GlobalBindings {
       this.remoteHost(host)
       this.remotePort(port)
 
-      log('Connecting to server ', host)
+      log(translate('logentry.connecting'), host)
 
       // Note: This call needs to be delayed until the user has interacted with
       // the page in some way (which at this point they have), see: https://goo.gl/7K7WLu
@@ -365,12 +365,12 @@ class GlobalBindings {
         password: password,
         tokens: tokens
       }).done(client => {
-        log('Connected!')
+        log(translate('logentry.connected'))
 
         this.client = client
         // Prepare for connection errors
         client.on('error', (err) => {
-          log('Connection error:', err)
+          log(translate('logentry.connection_error'), err)
           this.resetClient()
         })
 
@@ -444,7 +444,7 @@ class GlobalBindings {
           this.connectErrorDialog.reason(err.reason)
           this.connectErrorDialog.show()
         } else {
-          log('Connection error:', err)
+          log(translate('logentry.connection_error'), err)
         }
       })
     }
@@ -716,7 +716,7 @@ class GlobalBindings {
       } else if (mode === 'vad') {
         voiceHandler = new VADVoiceHandler(this.client, this.settings)
       } else {
-        log('Unknown voice mode:', mode)
+        log(translate('logentry.unknown_voice_mode'), mode)
         return
       }
       voiceHandler.on('started_talking', () => {
@@ -751,9 +751,11 @@ class GlobalBindings {
         target = target.channel()
       }
       if (target.users) { // Channel
-        return "Type message to channel '" + target.name() + "' here"
+        return translate('chat.channel_message_placeholder')
+          .replace('%1', target.name())
       } else { // User
-        return "Type message to user '" + target.name() + "' here"
+        return translate('chat.user_message_placeholder')
+          .replace('%1', target.name())
       }
     })
 
@@ -1141,7 +1143,7 @@ async function main() {
       voiceHandler.write(data)
     }
   }, err => {
-    log('Cannot initialize user media. Microphone will not work:', err)
+    log(translate('logentry.mic_init_error'), err)
   })
 }
 
