@@ -9,7 +9,7 @@
     "remove": "Eliminar",
     "add": "Añadir",
     "cancel": "Cancelar",
-    "connect": "Connectar",
+    "connect": "Conectar",
     "error": {
       "title": "Fallo al conectar",
       "reason": {
@@ -61,6 +61,17 @@
     "copy_mumble_url": "Copiar Mumble URL",
     "copy_mumble_web_url": "Copiar Mumble-Web URL",
     "send_message": "Enviar mensaje"
+  },
+  "logentry": {
+    "connecting": "Conectando al servidor",
+    "connected": "¡Conectado!",
+    "connection_error": "Error en la conexión:",
+    "unknown_voice_mode": "Modo de voz desconocido:",
+    "mic_init_error": "No se pudieron inicializar los medios. El micrófono no funcionará:"
+  },
+  "chat": {
+    "channel_message_placeholder": "Escribe un mensaje al canal '%1'",
+    "user_message_placeholder": "Escribe un mensaje al usuario '%1'"
   }
 }
 
