@@ -9,7 +9,7 @@
     "remove": "Supprimer",
     "add": "Ajouter",
     "cancel": "Annuler",
-    "connect": "connexion",
+    "connect": "Connexion",
     "error": {
       "title": "Impossible de se connecter",
       "reason": {
