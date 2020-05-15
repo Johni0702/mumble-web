@@ -20,7 +20,7 @@
         "serverpassword": "Le mot de passe est incorrect.",
         "username_in_use": "Ce nom d'utilisateur est déjà utilisé",
         "full": "Le serveur est plein.",
-        "clientcert": "Le serveur nécessite que vous utilisiez un certificat client, ce qui n'est pas supporté par cette application WEB.",
+        "clientcert": "Le serveur requiert un certificat client, ce qui n'est pas supporté par cette application Web.",
         "server": "Le serveur a répondu le message suivant :"
       },
       "retry": "Réessayez",
