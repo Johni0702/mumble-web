@@ -32,10 +32,10 @@
     "connect": "Rejoindre la conférence"
   },
   "usercontextmenu": {
-    "mute": "Couper le micro",
-    "deafen": "Couper les hauts-parleurs",
-    "priority_speaker": "Donner la priorité à l'orateur",
-    "local_mute": "Muet local",
+    "mute": "Muet",
+    "deafen": "Rendre sourd",
+    "priority_speaker": "Parole prioritaire",
+    "local_mute": "Ne plus l'écouter",
     "ignore_messages": "Ignorer les messages",
     "view_comment": "Voir le commentaire",
     "change_comment": "Changer le commentaire",
