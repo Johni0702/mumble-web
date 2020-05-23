@@ -351,7 +351,7 @@ class GlobalBindings {
       this.remoteHost(host)
       this.remotePort(port)
 
-      log('Connecting to server ', host)
+      log(translate('logentry.connecting'), host)
 
       let ctx = audioContext()
       if (!this._delayedMicNode) {
@@ -372,12 +372,12 @@ class GlobalBindings {
         },
         tokens: tokens
       }).done(client => {
-        log('Connected!')
+        log(translate('logentry.connected'))
 
         this.client = client
         // Prepare for connection errors
         client.on('error', (err) => {
-          log('Connection error:', err)
+          log(translate('logentry.connection_error'), err)
           this.resetClient()
         })
 
@@ -451,7 +451,7 @@ class GlobalBindings {
           this.connectErrorDialog.reason(err.reason)
           this.connectErrorDialog.show()
         } else {
-          log('Connection error:', err)
+          log(translate('logentry.connection_error'), err)
         }
       })
     }
@@ -717,7 +717,7 @@ class GlobalBindings {
       } else if (mode === 'vad') {
         voiceHandler = new VADVoiceHandler(this.client, this.settings)
       } else {
-        log('Unknown voice mode:', mode)
+        log(translate('logentry.unknown_voice_mode'), mode)
         return
       }
       voiceHandler.on('started_talking', () => {
@@ -761,9 +761,11 @@ class GlobalBindings {
         target = target.channel()
       }
       if (target.users) { // Channel
-        return "Type message to channel '" + target.name() + "' here"
+        return translate('chat.channel_message_placeholder')
+          .replace('%1', target.name())
       } else { // User
-        return "Type message to user '" + target.name() + "' here"
+        return translate('chat.user_message_placeholder')
+          .replace('%1', target.name())
       }
     })
 
@@ -1105,8 +1107,8 @@ function translateEverything() {
   translatePiece('.connect-dialog.error-dialog .dialog-close', 'attribute', {'name': 'value'}, 'connectdialog.error.cancel');
   translatePiece('.join-dialog .dialog-header', 'textcontent', {}, 'joindialog.title');
   translatePiece('.join-dialog .dialog-submit', 'attribute', {'name': 'value'}, 'joindialog.connect');
-  translatePiece('.user-context-menu .mute', 'textcontent', {}, 'contextmenu.mute');
-  translatePiece('.user-context-menu .deafen', 'textcontent', {}, 'contextmenu.deafen');
+  translatePiece('.user-context-menu .mute', 'textcontent', {}, 'usercontextmenu.mute');
+  translatePiece('.user-context-menu .deafen', 'textcontent', {}, 'usercontextmenu.deafen');
   translatePiece('.user-context-menu .priority-speaker', 'textcontent', {}, 'usercontextmenu.priority_speaker');
   translatePiece('.user-context-menu .local-mute', 'textcontent', {}, 'usercontextmenu.local_mute');
   translatePiece('.user-context-menu .ignore-messages', 'textcontent', {}, 'usercontextmenu.ignore_messages');

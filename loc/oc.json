@@ -51,15 +51,26 @@
     "remove_friend": "Tirar dels amics"
   },
   "channelcontextmenu": {
-    "channelcontextmenu.join": "Rejónher la sala",
-    "channelcontextmenu.add": "Ajustar",
-    "channelcontextmenu.edit": "Modificar",
-    "channelcontextmenu.remove": "Suprimir",
-    "channelcontextmenu.link": "Associar",
-    "channelcontextmenu.unlink": "Desassociar",
-    "channelcontextmenu.unlink_all": "Tot desassociar",
-    "channelcontextmenu.copy_mumble_url": "Copair l’URL Mumble",
-    "channelcontextmenu.copy_mumble_web_url": "Copiar l’URL Mumble-Web",
-    "channelcontextmenu.send_message": "Enviar messatge"
+    "join": "Rejónher la sala",
+    "add": "Ajustar",
+    "edit": "Modificar",
+    "remove": "Suprimir",
+    "link": "Associar",
+    "unlink": "Desassociar",
+    "unlink_all": "Tot desassociar",
+    "copy_mumble_url": "Copair l’URL Mumble",
+    "copy_mumble_web_url": "Copiar l’URL Mumble-Web",
+    "send_message": "Enviar messatge"
+ },
+  "logentry": {
+    "connecting": "Connexion al servidor",
+    "connected": "Connectat !",
+    "connection_error": "Error de connexion :",
+    "unknown_voice_mode": "Mòde àudio desconegut :",
+    "mic_init_error": "Aviada del mèdia utilizaire impossibla. Lo microfòn foncionarà pas :"
+  },
+  "chat": {
+    "channel_message_placeholder": "Escrivètz un messatge per la sala '%1' aquí",
+    "user_message_placeholder": "Escrivètz un messatge a '%1' aquí"    
   }
 }
