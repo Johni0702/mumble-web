@@ -30,7 +30,7 @@ git clone https://github.com/johni0702/mumble-web
 cd mumble-web
 npm install
 ```
-Note that npm should not be ran as root, use an unprivileged user account instead.
+Note that npm **must not** be ran as the root user (even in a container) because it will try to do special things which cause the build to fail, use a non-root user account instead.
 
 The npm version is prebuilt and ready to use whereas the git version allows you
 to e.g. customize the theme before building it.
