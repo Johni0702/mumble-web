@@ -56,7 +56,7 @@ function ConnectDialog () {
   self.tokenToAdd = ko.observable('')
   self.selectedTokens = ko.observableArray([])
   self.tokens = ko.observableArray([])
-  self.username = ko.observable('')
+  self.username = ko.observable(window.localStorage.getItem('username') || '')
   self.password = ko.observable('')
   self.channelName = ko.observable('')
   self.joinOnly = ko.observable(false)
@@ -65,6 +65,7 @@ function ConnectDialog () {
   self.hide = self.visible.bind(self.visible, false)
   self.connect = function () {
     self.hide()
+    window.localStorage.setItem('username', self.username())
     ui.connect(self.username(), self.address(), self.port(), self.tokens(), self.password(), self.channelName())
   }
 
@@ -377,7 +378,7 @@ class GlobalBindings {
         // Make sure we stay open if we're running as Matrix widget
         window.matrixWidget.setAlwaysOnScreen(true)
 
-        // Register all channels, recursively 
+        // Register all channels, recursively
         if(channelName.indexOf("/") != 0) {
           channelName = "/"+channelName;
         }
