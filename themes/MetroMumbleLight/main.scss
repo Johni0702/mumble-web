@@ -540,7 +540,7 @@ form {
 
 /* Mobile view */
 
-@media only screen and (max-width: 600px)  {
+@media only screen and (max-width: 600px) and (min-width: 320px) and (min-height: 600px)  {
 
   .toolbar-horizontal ~ .channel-root-container, .toolbar-vertical ~ .channel-root-container {
     height:calc(100% - 440px);
