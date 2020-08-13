@@ -30,6 +30,7 @@ class WorkerBasedMumbleConnector {
 
   _postMessage (msg, transfer) {
     try {
+      console.debug(msg,transfer)
       this._worker.postMessage(msg, transfer)
     } catch (err) {
       console.error('Failed to postMessage', msg)
@@ -138,6 +139,7 @@ class WorkerBasedMumbleClient extends EventEmitter {
     connector._addCall(this, 'setSelfMute', id)
     connector._addCall(this, 'setSelfTexture', id)
     connector._addCall(this, 'setAudioQuality', id)
+    connector._addCall(this, '_send', id)
 
     connector._addCall(this, 'disconnect', id)
     let _disconnect = this.disconnect

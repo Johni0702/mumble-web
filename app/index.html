@@ -78,6 +78,22 @@
           </form>
         </div>
       <!-- /ko -->
+      <!-- ko with: addChannelDialog -->
+      <div class="add-channel-dialog dialog" data-bind="visible: visible()">
+        <div class="dialog-header">
+          Add channel
+        </div>
+        <form data-bind="submit: addchannel">
+          <table>
+            <tr>
+              <td>Channel</td>
+              <td><input id="channelName" type="text" data-bind="value: channelName" required></td>
+            </tr>
+          </table>
+          <input class="dialog-submit" type="submit" value="Add channel">
+        </form>
+      </div>
+      <!-- /ko -->
       <!-- ko with: connectDialog -->
       <div class="join-dialog dialog" data-bind="visible: visible() && joinOnly()">
           <div class="dialog-header">
@@ -413,7 +429,7 @@
             class="join">
           Join Channel
         </li>
-        <li data-bind="css: { disabled: !canAdd() }"
+        <li data-bind="css: { disabled: !canAdd() }, click: $root.openAddChannel.bind($root, $root.thisUser())"
             class="add">
           Add
         </li>
@@ -421,7 +437,7 @@
             class="edit">
           Edit
         </li>
-        <li data-bind="css: { disabled: !canRemove() }"
+        <li data-bind="css: { disabled: !canRemove() }, click: $root.ChannelRemove.bind($root, $root.thisUser())"
             class="remove">
           Remove
         </li>
