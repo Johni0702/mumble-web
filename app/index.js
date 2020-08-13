@@ -88,6 +88,20 @@ function ContextMenu () {
   self.target = ko.observable()
 }
 
+function AddChannelDialog () {
+  var self = this;
+  self.channelName = ko.observable('')
+  self.parentID = 0;
+  self.visible = ko.observable(false);
+  self.show = self.visible.bind(self.visible, true)
+  self.hide = self.visible.bind(self.visible, false)
+
+  self.addchannel = function() {
+    self.hide();
+    ui.addchannel(self.channelName());
+  }
+}
+
 function ConnectDialog () {
   var self = this
   self.address = ko.observable('')
@@ -327,6 +341,7 @@ class GlobalBindings {
     this.userContextMenu = new ContextMenu()
     this.channelContextMenu = new ContextMenu()
     this.connectDialog = new ConnectDialog()
+    this.addChannelDialog = new AddChannelDialog()
     this.connectErrorDialog = new ConnectErrorDialog(this.connectDialog)
     this.connectionInfo = new ConnectionInfo(this)
     this.commentDialog = new CommentDialog()
@@ -370,6 +385,32 @@ class GlobalBindings {
 
     this.openSettings = () => {
       this.settingsDialog(new SettingsDialog(this.settings))
+    }
+
+    this.openAddChannel = (user, channel) => {
+      this.addChannelDialog.parentID = channel.model._id;
+      this.addChannelDialog.show()
+    }
+
+    this.addchannel = (channelName) => {
+      var msg = {
+        name: 'ChannelState',
+        payload: {
+          parent: this.addChannelDialog.parentID || 0,
+          name: channelName
+        }
+      }
+      this.client._send(msg);
+    }
+
+    this.ChannelRemove = (user, channel) => {
+      var msg = {
+        name: 'ChannelRemove',
+        payload: {
+          channel_id: channel.model._id
+        }
+      }
+      this.client._send(msg);
     }
 
     this.applySettings = () => {
@@ -689,13 +730,13 @@ class GlobalBindings {
         return true // TODO check for perms
       }
       ui.canAdd = () => {
-        return false // TODO check for perms and implement
+        return true // TODO check for perms
       }
       ui.canEdit = () => {
         return false // TODO check for perms and implement
       }
       ui.canRemove = () => {
-        return false // TODO check for perms and implement
+        return true // TODO check for perms
       }
       ui.canLink = () => {
         return false // TODO check for perms and implement

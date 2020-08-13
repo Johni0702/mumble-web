@@ -138,6 +138,7 @@ class WorkerBasedMumbleClient extends EventEmitter {
     connector._addCall(this, 'setSelfMute', id)
     connector._addCall(this, 'setSelfTexture', id)
     connector._addCall(this, 'setAudioQuality', id)
+    connector._addCall(this, '_send', id)
 
     connector._addCall(this, 'disconnect', id)
     let _disconnect = this.disconnect
