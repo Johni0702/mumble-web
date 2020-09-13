@@ -631,7 +631,13 @@ class GlobalBindings {
         linked: ko.observable(false)
       }
       ui.userCount = () => {
-        return ui.channels().reduce((acc, c) => acc + c.userCount(), ui.users().length)
+        const total = ui.channels().reduce((acc, c) => acc + c.userCount(), ui.users().length)
+        if (total > 0) {
+          ui.expanded(true)
+        } else {
+          ui.expanded(false)
+        }
+        return total
       }
       ui.openContextMenu = (_, event) => openContextMenu(event, this.channelContextMenu, ui)
       ui.canJoin = () => {

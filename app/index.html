@@ -564,9 +564,9 @@
             data-bind="visible: linked() && $root.thisUser().channel() !== $data">
           <div class="channel-name">
             <span data-bind="text: name"></span>
-            <!-- ko if: $root.settings.userCountInChannelName() && userCount() !== 0 -->
-            &nbsp;(<span data-bind="text: userCount()"></span>)
-            <!-- /ko -->
+            <span data-bind="visible: $root.settings.userCountInChannelName() && userCount() !== 0">
+              &nbsp;(<span data-bind="text: userCount()"></span>)
+            </span>
           </div>
         </div>
         <!-- ko if: expanded -->
