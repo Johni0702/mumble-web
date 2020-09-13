@@ -15,6 +15,21 @@ import {initialize as localizationInitialize, translate} from './loc';
 
 const dompurify = _dompurify(window)
 
+// from: https://gist.github.com/haliphax/5379454
+ko.extenders.scrollFollow = function (target, selector) {
+  target.subscribe(function (newval) {
+    const el = document.querySelector(selector);
+
+    // the scroll bar is all the way down, so we know they want to follow the text
+    if (el.scrollTop == el.scrollHeight - el.clientHeight) {
+      // have to push our code outside of this thread since the text hasn't updated yet
+      setTimeout(function () { el.scrollTop = el.scrollHeight - el.clientHeight; }, 0);
+    } 
+  });
+
+  return target;
+};
+
 function sanitize (html) {
   return dompurify.sanitize(html, {
     ALLOWED_TAGS: ['br', 'b', 'i', 'u', 'a', 'span', 'p']
@@ -293,7 +308,7 @@ class GlobalBindings {
     this.commentDialog = new CommentDialog()
     this.settingsDialog = ko.observable()
     this.minimalView = ko.observable(false)
-    this.log = ko.observableArray()
+    this.log = ko.observableArray().extend({ scrollFollow: '.log' })
     this.remoteHost = ko.observable()
     this.remotePort = ko.observable()
     this.thisUser = ko.observable()
