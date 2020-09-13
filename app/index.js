@@ -302,8 +302,8 @@ class GlobalBindings {
     this.messageBox = ko.observable('')
     this.toolbarHorizontal = ko.observable(!this.settings.toolbarVertical)
     this.selected = ko.observable()
-    this.selfMute = ko.observable()
-    this.selfDeaf = ko.observable()
+    this.selfMute = ko.observable(this.config.defaults.startMute)
+    this.selfDeaf = ko.observable(this.config.defaults.startDeaf)
 
     this.selfMute.subscribe(mute => {
       if (voiceHandler) {
