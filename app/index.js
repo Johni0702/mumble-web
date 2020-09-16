@@ -790,6 +790,9 @@ class GlobalBindings {
         if (target === this.thisUser()) {
           target = target.channel()
         }
+        // Avoid blank message
+        message = sanitize(message).trim()
+        if (message.length == 0) return;
         // Send message
         target.model.sendMessage(message)
         if (target.users) { // Channel
