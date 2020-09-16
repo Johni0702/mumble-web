@@ -33,7 +33,7 @@ ko.extenders.scrollFollow = function (target, selector) {
 
 function sanitize (html) {
   return dompurify.sanitize(html, {
-    ALLOWED_TAGS: ['br', 'b', 'i', 'u', 'a', 'span', 'p', 'img', 'center']
+    ALLOWED_TAGS: ['br', 'b', 'i', 'u', 'a', 'span', 'p', 'img', 'center', 'iframe']
   })
 }
 
@@ -62,7 +62,8 @@ const anchormeOptions = {
     test: /youtube\.com\/watch\?v\=/,
     transform: function (s) {
       s=s.replace(/.*watch\?v\=(.*)$/,"$1");
-      return '<iframe width="100%" height="400" src="https://www.youtube-nocookie.com/embed/'+s+'"></iframe>';
+      return '<iframe width="100%" height="400" src="https://www.youtube-nocookie.com/embed/'+s+'"></iframe><br>'+
+        '<a href="https://youtube.com/watch?v='+s+'">Youtube link</a>';
     }
   }]
 }
@@ -834,7 +835,7 @@ class GlobalBindings {
         message = message.replace(/\n\n+/g,"\n\n");
         message = message.replace(/\n/g,"<br>");
         // Send message
-        target.model.sendMessage(anchorme(message))
+        target.model.sendMessage(anchorme({input: message, options: anchormeOptions}))
         if (target.users) { // Channel
           this.log.push({
             type: 'chat-message-self',
