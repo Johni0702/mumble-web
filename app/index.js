@@ -55,7 +55,7 @@ const anchormeOptions = {
     test: /.*\.(png|jpg|jpeg|gif)$/i,
     transform: function (s) {
       if (s.indexOf('http') != 0) s='https://'+s;
-      return '<img src="'+s+'" width="100%"><br><a href="'+s+'" target="_blank">Image link</a>';
+      return '<center><img src="'+s+'" height="400"><br><a href="'+s+'" target="_blank">Image link</a></center>';
     }
   },{
     // render youtube-nocookie embed
@@ -63,7 +63,7 @@ const anchormeOptions = {
     transform: function (s) {
       s=s.replace(/.*watch\?v\=(.*)$/,"$1");
       return '<iframe width="100%" height="400" src="https://www.youtube-nocookie.com/embed/'+s+'"></iframe><br>'+
-        '<a href="https://youtube.com/watch?v='+s+'">Youtube link</a>';
+        '<center><a href="https://youtube.com/watch?v='+s+'">Youtube link</a></center>';
     }
   }]
 }
