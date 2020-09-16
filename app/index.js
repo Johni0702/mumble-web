@@ -359,7 +359,7 @@ class GlobalBindings {
     })
 
     this.submitOnEnter = function(data, e) {
-      if (e.which == 13) {
+      if (e.which == 13 && !e.shiftKey) {
        this.submitMessageBox();
        return false;
       }
