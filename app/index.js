@@ -399,7 +399,7 @@ class GlobalBindings {
     }
 
     this.getTimeString = () => {
-      return '[' + new Date().toLocaleTimeString('en-US') + ']'
+      return '[' + new Date().toLocaleTimeString(navigator.language) + ']'
     }
 
     this.connect = (username, host, port, tokens = [], password, channelName = "") => {
