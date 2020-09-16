@@ -49,7 +49,22 @@ const anchormeOptions = {
     } else {
       return "https://";
     }
-  }
+  },
+  specialTransform: [{
+    // render image preview
+    test: /.*\.(png|jpg|jpeg|gif)$/i,
+    transform: function (s) {
+      if (s.indexOf('http') != 0) s='https://'+s;
+      return '<a href="'+s+'" target="_blank"><img src="'+s+'" width="100%"><br>Image link</a>';
+    }
+  },{
+    // render youtube-nocookie embed
+    test: /youtube\.com\/watch\?v\=/,
+    transform: function (s) {
+      s=s.replace(/.*watch\?v\=(.*)$/,"$1");
+      return '<iframe width="100%" height="400" src="https://www.youtube-nocookie.com/embed/'+s+'"></iframe>';
+    }
+  }]
 }
 
 function openContextMenu (event, contextMenu, target) {
