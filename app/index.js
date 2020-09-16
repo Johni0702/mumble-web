@@ -342,6 +342,14 @@ class GlobalBindings {
       }
     })
 
+    this.submitOnEnter = function(data, e) {
+      if (e.which == 13) {
+       this.submitMessageBox();
+       return false;
+      }
+      return true;
+    }
+
     this.toggleToolbarOrientation = () => {
       this.toolbarHorizontal(!this.toolbarHorizontal())
       this.settings.toolbarVertical = !this.toolbarHorizontal()
@@ -806,10 +814,12 @@ class GlobalBindings {
           target = target.channel()
         }
         // Avoid blank message
-        message = sanitize(message).trim()
-        if (message.length == 0) return;
+        if (sanitize(message).trim().length == 0) return;
+        // Support multiline
+        message = message.replace(/\n\n+/g,"\n\n");
+        message = message.replace(/\n/g,"<br>");
         // Send message
-        target.model.sendMessage(message)
+        target.model.sendMessage(anchorme(message))
         if (target.users) { // Channel
           this.log.push({
             type: 'chat-message-self',
