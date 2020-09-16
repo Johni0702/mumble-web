@@ -55,7 +55,7 @@ const anchormeOptions = {
     test: /.*\.(png|jpg|jpeg|gif)$/i,
     transform: function (s) {
       if (s.indexOf('http') != 0) s='https://'+s;
-      return '<a href="'+s+'" target="_blank"><img src="'+s+'" width="100%"><br>Image link</a>';
+      return '<img src="'+s+'" width="100%"><br><a href="'+s+'" target="_blank">Image link</a>';
     }
   },{
     // render youtube-nocookie embed
