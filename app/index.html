@@ -546,8 +546,10 @@
           </div>
         </div>
         <form data-bind="submit: submitMessageBox">
-          <input id="message-box" type="text" data-bind="
-              attr: { placeholder: messageBoxHint }, textInput: messageBox">
+          <textarea id="message-box" row=1 data-bind="
+              attr: { placeholder: messageBoxHint }, 
+              textInput: messageBox, 
+              event: {keypress: submitOnEnter}"></textarea>
         </form>
       </div>
       <script type="text/html" id="channel">
