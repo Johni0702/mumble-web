@@ -21,6 +21,7 @@
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "@babel/runtime": "^7.9.2",
+    "anchorme": "^2.1.2",
     "audio-buffer-utils": "^5.1.2",
     "audio-context": "^1.0.3",
     "babel-loader": "^8.1.0",

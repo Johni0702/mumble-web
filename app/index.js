@@ -9,6 +9,7 @@ import audioContext from 'audio-context'
 import ko from 'knockout'
 import _dompurify from 'dompurify'
 import keyboardjs from 'keyboardjs'
+import anchorme from 'anchorme'
 
 import { ContinuousVoiceHandler, PushToTalkVoiceHandler, VADVoiceHandler, initVoice } from './voice'
 import {initialize as localizationInitialize, translate} from './loc';
@@ -32,8 +33,23 @@ ko.extenders.scrollFollow = function (target, selector) {
 
 function sanitize (html) {
   return dompurify.sanitize(html, {
-    ALLOWED_TAGS: ['br', 'b', 'i', 'u', 'a', 'span', 'p']
+    ALLOWED_TAGS: ['br', 'b', 'i', 'u', 'a', 'span', 'p', 'img', 'center']
   })
+}
+
+const anchormeOptions = {
+  // force target _blank attribute
+  attributes: {
+    target: "_blank"
+  },
+  // force https protocol except email
+  protocol: function(s) {
+    if (anchorme.validate.email(s)) {
+      return "mailto:";
+    } else {
+      return "https://";
+    }
+  }
 }
 
 function openContextMenu (event, contextMenu, target) {
@@ -420,7 +436,7 @@ class GlobalBindings {
             type: 'chat-message',
             user: sender.__ui,
             channel: channels.length > 0,
-            message: sanitize(message)
+            message: anchorme({input: sanitize(message), options: anchormeOptions})
           })
         })
 
@@ -794,13 +810,13 @@ class GlobalBindings {
         if (target.users) { // Channel
           this.log.push({
             type: 'chat-message-self',
-            message: sanitize(message),
+            message: anchorme({input: sanitize(message), options: anchormeOptions}),
             channel: target
           })
         } else { // User
           this.log.push({
             type: 'chat-message-self',
-            message: sanitize(message),
+            message: anchorme({input: sanitize(message), options: anchormeOptions}),
             user: target
           })
         }
