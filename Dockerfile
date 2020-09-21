@@ -1,6 +1,4 @@
-FROM alpine:edge
-
-LABEL maintainer="Andreas Peters <support@aventer.biz>"
+FROM alpine:20200626
 
 COPY ./ /home/node
 
