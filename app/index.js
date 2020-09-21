@@ -113,7 +113,6 @@ class ConnectionInfo {
     this.codec = ko.observable()
 
     this.show = () => {
-      if (!ui.thisUser()) return
       this.update()
       this.visible(true)
     }
@@ -344,7 +343,7 @@ class GlobalBindings {
     }
 
     this.getTimeString = () => {
-      return '[' + new Date().toLocaleTimeString('en-US') + ']'
+      return '[' + new Date().toLocaleTimeString(navigator.language) + ']'
     }
 
     this.connect = (username, host, port, tokens = [], password, channelName = "") => {
@@ -377,7 +376,7 @@ class GlobalBindings {
         // Make sure we stay open if we're running as Matrix widget
         window.matrixWidget.setAlwaysOnScreen(true)
 
-        // Register all channels, recursively 
+        // Register all channels, recursively
         if(channelName.indexOf("/") != 0) {
           channelName = "/"+channelName;
         }
