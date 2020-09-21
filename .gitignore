@@ -52,3 +52,5 @@ jspm_packages
 .yarn-integrity
 
 
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
