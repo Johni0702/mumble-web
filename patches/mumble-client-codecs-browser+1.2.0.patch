@@ -2,8 +2,9 @@ diff --git a/node_modules/mumble-client-codecs-browser/lib/decode-worker.js b/no
 index 3925f29..be9af92 100644
 --- a/node_modules/mumble-client-codecs-browser/lib/decode-worker.js
 +++ b/node_modules/mumble-client-codecs-browser/lib/decode-worker.js
-@@ -1,10 +1,6 @@
+@@ -1,10 +1,7 @@
  'use strict';
++import 'subworkers'
  
 -Object.defineProperty(exports, "__esModule", {
 -  value: true
@@ -32,9 +33,10 @@ diff --git a/node_modules/mumble-client-codecs-browser/lib/decoder-stream.js b/n
 index 6cfda8b..28a9549 100644
 --- a/node_modules/mumble-client-codecs-browser/lib/decoder-stream.js
 +++ b/node_modules/mumble-client-codecs-browser/lib/decoder-stream.js
-@@ -1,9 +1,5 @@
+@@ -1,9 +1,6 @@
  'use strict';
- 
++import 'subworkers'
+
 -Object.defineProperty(exports, "__esModule", {
 -  value: true
 -});
@@ -95,8 +97,9 @@ diff --git a/node_modules/mumble-client-codecs-browser/lib/encode-worker.js b/no
 index f7187ab..c2ebaa3 100644
 --- a/node_modules/mumble-client-codecs-browser/lib/encode-worker.js
 +++ b/node_modules/mumble-client-codecs-browser/lib/encode-worker.js
-@@ -1,10 +1,6 @@
+@@ -1,10 +1,7 @@
  'use strict';
++import 'subworkers'
  
 -Object.defineProperty(exports, "__esModule", {
 -  value: true
@@ -126,8 +129,9 @@ diff --git a/node_modules/mumble-client-codecs-browser/lib/encoder-stream.js b/n
 index 021f131..eeb9189 100644
 --- a/node_modules/mumble-client-codecs-browser/lib/encoder-stream.js
 +++ b/node_modules/mumble-client-codecs-browser/lib/encoder-stream.js
-@@ -1,9 +1,5 @@
+@@ -1,9 +1,6 @@
  'use strict';
++import 'subworkers'
  
 -Object.defineProperty(exports, "__esModule", {
 -  value: true
