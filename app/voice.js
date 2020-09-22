@@ -1,7 +1,7 @@
 import { Writable } from 'stream'
 import MicrophoneStream from 'microphone-stream'
 import audioContext from 'audio-context'
-import getUserMedia from 'getusermedia'
+import getUserMedia from './getusermedia'
 import keyboardjs from 'keyboardjs'
 import vad from 'voice-activity-detection'
 import DropStream from 'drop-stream'

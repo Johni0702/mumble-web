@@ -275,5 +275,3 @@ import 'subworkers'
       console.error('exception during message event', ev.data, ex)
     }
   })
-
-  export default null

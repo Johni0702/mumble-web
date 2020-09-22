@@ -1,9 +1,4 @@
-**If you do not have specific requirements, please consider using the `webrtc` version instead: https://github.com/Johni0702/mumble-web/tree/webrtc (note that setup instructions differ significantly).
-It should be near identical in features but less susceptible to performance issues. If you are having trouble with the `webrtc` version, please let us know.**
-
-PRs, unless webrtc-specific, should still target `master`.
-
-# mumble-web
+# Mumble web app for all browsers
 
 mumble-web is an HTML5 [Mumble] client for use in modern browsers.
 
