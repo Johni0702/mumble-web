@@ -1,4 +1,4 @@
-# mumble-web
+# mumble-web for all browsers
 
 mumble-web is an HTML5 [Mumble] client for use in modern browsers.
 
