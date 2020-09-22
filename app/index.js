@@ -16,6 +16,29 @@ import {initialize as localizationInitialize, translate} from './loc';
 
 const dompurify = _dompurify(window)
 
+// from: https://gist.github.com/haliphax/5379454
+ko.extenders.scrollFollow = function (target, selector) {
+  target.subscribe(function (chat) {
+    const el = document.querySelector(selector);
+
+    // the scroll bar is all the way down, so we know they want to follow the text
+    if (el.scrollTop == el.scrollHeight - el.clientHeight) {
+      // have to push our code outside of this thread since the text hasn't updated yet
+      setTimeout(function () { el.scrollTop = el.scrollHeight - el.clientHeight; }, 0);
+    }  else {
+      // send notification
+      const last = chat[chat.length - 1]
+      if (Notification.permission == 'granted' && last.type != 'chat-message-self') {
+        let sender = 'Mumble Server'
+        if (last.user && last.user.name) sender=last.user.name()
+        new Notification(sender, {body: dompurify.sanitize(last.message, {ALLOWED_TAGS:[]})})
+      }
+    }
+  });
+
+  return target;
+};
+
 function sanitize (html) {
   return dompurify.sanitize(html, {
     ALLOWED_TAGS: ['br', 'b', 'i', 'u', 'a', 'span', 'p', 'img', 'center']
@@ -372,6 +395,10 @@ class GlobalBindings {
     }
 
     this.connect = (username, host, port, tokens = [], password, channelName = "") => {
+
+      // if browser support Notification request permission
+      if ('Notification' in window) Notification.requestPermission()
+
       this.resetClient()
 
       this.remoteHost(host)
