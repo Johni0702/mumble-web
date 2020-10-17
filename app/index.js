@@ -28,7 +28,7 @@ ko.extenders.scrollFollow = function (target, selector) {
     }  else {
       // send notification
       const last = chat[chat.length - 1]
-      if (Notification.permission == 'granted' && last.type != 'chat-message-self') {
+      if (ui.config.defaults.enableNotifications && Notification.permission == 'granted' && last.type != 'chat-message-self') {
         let sender = 'Mumble Server'
         if (last.user && last.user.name) sender=last.user.name()
         new Notification(sender, {body: dompurify.sanitize(last.message, {ALLOWED_TAGS:[]})})
@@ -412,8 +412,8 @@ class GlobalBindings {
 
     this.connect = (username, host, port, tokens = [], password, channelName = "") => {
 
-      // if browser support Notification request permission
-      if ('Notification' in window) Notification.requestPermission()
+      // if browser support Notification and feature enabled, request permission
+      if (this.config.defaults.enableNotifications && window.Notification) Notification.requestPermission()
 
       this.resetClient()
 
