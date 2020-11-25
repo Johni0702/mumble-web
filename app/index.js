@@ -5,6 +5,7 @@ import ByteBuffer from 'bytebuffer'
 import MumbleClient from 'mumble-client'
 import WorkerBasedMumbleConnector from './worker-client'
 import BufferQueueNode from 'web-audio-buffer-queue'
+import mumbleConnect from 'mumble-client-websocket'
 import audioContext from 'audio-context'
 import ko from 'knockout'
 import _dompurify from 'dompurify'
@@ -118,6 +119,9 @@ function ConnectDialog () {
   self.hide = self.visible.bind(self.visible, false)
   self.connect = function () {
     self.hide()
+    if (ui.detectWebRTC) {
+      ui.webrtc = true
+    }
     ui.connect(self.username(), self.address(), self.port(), self.tokens(), self.password(), self.channelName())
   }
 
@@ -336,7 +340,10 @@ class GlobalBindings {
   constructor (config) {
     this.config = config
     this.settings = new Settings(config.settings)
-    this.connector = new WorkerBasedMumbleConnector()
+    this.detectWebRTC = true
+    this.webrtc = true
+    this.fallbackConnector = new WorkerBasedMumbleConnector()
+    this.webrtcConnector = { connect: mumbleConnect }
     this.client = null
     this.userContextMenu = new ContextMenu()
     this.channelContextMenu = new ContextMenu()
@@ -449,12 +456,27 @@ class GlobalBindings {
 
       // Note: This call needs to be delayed until the user has interacted with
       // the page in some way (which at this point they have), see: https://goo.gl/7K7WLu
-      this.connector.setSampleRate(audioContext().sampleRate)
+      let ctx = audioContext()
+      this.fallbackConnector.setSampleRate(ctx.sampleRate)
+      if (!this._delayedMicNode) {
+        this._micNode = ctx.createMediaStreamSource(this._micStream)
+        this._delayNode = ctx.createDelay()
+        this._delayNode.delayTime.value = 0.15
+        this._delayedMicNode = ctx.createMediaStreamDestination()
+      }
 
       // TODO: token
-      this.connector.connect(`wss://${host}:${port}`, {
+      (this.webrtc ? this.webrtcConnector : this.fallbackConnector).connect(`wss://${host}:${port}`, {
         username: username,
         password: password,
+        webrtc: this.webrtc ? {
+          enabled: true,
+          required: true,
+          mic: this._delayedMicNode.stream,
+          audioContext: ctx
+        } : {
+          enabled: false,
+        },
         tokens: tokens
       }).done(client => {
         log(translate('logentry.connected'))
@@ -535,6 +557,10 @@ class GlobalBindings {
           this.connectErrorDialog.type(err.type)
           this.connectErrorDialog.reason(err.reason)
           this.connectErrorDialog.show()
+        } else if (err === 'server_does_not_support_webrtc' && this.detectWebRTC && this.webrtc) {
+          log(translate('logentry.connection_fallback_mode'))
+          this.webrtc = false
+          this.connect(username, host, port, tokens, password, channelName)
         } else {
           log(translate('logentry.connection_error'), err)
         }
@@ -686,24 +712,32 @@ class GlobalBindings {
         }
       }).on('voice', stream => {
         console.log(`User ${user.username} started takling`)
-        var userNode = new BufferQueueNode({
-          audioContext: audioContext()
-        })
-        userNode.connect(audioContext().destination)
-
+        let userNode
+        if (!this.webrtc) {
+          userNode = new BufferQueueNode({
+            audioContext: audioContext()
+          })
+          userNode.connect(audioContext().destination)
+        }
+        if (stream.target === 'normal') {
+          ui.talking('on')
+        } else if (stream.target === 'shout') {
+          ui.talking('shout')
+        } else if (stream.target === 'whisper') {
+          ui.talking('whisper')
+        }
         stream.on('data', data => {
-          if (data.target === 'normal') {
-            ui.talking('on')
-          } else if (data.target === 'shout') {
-            ui.talking('shout')
-          } else if (data.target === 'whisper') {
-            ui.talking('whisper')
+          if (this.webrtc) {
+            // mumble-client is in WebRTC mode, no pcm data should arrive this way
+          } else {
+            userNode.write(data.buffer)
           }
-          userNode.write(data.buffer)
         }).on('end', () => {
           console.log(`User ${user.username} stopped takling`)
           ui.talking('off')
-          userNode.end()
+          if (!this.webrtc) {
+            userNode.end()
+          }
         })
       })
     }
@@ -823,6 +857,15 @@ class GlobalBindings {
       })
       if (this.selfMute()) {
         voiceHandler.setMute(true)
+      }
+
+      this._micNode.disconnect()
+      this._delayNode.disconnect()
+      if (mode === 'vad') {
+        this._micNode.connect(this._delayNode)
+        this._delayNode.connect(this._delayedMicNode)
+      } else {
+        this._micNode.connect(this._delayedMicNode)
       }
 
       this.client.setAudioQuality(
@@ -1055,6 +1098,12 @@ function initializeUI () {
   if (queryParams.password) {
     ui.connectDialog.password(queryParams.password)
   }
+  if (queryParams.webrtc !== 'auto') {
+    ui.detectWebRTC = false
+    if (queryParams.webrtc == 'false') {
+      ui.webrtc = false
+    }
+  }
   if (queryParams.channelName) {
     ui.connectDialog.channelName(queryParams.channelName)
   }
@@ -1251,23 +1300,26 @@ function translateEverything() {
 async function main() {
   await localizationInitialize(navigator.language);
   translateEverything();
-  initializeUI();
-  initVoice(data => {
-    if (testVoiceHandler) {
-      testVoiceHandler.write(data)
-    }
-    if (!ui.client) {
-      if (voiceHandler) {
-        voiceHandler.end()
+  try {
+    const userMedia = await initVoice(data => {
+      if (testVoiceHandler) {
+        testVoiceHandler.write(data)
       }
-      voiceHandler = null
-    } else if (voiceHandler) {
-      voiceHandler.write(data)
-    }
-  }, err => {
-    log(translate('logentry.mic_init_error'), err)
-  })
+      if (!ui.client) {
+        if (voiceHandler) {
+          voiceHandler.end()
+        }
+        voiceHandler = null
+      } else if (voiceHandler) {
+        voiceHandler.write(data)
+      }
+    })
+    ui._micStream = userMedia
+  } catch (err) {
+    window.alert('Failed to initialize user media\nRefresh page to retry.\n' + err)
+    return
+  }
+  initializeUI();
 }
 
 window.onload = main
-

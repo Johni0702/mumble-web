@@ -79,6 +79,7 @@
     "connecting": "Connecting to server",
     "connected": "Connected!",
     "connection_error": "Connection error:",
+    "connection_fallback_mode": "Server does not support WebRTC, re-trying in fallback mode..",
     "unknown_voice_mode": "Unknown voice mode:",
     "mic_init_error": "Cannot initialize user media. Microphone will not work:"
   },

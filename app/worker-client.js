@@ -125,7 +125,7 @@ class WorkerBasedMumbleConnector {
   }
 }
 
-class WorkerBasedMumbleClient extends EventEmitter {
+export class WorkerBasedMumbleClient extends EventEmitter {
   constructor (connector, clientId) {
     super()
     this._connector = connector
@@ -342,11 +342,12 @@ class WorkerBasedMumbleUser extends EventEmitter {
         props
       ]
     } else if (name === 'voice') {
-      let [id] = args
+      let [id, target] = args
       let stream = new PassThrough({
         objectMode: true
       })
       this._connector._voiceStreams[id] = stream
+      stream.target = target
       args = [stream]
     } else if (name === 'remove') {
       delete this._client._users[this._id]
