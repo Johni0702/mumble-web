@@ -1124,6 +1124,31 @@ function translateEverything() {
   translatePiece('.channel-context-menu .copy-mumble-url', 'textcontent', {}, 'channelcontextmenu.copy_mumble_url');
   translatePiece('.channel-context-menu .copy-mumble-web-url', 'textcontent', {}, 'channelcontextmenu.copy_mumble_web_url');
   translatePiece('.channel-context-menu .send-message', 'textcontent', {}, 'channelcontextmenu.send_message');
+
+  translatePiece('.toolbar .tb-horizontal', 'attribute', {'name': 'title'}, 'toolbar.orientation');
+  translatePiece('.toolbar .tb-horizontal', 'attribute', {'name': 'alt'}, 'toolbar.orientation');
+  translatePiece('.toolbar .tb-vertical', 'attribute', {'name': 'title'}, 'toolbar.orientation');
+  translatePiece('.toolbar .tb-vertical', 'attribute', {'name': 'alt'}, 'toolbar.orientation');
+  translatePiece('.toolbar .tb-connect', 'attribute', {'name': 'title'}, 'toolbar.connect');
+  translatePiece('.toolbar .tb-connect', 'attribute', {'name': 'alt'}, 'toolbar.connect');
+  translatePiece('.toolbar .tb-information', 'attribute', {'name': 'title'}, 'toolbar.information');
+  translatePiece('.toolbar .tb-information', 'attribute', {'name': 'alt'}, 'toolbar.information');
+  translatePiece('.toolbar .tb-mute', 'attribute', {'name': 'title'}, 'toolbar.mute');
+  translatePiece('.toolbar .tb-mute', 'attribute', {'name': 'alt'}, 'toolbar.mute');
+  translatePiece('.toolbar .tb-unmute', 'attribute', {'name': 'title'}, 'toolbar.unmute');
+  translatePiece('.toolbar .tb-unmute', 'attribute', {'name': 'alt'}, 'toolbar.unmute');
+  translatePiece('.toolbar .tb-deaf', 'attribute', {'name': 'title'}, 'toolbar.deaf');
+  translatePiece('.toolbar .tb-deaf', 'attribute', {'name': 'alt'}, 'toolbar.deaf');
+  translatePiece('.toolbar .tb-undeaf', 'attribute', {'name': 'title'}, 'toolbar.undeaf');
+  translatePiece('.toolbar .tb-undeaf', 'attribute', {'name': 'alt'}, 'toolbar.undeaf');
+  translatePiece('.toolbar .tb-record', 'attribute', {'name': 'title'}, 'toolbar.record');
+  translatePiece('.toolbar .tb-record', 'attribute', {'name': 'alt'}, 'toolbar.record');
+  translatePiece('.toolbar .tb-comment', 'attribute', {'name': 'title'}, 'toolbar.comment');
+  translatePiece('.toolbar .tb-comment', 'attribute', {'name': 'alt'}, 'toolbar.comment');
+  translatePiece('.toolbar .tb-settings', 'attribute', {'name': 'title'}, 'toolbar.settings');
+  translatePiece('.toolbar .tb-settings', 'attribute', {'name': 'alt'}, 'toolbar.settings');
+  translatePiece('.toolbar .tb-sourcecode', 'attribute', {'name': 'title'}, 'toolbar.sourcecode');
+  translatePiece('.toolbar .tb-sourcecode', 'attribute', {'name': 'alt'}, 'toolbar.sourcecode');
 }
 
 async function main() {
