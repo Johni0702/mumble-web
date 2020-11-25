@@ -12,8 +12,6 @@ import Worker from './worker'
  */
 class WorkerBasedMumbleConnector {
   constructor () {
-    this._worker = new Worker()
-    this._worker.addEventListener('message', this._onMessage.bind(this))
     this._reqId = 1
     this._requests = {}
     this._clients = {}
@@ -29,6 +27,10 @@ class WorkerBasedMumbleConnector {
   }
 
   _postMessage (msg, transfer) {
+    if (!this._worker) {
+      this._worker = new Worker()
+      this._worker.addEventListener('message', this._onMessage.bind(this))
+    }
     try {
       this._worker.postMessage(msg, transfer)
     } catch (err) {

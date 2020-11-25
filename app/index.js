@@ -457,7 +457,9 @@ class GlobalBindings {
       // Note: This call needs to be delayed until the user has interacted with
       // the page in some way (which at this point they have), see: https://goo.gl/7K7WLu
       let ctx = audioContext()
-      this.fallbackConnector.setSampleRate(ctx.sampleRate)
+      if (!this.webrtc) {
+        this.fallbackConnector.setSampleRate(ctx.sampleRate)
+      }
       if (!this._delayedMicNode) {
         this._micNode = ctx.createMediaStreamSource(this._micStream)
         this._delayNode = ctx.createDelay()
