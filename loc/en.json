@@ -31,6 +31,19 @@
     "title": "Mumble Voice Conference",
     "connect": "Join Conference"
   },
+  "toolbar": {
+    "orientation": "Switch Orientation",
+    "connect": "Connection",
+    "information": "Information",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "deaf": "Deafen",
+    "undeaf": "Undeafen",
+    "record": "Record",
+    "comment": "Comment",
+    "settings": "Settings",
+    "sourcecode": "Open Source Code"
+  },
   "usercontextmenu": {
     "mute": "Mute",
     "deafen": "Deafen",
