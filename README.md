@@ -38,8 +38,8 @@ to e.g. customize the theme before building it.
 Either way you will end up with a `dist` folder that contains the static page.
 
 #### Setup
-At the time of writing this there do not seem to be any Mumble servers
-which natively support Websockets. To use this client with any standard mumble
+At the time of writing this there seems to be only one Mumble server (which is [grumble](https://github.com/mumble-voip/grumble))
+that natively support Websockets. To use this client with any other standard mumble
 server, websockify must be set up (preferably on the same machine that the
 Mumble server is running on).
 
