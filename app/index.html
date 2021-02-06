@@ -233,12 +233,12 @@
           <form data-bind="submit: $root.applySettings">
             <table>
                 <tr>
-                  <td>Transmission</td>
+                  <td class="stg-transmission">Transmission</td>
                   <td>
                     <select data-bind='value: voiceMode'>
-                      <option value="cont">Continuous</option>
-                      <option value="vad">Voice Activity</option>
-                      <option value="ptt">Push To Talk</option>
+                      <option value="cont" class="stg-continuous">Continuous</option>
+                      <option value="vad" class="stg-voice-activity">Voice Activity</option>
+                      <option value="ptt" class="stg-push-to-talk">Push To Talk</option>
                   </td>
                 </tr>
                 <tr data-bind="visible: voiceMode() == 'vad'">
@@ -254,13 +254,13 @@
                   </td>
                 </tr>
                 <tr data-bind="visible: voiceMode() == 'ptt'">
-                  <td>PTT Key</td>
+                  <td class="stg-push-to-talk-key">PTT Key</td>
                   <td>
                     <input type="button" data-bind="value: pttKeyDisplay, click: recordPttKey">
                   </td>
                 </tr>
                 <tr>
-                  <td>Audio Quality</td>
+                  <td class="stg-audio-quality">Audio Quality</td>
                   <td><span data-bind="text: (audioBitrate()/1000).toFixed(1)"></span> kbit/s</td>
                 </tr>
                 <tr>
@@ -270,7 +270,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Audio per packet</td>
+                  <td class="stg-audio-per-packet">Audio per packet</td>
                   <td><span data-bind="text: msPerPacket"></span> ms</td>
                 </tr>
                 <tr>
@@ -283,28 +283,28 @@
                   <td colspan="2" class="bandwidth-info">
                     <span data-bind="text: (totalBandwidth()/1000).toFixed(1)"></span>
                     kbit/s
-                    (Audio
+                    (<span class="stg-audio">Audio</span>
                     <span data-bind="text: (audioBitrate()/1000).toFixed(1)"></span>,
-                    Position
+                    <span class="stg-position">Position</span>
                     <span data-bind="text: (positionBandwidth()/1000).toFixed(1)"></span>,
-                    Overhead
+                    <span class="stg-overhead">Overhead</span>
                     <span data-bind="text: (overheadBandwidth()/1000).toFixed(1)"></span>)
                   </td>
                 </tr>
                 <tr>
-                  <td>Show Avatars</td>
+                  <td class="stg-show-avatars">Show Avatars</td>
                   <td>
                     <select data-bind='value: showAvatars'>
-                      <option value="always">Always</option>
-                      <option value="own_channel">Same Channel</option>
-                      <option value="linked_channel">Linked Channels</option>
-                      <option value="minimal_only">Minimal View</option>
-                      <option value="never">Never</option>
+                      <option value="always" class="stg-always">Always</option>
+                      <option value="own_channel" class="stg-same-channel">Same Channel</option>
+                      <option value="linked_channel" class="stg-linked-channels">Linked Channels</option>
+                      <option value="minimal_only" class="stg-minimal-view">Minimal View</option>
+                      <option value="never" class="stg-never">Never</option>
                   </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input type="checkbox" data-bind="checked: userCountInChannelName">
+                        <input type="checkbox" data-bind="checked: userCountInChannelName" class="stg-show-user-count">
                         Show user count after channel name
                     </td>
                 </tr>
