@@ -5,7 +5,7 @@
     "port": "Port",
     "username": "Nom d’utilisateur",
     "password": "Mot de passe",
-    "tokens": "Jetons",
+    "tokens": "Jeton",
     "remove": "Supprimer",
     "add": "Ajouter",
     "cancel": "Annuler",
@@ -28,8 +28,8 @@
     }
   },
   "joindialog": {
-    "title": "Conférence audio Mumble",
-    "connect": "Rejoindre la conférence"
+    "title": "Conférence audio Optéos",
+    "connect": "Rejoindre la conférence audio"
   },
   "toolbar": {
     "orientation": "Changer d’orientation",
@@ -45,10 +45,10 @@
     "sourcecode": "Code Open Source"
   },
   "usercontextmenu": {
-    "mute": "Rendre muet",
-    "deafen": "Rendre sourd",
-    "priority_speaker": "Parole prioritaire",
-    "local_mute": "Ne plus l’écouter",
+    "mute": "Muet",
+    "deafen": "Sourd",
+    "priority_speaker": "Orateur prioritaire",
+    "local_mute": "Muet (local)",
     "ignore_messages": "Ignorer les messages",
     "view_comment": "Voir le commentaire",
     "change_comment": "Modifier le commentaire",
@@ -58,8 +58,8 @@
     "reset_avatar": "Réinitialiser l’avatar",
     "send_message": "Envoyer le message",
     "information": "Information",
-    "self_mute": "Devenir muet",
-    "self_deafen": "Devenir sourd",
+    "self_mute": "Muet (soi-même)",
+    "self_deafen": "Sourd (soi-même)",
     "add_friend": "Ajouter un ami",
     "remove_friend": "Supprimer un ami"
   },
@@ -68,12 +68,12 @@
     "add": "Ajouter",
     "edit": "Modifier",
     "remove": "Supprimer",
-    "link": "Lier",
-    "unlink": "Délier",
-    "unlink_all": "Délier tous",
+    "link": "Créer un lien",
+    "unlink": "Supprimer le lien",
+    "unlink_all": "Supprimer tous les liens",
     "copy_mumble_url": "Copier l’URL Mumble",
     "copy_mumble_web_url": "Copier l’URL Mumble Web",
-    "send_message": "Envoyer un message"
+    "send_message": "Envoyer le message"
   },
   "logentry": {
     "connecting": "Connexion au server",

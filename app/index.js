@@ -1297,27 +1297,6 @@ function translateEverything() {
   translatePiece('.toolbar .tb-settings', 'attribute', {'name': 'alt'}, 'toolbar.settings');
   translatePiece('.toolbar .tb-sourcecode', 'attribute', {'name': 'title'}, 'toolbar.sourcecode');
   translatePiece('.toolbar .tb-sourcecode', 'attribute', {'name': 'alt'}, 'toolbar.sourcecode');
-  
-  translatePiece('.settings-dialog .dialog-header', 'textcontent', {}, 'settingsdialog.title');
-  translatePiece('.settings-dialog .stg-transmission', 'textcontent', {}, 'settingsdialog.transmission');
-  translatePiece('.settings-dialog .stg-continuous', 'textcontent', {}, 'settingsdialog.continuous');
-  translatePiece('.settings-dialog .stg-voice-activity', 'textcontent', {}, 'settingsdialog.voice_activity');
-  translatePiece('.settings-dialog .stg-push-to-talk', 'textcontent', {}, 'settingsdialog.push_to_talk');
-  translatePiece('.settings-dialog .stg-push-to-talk-key', 'textcontent', {}, 'settingsdialog.push_to_talk_key');
-  translatePiece('.settings-dialog .stg-audio-quality', 'textcontent', {}, 'settingsdialog.audio_quality');
-  translatePiece('.settings-dialog .stg-audio-per-packet', 'textcontent', {}, 'settingsdialog.audio_per_packet');
-  translatePiece('.settings-dialog .stg-audio', 'textcontent', {}, 'settingsdialog.audio');
-  translatePiece('.settings-dialog .stg-position', 'textcontent', {}, 'settingsdialog.position');
-  translatePiece('.settings-dialog .stg-overhead', 'textcontent', {}, 'settingsdialog.overhead');
-  translatePiece('.settings-dialog .stg-show-avatars', 'textcontent', {}, 'settingsdialog.show_avatars');
-  translatePiece('.settings-dialog .stg-always', 'textcontent', {}, 'settingsdialog.always');
-  translatePiece('.settings-dialog .stg-same-channel', 'textcontent', {}, 'settingsdialog.same_channel');
-  translatePiece('.settings-dialog .stg-linked-channels', 'textcontent', {}, 'settingsdialog.linked_channels');
-  translatePiece('.settings-dialog .stg-minimal-view', 'textcontent', {}, 'settingsdialog.minimal_view');
-  translatePiece('.settings-dialog .stg-never', 'textcontent', {}, 'settingsdialog.never');
-  translatePiece('.settings-dialog .stg-show-user-count', 'textcontent', {}, 'settingsdialog.show_user_count');
-  translatePiece('.settings-dialog .dialog-close', 'textcontent', {}, 'settingsdialog.cancel');
-  translatePiece('.settings-dialog .dialog-submit', 'textcontent', {}, 'settingsdialog.apply');
 }
 
 async function main() {
