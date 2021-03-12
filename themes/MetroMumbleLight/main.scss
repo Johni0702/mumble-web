@@ -278,7 +278,7 @@ html, body {
   border-radius: 3px;
   cursor: pointer;
 }
-.toolbar img:hover {
+.toolbar img:hover, .toolbar img:focus {
   border: 1px solid $toolbar-hover-bg-color;
   background-color: $toolbar-hover-border-color;
 }
