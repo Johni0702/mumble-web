@@ -150,7 +150,7 @@ This assumes you are using the Riot Web or Desktop client. Other clients will pr
   "creatorUserId": "@your_user_id:your_home_server.example",
   "url": "https://voice.johni0702.de/?address=voice.johni0702.de&port=443/mumble&matrix=true&username=$matrix_display_name&theme=$theme&avatarurl=$matrix_avatar_url",
   "data": {},
-  "type": "jitsi",
+  "type": "customwidget",
   "id": "mumble"
 }
 ```
