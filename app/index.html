@@ -19,6 +19,8 @@
     <script src="config.local.js"></script>
     <script src="theme.js"></script>
     <script src="matrix.js"></script>
+    
+    <title>Mumble web</title>
   </head>
   <body>
     <div class="loading-container" data-bind="css: { loaded: true }">
@@ -27,32 +29,32 @@
     <div id="container" style="display: none" data-bind="visible: true,
                                                          css: { minimal: minimalView }">
       <!-- ko with: connectDialog --> 
-      <div class="connect-dialog dialog" data-bind="visible: visible() && !joinOnly()">
+      <div class="connect-dialog dialog" role="dialog" aria-labelledby="connect-dialog_title" data-bind="visible: visible() && !joinOnly()">
           <div id="connect-dialog_title" class="dialog-header">
             Connect to Server
           </div>
           <form data-bind="submit: connect">
             <table>
                 <tr data-bind="if: $root.config.connectDialog.address">
-                  <td id="connect-dialog_input_address">Address</td>
+                  <td><label id="connect-dialog_input_address" for="address">Address</label></td>
                   <td><input id="address" type="text" data-bind="value: address" required></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.port">
-                  <td id="connect-dialog_input_port">Port</td>
+                  <td><label id="connect-dialog_input_port" for="port">Port</label></td>
                   <td><input id="port" type="text" data-bind="value: port" required></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.username">
-                  <td id="connect-dialog_input_username">Username</td>
+                  <td><label id="connect-dialog_input_username" for="username">Username</label></td>
                   <td><input id="username" type="text" data-bind="value: username" required></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.password">
-                  <td id="connect-dialog_input_password">Password</td>
+                  <td><label id="connect-dialog_input_password" for="password">Password</label></td>
                   <td><input id="password" type="password" data-bind="value: password"></td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.token">
-                  <td id="connect-dialog_input_tokens">Tokens</td>
+                  <td><label id="connect-dialog_input_tokens" for="tokens">Tokens</label></td>
                   <td>
-                      <input type="text" data-bind='value: tokenToAdd, valueUpdate: "afterkeydown"'>
+                      <input id="tokens" type="text" data-bind='value: tokenToAdd, valueUpdate: "afterkeydown"'>
                   </td>
                 </tr>
                 <tr data-bind="if: $root.config.connectDialog.token">
@@ -79,8 +81,8 @@
         </div>
       <!-- /ko -->
       <!-- ko with: addChannelDialog -->
-      <div class="add-channel-dialog dialog" data-bind="visible: visible()">
-        <div class="dialog-header">
+      <div class="add-channel-dialog dialog" role="dialog" aria-labelledby="add-channel-dialog_title" data-bind="visible: visible()">
+        <div id="add-channel-dialog_title" class="dialog-header">
           Add channel
         </div>
         <form data-bind="submit: addchannel">
@@ -95,8 +97,8 @@
       </div>
       <!-- /ko -->
       <!-- ko with: connectDialog -->
-      <div class="join-dialog dialog" data-bind="visible: visible() && joinOnly()">
-          <div class="dialog-header">
+      <div class="join-dialog dialog" role="dialog" aria-labelledby="join-dialog_title" data-bind="visible: visible() && joinOnly()">
+          <div id="join-dialog_title" class="dialog-header">
             Mumble Voice Conference
           </div>
           <form data-bind="submit: connect">
@@ -105,8 +107,8 @@
         </div>
       <!-- /ko -->
       <!-- ko with: connectErrorDialog -->
-       <div class="connect-dialog error-dialog dialog" data-bind="visible: visible()">
-          <div class="dialog-header">
+       <div class="connect-dialog error-dialog dialog" role="dialog" aria-labelledby="connect-error-dialog_title" data-bind="visible: visible()">
+          <div id="connect-error-dialog_title" class="dialog-header">
             Failed to connect
           </div>
           <form data-bind="submit: connect">
@@ -181,8 +183,8 @@
         </div>
       <!-- /ko -->
       <!-- ko with: connectionInfo -->
-      <div class="connection-info-dialog dialog" data-bind="visible: visible">
-        <div class="dialog-header">
+      <div class="connection-info-dialog dialog" role="dialog" aria-labelledby="connection-info-dialog_title" data-bind="visible: visible">
+        <div id="connection-info-dialog_title" class="dialog-header">
           Connection Information
         </div>
         <div class="dialog-content">
@@ -226,16 +228,16 @@
       </div>
       <!-- /ko -->
       <!-- ko with: settingsDialog -->
-      <div class="settings-dialog dialog" data-bind="visible: $data">
-          <div class="dialog-header">
+      <div class="settings-dialog dialog" role="dialog" aria-labelledby="settings-dialog_title" data-bind="visible: $data">
+          <div id="settings-dialog_title" class="dialog-header">
             Settings
           </div>
           <form data-bind="submit: $root.applySettings">
             <table>
                 <tr>
-                  <td>Transmission</td>
+                  <td><label for="settings-transmission">Transmission</label></td>
                   <td>
-                    <select data-bind='value: voiceMode'>
+                    <select id="settings-transmission" data-bind='value: voiceMode'>
                       <option value="cont">Continuous</option>
                       <option value="vad">Voice Activity</option>
                       <option value="ptt">Push To Talk</option>
@@ -250,32 +252,33 @@
                         }"></div>
                     </div>
                     <input type="range" min="0" max="1" step="0.01"
-                           data-bind="value: vadLevel">
+                           data-bind="value: vadLevel"
+                           aria-label="Voice activation level" title="Voice activation level">
                   </td>
                 </tr>
                 <tr data-bind="visible: voiceMode() == 'ptt'">
-                  <td>PTT Key</td>
+                  <td><label for="settings-ptt-key">PTT Key</label></td>
                   <td>
-                    <input type="button" data-bind="value: pttKeyDisplay, click: recordPttKey">
+                    <input id="settings-ptt-key" type="button" data-bind="value: pttKeyDisplay, click: recordPttKey">
                   </td>
                 </tr>
                 <tr>
-                  <td>Audio Quality</td>
+                  <td><label for="settings-audio-quality">Audio Quality</label></td>
                   <td><span data-bind="text: (audioBitrate()/1000).toFixed(1)"></span> kbit/s</td>
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <input type="range" min="8000" max="96000" step="8"
+                    <input id="settings-audio-quality" type="range" min="8000" max="96000" step="8"
                            data-bind="value: audioBitrate, valueUpdate: 'input'">
                   </td>
                 </tr>
                 <tr>
-                  <td>Audio per packet</td>
+                  <td><label for="settings-packet">Audio per packet</label></td>
                   <td><span data-bind="text: msPerPacket"></span> ms</td>
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <input type="range" min="10" max="60" step="10"
+                    <input id="settings-packet" type="range" min="10" max="60" step="10"
                            data-bind="value: msPerPacket, valueUpdate: 'input'">
                   </td>
                 </tr>
@@ -292,9 +295,9 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Show Avatars</td>
+                  <td><label for="settings-avatars">Show Avatars</label></td>
                   <td>
-                    <select data-bind='value: showAvatars'>
+                    <select id="settings-avatars" data-bind='value: showAvatars'>
                       <option value="always">Always</option>
                       <option value="own_channel">Same Channel</option>
                       <option value="linked_channel">Linked Channels</option>
@@ -304,8 +307,8 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input type="checkbox" data-bind="checked: userCountInChannelName">
-                        Show user count after channel name
+                        <input id="settings-user-count" type="checkbox" data-bind="checked: userCountInChannelName">
+                        <label for="settings-user-count">Show user count after channel name</label>
                     </td>
                 </tr>
             </table>
@@ -488,43 +491,52 @@
         <img class="tb-connect" data-bind="visible: !connectDialog.joinOnly(),
                                            click: connectDialog.show"
                       rel="connect" src="/svg/applications-internet.svg"
-                      title="Connect to Server" alt="Connection">
+                      title="Connect to Server" alt="Connection"
+                      tabindex="0">
         <img class="tb-information" rel="information" src="/svg/information_icon.svg"
              data-bind="click: connectionInfo.show,
                         css: { disabled: !thisUser() }"
-                        title="Information" alt="Information">
+                        title="Information" alt="Information"
+                        tabindex="0">
         <div class="divider"></div>
         <img class="tb-mute" data-bind="visible: !selfMute(),
                               click: function () { requestMute(thisUser()) }"
                       rel="mute" src="/svg/audio-input-microphone.svg"
-                      title="Mute" alt="Mute">
+                      title="Mute" alt="Mute"
+                      tabindex="0">
         <img class="tb-unmute tb-active" data-bind="visible: selfMute,
                               click: function () { requestUnmute(thisUser()) }"
                       rel="unmute" src="/svg/audio-input-microphone-muted.svg"
-                      title="Unmute" alt="Unmute">
+                      title="Unmute" alt="Unmute"
+                      tabindex="0">
         <img class="tb-deaf" data-bind="visible: !selfDeaf(),
                               click: function () { requestDeaf(thisUser()) }"
                       rel="deaf" src="/svg/audio-output.svg"
-                      title="Deafen" alt="Deafen">
+                      title="Deafen" alt="Deafen"
+                      tabindex="0">
         <img class="tb-undeaf tb-active" data-bind="visible: selfDeaf,
                               click: function () { requestUndeaf(thisUser()) }"
                       rel="undeaf" src="/svg/audio-output-deafened.svg"
-                      title="Undeafen" alt="Undeafen">
+                      title="Undeafen" alt="Undeafen"
+                      tabindex="0">
         <img class="tb-record" data-bind="click: function(){}"
                       rel="record" src="/svg/media-record.svg"
                       title="Record" alt="Record">
         <div class="divider"></div>
         <img class="tb-comment" data-bind="click: commentDialog.show"
                       rel="comment" src="/svg/toolbar-comment.svg"
-                      title="Comment" alt="Comment">
+                      title="Comment" alt="Comment"
+                      tabindex="0">
         <div class="divider"></div>
         <img class="tb-settings" data-bind="click: openSettings"
                       rel="settings" src="/svg/config_basic.svg"
-                      title="Settings" alt="Settings">
+                      title="Settings" alt="Settings"
+                      tabindex="0">
         <div class="divider"></div>
         <img class="tb-sourcecode" data-bind="click: openSourceCode"
                       rel="Source Code" src="/svg/source-code.svg"
-                      title="Open Soure Code" alt="Open Source Code">
+                      title="Open Soure Code" alt="Open Source Code"
+                      tabindex="0">
       </div>
       <div class="chat">
         <script type="text/html" id="log-generic">
@@ -563,7 +575,7 @@
         </div>
         <form data-bind="submit: submitMessageBox">
           <textarea id="message-box" row=1 data-bind="
-              attr: { placeholder: messageBoxHint }, 
+              attr: { placeholder: messageBoxHint, 'aria-label': messageBoxHint },
               textInput: messageBox, 
               event: {keypress: submitOnEnter}"></textarea>
         </form>
@@ -578,7 +590,7 @@
             css: {
               selected: $root.selected() === $data,
               currentChannel: users.indexOf($root.thisUser()) !== -1
-            }">
+            }" tabindex="0">
           <div class="channel-status">
             <img class="channel-description" data-bind="visible: description"
                 alt="description" src="/svg/comment.svg">
