@@ -86,6 +86,45 @@
   "chat": {
     "channel_message_placeholder": "Type message to channel '%1' here",
     "user_message_placeholder": "Type message to user '%1' here"
+  },
+  "connectioninfodialog": {
+    "title": "Connection Information",
+    "version": "Version",
+    "protocol": "Protocol",
+    "unknown": "Unknown",
+    "control_channel": "Control Channel",
+    "average_latency": "average latency",
+    "deviation": "deviation",
+    "remote_host": "Remote host",
+    "port": "port",
+    "audio_bandwidth": "Audio bandwidth",
+    "maximum": "Maximum",
+    "with_overhead": "with overhead",
+    "current": "Current",
+    "codec": "Codec:",
+    "ok": "OK"
+  },
+  "settingsdialog": {
+    "title": "Settings",
+    "transmission": "Transmission",
+    "continuous": "Continuous",
+    "voice_activity": "Voice Activity",
+    "push_to_talk": "Push To Talk",
+    "push_to_talk_key": "PTT Key",
+    "audio_quality": "Audio Quality",
+    "audio_per_packet": "Audio per packet",
+    "audio": "Audio",
+    "position": "Position",
+    "overhead": "Overhead",
+    "show_avatars": "Show Avatars",
+    "always": "Always",
+    "same_channel": "Same Channel",
+    "linked_channels": "Linked Channels",
+    "minimal_view": "Minimal View",
+    "never": "Never",
+    "show_user_count": "Show user count after channel name",
+    "cancel": "Cancel",
+    "apply": "Apply"
   }
 }
 

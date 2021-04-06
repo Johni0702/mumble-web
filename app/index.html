@@ -186,9 +186,9 @@
           Connection Information
         </div>
         <div class="dialog-content">
-          <h3>Version</h3>
+          <h3 class="ci-version">Version</h3>
           <!-- ko with: serverVersion -->
-          Protocol
+          <span class="ci-protocol">Protocol</span>
           <span data-bind="text: major + '.' + minor + '.' + patch"></span>.
           <br>
           <br>
@@ -199,26 +199,26 @@
           <br>
           <!-- /ko -->
           <!-- ko if: !serverVersion() -->
-          Unknown
+          <span class="ci-unknown">Unknown</span>
           <!-- /ko -->
 
-          <h3>Control channel</h3>
-          <span data-bind="text: latencyMs().toFixed(2)"></span> ms average latency
-          (<span data-bind="text: latencyDeviation().toFixed(2)"></span> deviation)
+          <h3 class="ci-control-channel">Control channel</h3>
+          <span data-bind="text: latencyMs().toFixed(2)"></span> ms <span class="ci-average-latency">average latency</span>
+          (<span data-bind="text: latencyDeviation().toFixed(2)"></span> <span class="ci-deviation">deviation</span>)
           <br>
           <br>
-          Remote host <span data-bind="text: remoteHost"></span>
-          (port <span data-bind="text: remotePort"></span>)
+          <span class="ci-remote-host">Remote host</span> <span data-bind="text: remoteHost"></span>
+          (<span class="ci-port">port</span> <span data-bind="text: remotePort"></span>)
           <br>
 
-          <h3>Audio bandwidth</h3>
-          Maximum <span data-bind="text: (maxBitrate()/1000).toFixed(1)"></span> kbits/s
-          (<span data-bind="text: (maxBandwidth()/1000).toFixed(1)"></span> kbits/s with overhead)
+          <h3 class="ci-audio-bandwidth">Audio bandwidth</h3>
+          <span class="ci-maximum">Maximum</span> <span data-bind="text: (maxBitrate()/1000).toFixed(1)"></span> kbits/s
+          (<span data-bind="text: (maxBandwidth()/1000).toFixed(1)"></span> kbits/s <span class="ci-with-overhead">with overhead</span>)
           <br>
-          Current <span data-bind="text: (currentBitrate()/1000).toFixed(1)"></span> kbits/s
-          (<span data-bind="text: (currentBandwidth()/1000).toFixed(1)"></span> kbits/s with overhead)
+          <span class="ci-current">Current</span> <span data-bind="text: (currentBitrate()/1000).toFixed(1)"></span> kbits/s
+          (<span data-bind="text: (currentBandwidth()/1000).toFixed(1)"></span> kbits/s <span class="ci-with-overhead2">with overhead</span>)
           <br>
-          Codec: <span data-bind="text: codec"></span>
+          <span class="ci-codec">Codec:</span> <span data-bind="text: codec"></span>
         </div>
         <div class="dialog-footer">
           <input class="dialog-close" type="button" data-bind="click: hide" value="OK">
@@ -233,12 +233,12 @@
           <form data-bind="submit: $root.applySettings">
             <table>
                 <tr>
-                  <td>Transmission</td>
+                  <td class="stg-transmission">Transmission</td>
                   <td>
                     <select data-bind='value: voiceMode'>
-                      <option value="cont">Continuous</option>
-                      <option value="vad">Voice Activity</option>
-                      <option value="ptt">Push To Talk</option>
+                      <option value="cont" class="stg-continuous">Continuous</option>
+                      <option value="vad" class="stg-voice-activity">Voice Activity</option>
+                      <option value="ptt" class="stg-push-to-talk">Push To Talk</option>
                   </td>
                 </tr>
                 <tr data-bind="visible: voiceMode() == 'vad'">
@@ -254,13 +254,13 @@
                   </td>
                 </tr>
                 <tr data-bind="visible: voiceMode() == 'ptt'">
-                  <td>PTT Key</td>
+                  <td class="stg-push-to-talk-key">PTT Key</td>
                   <td>
                     <input type="button" data-bind="value: pttKeyDisplay, click: recordPttKey">
                   </td>
                 </tr>
                 <tr>
-                  <td>Audio Quality</td>
+                  <td class="stg-audio-quality">Audio Quality</td>
                   <td><span data-bind="text: (audioBitrate()/1000).toFixed(1)"></span> kbit/s</td>
                 </tr>
                 <tr>
@@ -270,7 +270,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Audio per packet</td>
+                  <td class="stg-audio-per-packet">Audio per packet</td>
                   <td><span data-bind="text: msPerPacket"></span> ms</td>
                 </tr>
                 <tr>
@@ -283,29 +283,29 @@
                   <td colspan="2" class="bandwidth-info">
                     <span data-bind="text: (totalBandwidth()/1000).toFixed(1)"></span>
                     kbit/s
-                    (Audio
+                    (<span class="stg-audio">Audio</span>
                     <span data-bind="text: (audioBitrate()/1000).toFixed(1)"></span>,
-                    Position
+                    <span class="stg-position">Position</span>
                     <span data-bind="text: (positionBandwidth()/1000).toFixed(1)"></span>,
-                    Overhead
+                    <span class="stg-overhead">Overhead</span>
                     <span data-bind="text: (overheadBandwidth()/1000).toFixed(1)"></span>)
                   </td>
                 </tr>
                 <tr>
-                  <td>Show Avatars</td>
+                  <td class="stg-show-avatars">Show Avatars</td>
                   <td>
                     <select data-bind='value: showAvatars'>
-                      <option value="always">Always</option>
-                      <option value="own_channel">Same Channel</option>
-                      <option value="linked_channel">Linked Channels</option>
-                      <option value="minimal_only">Minimal View</option>
-                      <option value="never">Never</option>
+                      <option value="always" class="stg-always">Always</option>
+                      <option value="own_channel" class="stg-same-channel">Same Channel</option>
+                      <option value="linked_channel" class="stg-linked-channels">Linked Channels</option>
+                      <option value="minimal_only" class="stg-minimal-view">Minimal View</option>
+                      <option value="never" class="stg-never">Never</option>
                   </td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <input type="checkbox" data-bind="checked: userCountInChannelName">
-                        Show user count after channel name
+                        <span class="stg-show-user-count">Show user count after channel name</span>
                     </td>
                 </tr>
             </table>

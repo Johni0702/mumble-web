@@ -1297,6 +1297,44 @@ function translateEverything() {
   translatePiece('.toolbar .tb-settings', 'attribute', {'name': 'alt'}, 'toolbar.settings');
   translatePiece('.toolbar .tb-sourcecode', 'attribute', {'name': 'title'}, 'toolbar.sourcecode');
   translatePiece('.toolbar .tb-sourcecode', 'attribute', {'name': 'alt'}, 'toolbar.sourcecode');
+
+  translatePiece('.connection-info-dialog .dialog-header', 'textcontent', {}, 'connectioninfodialog.title');
+  translatePiece('.connection-info-dialog .ci-version', 'textcontent', {}, 'connectioninfodialog.version');
+  translatePiece('.connection-info-dialog .ci-protocol', 'textcontent', {}, 'connectioninfodialog.protocol');
+  translatePiece('.connection-info-dialog .ci-unknown', 'textcontent', {}, 'connectioninfodialog.unknown');
+  translatePiece('.connection-info-dialog .ci-control-channel', 'textcontent', {}, 'connectioninfodialog.control_channel');
+  translatePiece('.connection-info-dialog .ci-average-latency', 'textcontent', {}, 'connectioninfodialog.average_latency');
+  translatePiece('.connection-info-dialog .ci-deviation', 'textcontent', {}, 'connectioninfodialog.deviation');
+  translatePiece('.connection-info-dialog .ci-remote-host', 'textcontent', {}, 'connectioninfodialog.remote_host');
+  translatePiece('.connection-info-dialog .ci-port', 'textcontent', {}, 'connectioninfodialog.port');
+  translatePiece('.connection-info-dialog .ci-audio-bandwidth', 'textcontent', {}, 'connectioninfodialog.audio_bandwidth');
+  translatePiece('.connection-info-dialog .ci-maximum', 'textcontent', {}, 'connectioninfodialog.maximum');
+  translatePiece('.connection-info-dialog .ci-with-overhead', 'textcontent', {}, 'connectioninfodialog.with_overhead');
+  translatePiece('.connection-info-dialog .ci-with-overhead2', 'textcontent', {}, 'connectioninfodialog.with_overhead');
+  translatePiece('.connection-info-dialog .ci-current', 'textcontent', {}, 'connectioninfodialog.current');
+  translatePiece('.connection-info-dialog .ci-codec', 'textcontent', {}, 'connectioninfodialog.codec');
+  translatePiece('.connection-info-dialog .dialog-close', 'attribute', {'name': 'value'}, 'connectioninfodialog.ok');
+
+  translatePiece('.settings-dialog .dialog-header', 'textcontent', {}, 'settingsdialog.title');
+  translatePiece('.settings-dialog .stg-transmission', 'textcontent', {}, 'settingsdialog.transmission');
+  translatePiece('.settings-dialog .stg-continuous', 'textcontent', {}, 'settingsdialog.continuous');
+  translatePiece('.settings-dialog .stg-voice-activity', 'textcontent', {}, 'settingsdialog.voice_activity');
+  translatePiece('.settings-dialog .stg-push-to-talk', 'textcontent', {}, 'settingsdialog.push_to_talk');
+  translatePiece('.settings-dialog .stg-push-to-talk-key', 'textcontent', {}, 'settingsdialog.push_to_talk_key');
+  translatePiece('.settings-dialog .stg-audio-quality', 'textcontent', {}, 'settingsdialog.audio_quality');
+  translatePiece('.settings-dialog .stg-audio-per-packet', 'textcontent', {}, 'settingsdialog.audio_per_packet');
+  translatePiece('.settings-dialog .stg-audio', 'textcontent', {}, 'settingsdialog.audio');
+  translatePiece('.settings-dialog .stg-position', 'textcontent', {}, 'settingsdialog.position');
+  translatePiece('.settings-dialog .stg-overhead', 'textcontent', {}, 'settingsdialog.overhead');
+  translatePiece('.settings-dialog .stg-show-avatars', 'textcontent', {}, 'settingsdialog.show_avatars');
+  translatePiece('.settings-dialog .stg-always', 'textcontent', {}, 'settingsdialog.always');
+  translatePiece('.settings-dialog .stg-same-channel', 'textcontent', {}, 'settingsdialog.same_channel');
+  translatePiece('.settings-dialog .stg-linked-channels', 'textcontent', {}, 'settingsdialog.linked_channels');
+  translatePiece('.settings-dialog .stg-minimal-view', 'textcontent', {}, 'settingsdialog.minimal_view');
+  translatePiece('.settings-dialog .stg-never', 'textcontent', {}, 'settingsdialog.never');
+  translatePiece('.settings-dialog .stg-show-user-count', 'textcontent', {}, 'settingsdialog.show_user_count');
+  translatePiece('.settings-dialog .dialog-close', 'attribute', {'name': 'value'}, 'settingsdialog.cancel');
+  translatePiece('.settings-dialog .dialog-submit', 'attribute', {'name': 'value'}, 'settingsdialog.apply');
 }
 
 async function main() {
