@@ -1,0 +1,65 @@
+{
+  "connectdialog": {
+    "title": "Connexion au serveur",
+    "address": "Addresse",
+    "port": "Port",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "tokens": "Jetons",
+    "remove": "Supprimer",
+    "add": "Ajouter",
+    "cancel": "Annuler",
+    "connect": "Connexion",
+    "error": {
+      "title": "Erreur a la connexion",
+      "reason": {
+        "refused": "La connexion a été refusée",
+        "version": "Le serveur utilise une version incompatible",
+        "username": "Votre nom d'utilisateur à été refusé, en avez vous essayé un autre ?",
+        "userpassword": "Le mot de passe renseigné est incorrect,le nom d'utilisateur requiert un mot de passe précis",
+        "serverpassword": "Le mot de passe renseigné est incorrect.",
+        "username_in_use": "Ce nom d'utilisateur est déjà utilisé",
+        "full": "Le serveur est plein",
+        "clientcert": "Le serveur demande un certificat non supporté par l'application web.",
+        "server": "Le serveur retourne:"
+      },
+      "retry": "Réessayer",
+      "cancel": "Annuler"
+    }
+  },
+  "joindialog": {
+    "title": "Conférence audio mumble",
+    "connect": "Rejoindre la conférence"
+  },
+  "usercontextmenu": {
+    "mute": "Muet",
+    "deafen": "Sourd",
+    "priority_speaker": "Orateur prioritaire",
+    "local_mute": "Local Mute",
+    "ignore_messages": "Ignorer les messages",
+    "view_comment": "Voir le commentaire",
+    "change_comment": "Changer le commentaire",
+    "reset_comment": "Reinitialiser le commentaire",
+    "view_avatar": "Voir l'avatar",
+    "change_avatar": "Changer l'avatar",
+    "reset_avatar": "Reinitialiser l'avatar",
+    "send_message": "Envoyer un message",
+    "information": "Information",
+    "self_mute": "Devenir muet",
+    "self_deafen": "Devenir sourd",
+    "add_friend": "Ajouter un ami",
+    "remove_friend": "Supprimer un ami"
+  },
+  "channelcontextmenu": {
+    "join": "Rejoindre ce salon",
+    "add": "Ajouter",
+    "edit": "Editer",
+    "remove": "Supprimer",
+    "link": "Associer",
+    "unlink": "Dissocier",
+    "unlink_all": "Dissocier tout",
+    "copy_mumble_url": "Copier l'URL de mumble",
+    "copy_mumble_web_url": "Copier l'URL de mumble-web",
+    "send_message": "Envoyer un message"
+  }
+}
