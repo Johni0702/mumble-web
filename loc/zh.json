@@ -1,0 +1,90 @@
+{
+  "connectdialog": {
+    "title": "连接服务器",
+    "address": "地址",
+    "port": "端口",
+    "username": "用户名",
+    "password": "密码",
+    "tokens": "访问令牌",
+    "remove": "删除",
+    "add": "添加",
+    "cancel": "取消",
+    "connect": "连接",
+    "error": {
+      "title": "连接失败",
+      "reason": {
+        "refused": "连接被拒绝。",
+        "version": "服务器使用的版本不兼容。",
+        "username": "您的用户名被拒绝。尝试换一个？",
+        "userpassword": "您提供的密码不正确。\n您选择的用户名需要专用密码。",
+        "serverpassword": "您提供的密码不正确。",
+        "username_in_use": "您选择的用户名已被使用。",
+        "full": "服务器已满。",
+        "clientcert": "服务器需要您提供客户端证书，但此 Web 应用不支持。",
+        "server": "服务器报告："
+      },
+      "retry": "重试",
+      "cancel": "取消"
+    }
+  },
+  "joindialog": {
+    "title": "Mumble 语音会议",
+    "connect": "加入会议"
+  },
+  "toolbar": {
+    "orientation": "切换工具栏方向",
+    "connect": "连接",
+    "information": "信息",
+    "mute": "关闭麦克风",
+    "unmute": "打开麦克风",
+    "deaf": "关闭扬声器",
+    "undeaf": "打开扬声器",
+    "record": "录音",
+    "comment": "简介",
+    "settings": "设置",
+    "sourcecode": "开放源代码"
+  },
+  "usercontextmenu": {
+    "mute": "关闭麦克风",
+    "deafen": "关闭扬声器",
+    "priority_speaker": "优先发言人",
+    "local_mute": "本地静音",
+    "ignore_messages": "忽略消息",
+    "view_comment": "查看简介",
+    "change_comment": "修改简介",
+    "reset_comment": "重置简介",
+    "view_avatar": "查看头像",
+    "change_avatar": "修改头像",
+    "reset_avatar": "重置头像",
+    "send_message": "发送消息",
+    "information": "信息",
+    "self_mute": "关闭自己的麦克风",
+    "self_deafen": "关闭自己的扬声器",
+    "add_friend": "添加好友",
+    "remove_friend": "删除好友"
+  },
+  "channelcontextmenu": {
+    "join": "加入频道",
+    "add": "添加",
+    "edit": "编辑",
+    "remove": "删除",
+    "link": "链接",
+    "unlink": "取消链接",
+    "unlink_all": "取消全部链接",
+    "copy_mumble_url": "复制 Mumble URL",
+    "copy_mumble_web_url": "复制 Mumble-Web URL",
+    "send_message": "发送消息"
+  },
+  "logentry": {
+    "connecting": "连接到服务器",
+    "connected": "已连接！",
+    "connection_error": "连接错误：",
+    "connection_fallback_mode": "服务器不支持 WebRTC，正在以回退模式重试…",
+    "unknown_voice_mode": "未知语音模式：",
+    "mic_init_error": "无法初始化用户媒体。麦克风将不可用："
+  },
+  "chat": {
+    "channel_message_placeholder": "在此输入发到 '%1' 频道的消息",
+    "user_message_placeholder": "在此输入发给 '%1' 用户的消息"
+  }
+}
