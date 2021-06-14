@@ -5,6 +5,7 @@ import keyboardjs from 'keyboardjs'
 import vad from 'voice-activity-detection'
 import DropStream from 'drop-stream'
 import { WorkerBasedMumbleClient } from './worker-client'
+import workletUrl from './recorder.js'
 
 class VoiceHandler extends Writable {
   constructor (client, settings) {
@@ -163,14 +164,68 @@ export class VADVoiceHandler extends VoiceHandler {
 }
 
 var theUserMedia = null
+var oldBufferNumber = 0;
 
 export function initVoice (onData) {
   return window.navigator.mediaDevices.getUserMedia({ audio: true }).then((userMedia) => {
     theUserMedia = userMedia
-    var micStream = new MicrophoneStream(userMedia, { objectMode: true, bufferSize: 1024 })
-    micStream.on('data', data => {
-      onData(Buffer.from(data.getChannelData(0).buffer))
-    })
+    setTimeout(() => audioContext().audioWorklet.addModule(workletUrl).then(() => {
+      console.log("AudioWorklet loaded!")
+      const recorderNode = new window.AudioWorkletNode(
+        audioContext(),
+        'recorder-worklet'
+      )
+      const microphone = audioContext().createMediaStreamSource(userMedia)
+      microphone.connect(recorderNode)
+
+      const delay_buffer = []
+      const delay_upperlimit = 30
+      recorderNode.port.onmessage = e => {
+        if (e.data.eventType === 'data') {
+          // Determine the delay between audio packet delivery (recorder.postMessage) and reception and 
+          // stop forwarding audio packets to the voice pipeline, when the average delay is higher than
+          // delay_upperlimit.
+          // This prevents possible audio glitches induced by too high delays.
+          const timestamp = e.data.timestamp
+          const delay = Date.now() - timestamp
+          const newBufferNumber = e.data.number
+          var avg = 0
+
+          delay_buffer.push(delay)
+          if (delay_buffer.length < 10) {
+            console.debug("Not enough values!")
+            oldBufferNumber = newBufferNumber
+            return
+          }
+          if (delay_buffer.length > 10) {
+            delay_buffer.shift()
+          }
+          for (var i = 0; i < delay_buffer.length; i++) {
+            avg += delay_buffer[i]
+          }
+          avg /= delay_buffer.length
+          if (avg >= delay_upperlimit) {
+            console.log("Average delay too high! " + avg)
+            oldBufferNumber = newBufferNumber
+            return
+          }
+
+          // Only forward audio packets with higher buffer number (=new audio packets) 
+          // to the voice pipe line
+          if (oldBufferNumber >= newBufferNumber) {
+            console.error("Old buffer occured!", oldBufferNumber, newBufferNumber)
+          } else {
+            if (oldBufferNumber + 1 != newBufferNumber) {
+              console.log("Buffer numbers don't fit!", oldBufferNumber, newBufferNumber)
+            }
+            oldBufferNumber = newBufferNumber
+            const audioData = e.data.audioBuffer
+            onData(audioData)
+          }
+        }
+      }
+      console.log("AudioWorkletNode initialized!")
+    }), 500)
     return userMedia
   })
 }
