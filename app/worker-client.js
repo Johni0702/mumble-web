@@ -146,6 +146,7 @@ export class WorkerBasedMumbleClient extends EventEmitter {
     let _disconnect = this.disconnect
     this.disconnect = () => {
       _disconnect.apply(this)
+      this.emit('disconnect')
       delete connector._clients[id]
     }
 

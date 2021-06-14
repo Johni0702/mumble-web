@@ -489,6 +489,10 @@ class GlobalBindings {
           log(translate('logentry.connection_error'), err)
           this.resetClient()
         })
+        client.on('disconnect', (err) => {
+          log(translate('logentry.connection_error'), err)
+          this.reconnect(username, host, port, tokens, password, channelName)
+        })
 
         // Make sure we stay open if we're running as Matrix widget
         window.matrixWidget.setAlwaysOnScreen(true)
@@ -565,6 +569,7 @@ class GlobalBindings {
           this.connect(username, host, port, tokens, password, channelName)
         } else {
           log(translate('logentry.connection_error'), err)
+          this.reconnect(username, host, port, tokens, password, channelName)
         }
       })
     }
@@ -824,6 +829,11 @@ class GlobalBindings {
       }
       this.client = null
       this.selected(null).root(null).thisUser(null)
+    }
+
+    this.reconnect = (username, host, port, tokens, password, channelName) => {
+      log("Connection Lost!\nReconnecting in 5 seconds!")
+      setTimeout(() => this.connect(username, host, port, tokens, password, channelName), 5000)
     }
 
     this.connected = () => this.thisUser() != null
