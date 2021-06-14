@@ -97,6 +97,11 @@ module.exports = {
         use: { loader: 'worker-loader' }
       },
       {
+        test: /recorder\.js$/,
+        loader: 'worklet-loader',
+        options: {name:'[hash].audioworklet.js'}
+      },
+      {
         enforce: 'post',
         test: /mumble-streams\/lib\/data.js/,
         use: [
