@@ -31,6 +31,19 @@
     "title": "Conferéncia àudio Mumble",
     "connect": "Participar a la conferéncia"
   },
+  "toolbar": {
+    "orientation": "Bascular l'orientacion",
+    "connect": "Connexion",
+    "information": "Informacions",
+    "mute": "Amudir",
+    "unmute": "Restablir lo son",
+    "deaf": "Sordina",
+    "undeaf": "Brusent",
+    "record": "Enregistrar",
+    "comment": "Comentaris",
+    "settings": "Paramètres",
+    "sourcecode": "Dobrir còdi font"
+  },  
   "usercontextmenu": {
     "mute": "Copar lo son",
     "deafen": "Sordina",
@@ -66,6 +79,7 @@
     "connecting": "Connexion al servidor",
     "connected": "Connectat !",
     "connection_error": "Error de connexion :",
+    "connection_fallback_mode": "Lo servidor pren pas en carga lo WebRTC, ensag novèl en mòde replegament..",    
     "unknown_voice_mode": "Mòde àudio desconegut :",
     "mic_init_error": "Aviada del mèdia utilizaire impossibla. Lo microfòn foncionarà pas :"
   },
