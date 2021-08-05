@@ -826,6 +826,11 @@ class GlobalBindings {
       this.selected(null).root(null).thisUser(null)
     }
 
+    this.disconnect = () => {
+      this.resetClient()
+      ui.connectDialog.show()
+    }
+
     this.connected = () => this.thisUser() != null
 
     this._updateVoiceHandler = () => {
