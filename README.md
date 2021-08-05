@@ -164,6 +164,9 @@ See [here](https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFR
 ### License
 ISC
 
+### Attribution
+themes/MetroMumbleLight/svg/disconnect.svg created by [Freepik](https://www.freepik.com) from https://www.flaticon.com/
+
 [Mumble]: https://wiki.mumble.info/wiki/Main_Page
 [mumble-web-proxy]: https://github.com/johni0702/mumble-web-proxy
 [MetroMumble]: https://github.com/xPoke/MetroMumble

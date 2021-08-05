@@ -489,6 +489,10 @@
                                            click: connectDialog.show"
                       rel="connect" src="/svg/applications-internet.svg"
                       title="Connect to Server" alt="Connection">
+        <img class="tb-disconnect" data-bind="visible: connected(),
+				              click: disconnect"
+                      rel="disconnect" src="/svg/disconnect.svg"
+                      title="Disconnect from Server" alt="Disconnection">
         <img class="tb-information" rel="information" src="/svg/information_icon.svg"
              data-bind="click: connectionInfo.show,
                         css: { disabled: !thisUser() }"
