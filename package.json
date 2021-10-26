@@ -3,7 +3,7 @@
   "version": "0.5.1",
   "description": "An HTML5 Mumble client.",
   "scripts": {
-    "build": "webpack && [ -f dist/config.local.js ] || cp app/config.local.js dist/",
+    "build": "webpack && ( [ -f dist/config.local.js ] || cp app/config.local.js dist/ )  && ( [ -f dist/Mumble.proto ] || cp node_modules/mumble-streams/lib/Mumble.proto dist/ )",
     "watch": "webpack --watch",
     "prepare": "rm -rf dist && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
