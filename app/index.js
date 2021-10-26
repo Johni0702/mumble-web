@@ -467,8 +467,10 @@ class GlobalBindings {
         this._delayedMicNode = ctx.createMediaStreamDestination()
       }
 
+      const ws = location.protocol == 'http:' ? 'ws' : 'wss';
+
       // TODO: token
-      (this.webrtc ? this.webrtcConnector : this.fallbackConnector).connect(`wss://${host}:${port}`, {
+      (this.webrtc ? this.webrtcConnector : this.fallbackConnector).connect(`${ws}://${host}:${port}`, {
         username: username,
         password: password,
         webrtc: this.webrtc ? {
