@@ -1,0 +1,21 @@
+diff --git a/node_modules/mumble-streams/lib/data.js b/node_modules/mumble-streams/lib/data.js
+index 1d0cd75..013c290 100644
+--- a/node_modules/mumble-streams/lib/data.js
++++ b/node_modules/mumble-streams/lib/data.js
+@@ -1,5 +1,4 @@
+-var fs = require('fs'),
+-    protobufjs = require('protobufjs'),
++var protobufjs = require('protobufjs'),
+     util = require('util'),
+     Transform = require('stream').Transform;
+ 
+@@ -40,8 +39,7 @@ for (var id in nameById) {
+ }
+ 
+ // Explicitly reading with readFileSync to support brfs
+-var mumbleProto = fs.readFileSync(__dirname + '/Mumble.proto');
+-var messages = protobufjs.loadProto(mumbleProto).build('MumbleProto');
++var messages = protobufjs.loadProtoFile("Mumble.proto").build('MumbleProto');
+ 
+ /**
+  * Encodes the given message.
