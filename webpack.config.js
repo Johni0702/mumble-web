@@ -1,7 +1,11 @@
 var theme = '../themes/MetroMumbleLight'
 var path = require('path');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 module.exports = {
+  plugins: [
+    new NodePolyfillPlugin()
+  ],
   mode: 'development',
   entry: {
     index: [
@@ -16,13 +20,14 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     chunkFilename: '[chunkhash].js',
-    filename: '[name].js'
+    filename: '[name].js',
+    publicPath: ''
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: /(node_modules)/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -36,7 +41,10 @@ module.exports = {
         use: [
           {
             loader: 'file-loader',
-            options: { 'name': '[name].[ext]' }
+            options: {
+              esModule: false,
+              'name': '[name].[ext]'
+            }
           },
           {
             loader: "extract-loader"
@@ -53,7 +61,12 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'file-loader',
+          {
+            loader: 'file-loader',
+            options: {
+              esModule: false,
+            },
+          },
           'extract-loader',
           'css-loader'
         ]
@@ -61,7 +74,13 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          'file-loader?name=[hash].css',
+          {
+            loader: 'file-loader',
+            options: {
+              esModule: false,
+              name: '[contenthash].css'
+            },
+          },
           'extract-loader',
           'css-loader',
           'sass-loader'
@@ -71,7 +90,12 @@ module.exports = {
         type: 'javascript/auto',
         test: /manifest\.json$|\.xml$/,
         use: [
-          'file-loader',
+          {
+            loader: 'file-loader',
+            options: {
+              esModule: false,
+            },
+          },
           'extract-loader',
           {
             loader: 'regexp-replace-loader',
@@ -89,7 +113,13 @@ module.exports = {
       {
         test: /\.(svg|png|ico)$/,
         use: [
-          'file-loader'
+          {
+            loader: 'file-loader',
+            options: {
+              esModule: false,
+              name: '[contenthash].[ext]'
+            }
+          }
         ]
       },
       {
