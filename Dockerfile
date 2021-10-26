@@ -23,7 +23,7 @@ RUN cd /home/node && \
 
 USER root
 
-RUN apk del gcc git
+RUN apk del --no-cache gcc git
 
 USER node
 
