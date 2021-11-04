@@ -31,6 +31,19 @@
     "title": "Chat de Voz Mumble",
     "connect": "Unirse a la conferencia"
   },
+  "toolbar": {
+    "orientation": "Alternar orientación",
+    "connect": "Conexión",
+    "information": "Información",
+    "mute": "Enmudecer",
+    "unmute": "Hablar",
+    "deaf": "Ensordecer",
+    "undeaf": "Escuchar",
+    "record": "Grabar",
+    "comment": "Comentar",
+    "settings": "Ajustes",
+    "sourcecode": "Abrir Código Fuente"
+  },
   "usercontextmenu": {
     "mute": "Enmudecer",
     "deafen": "Ensordecer",
@@ -66,6 +79,7 @@
     "connecting": "Conectando al servidor",
     "connected": "¡Conectado!",
     "connection_error": "Error en la conexión:",
+    "connection_fallback_mode": "El servidor no soporta WebRTC, reconectando en modo fallback...",
     "unknown_voice_mode": "Modo de voz desconocido:",
     "mic_init_error": "No se pudieron inicializar los medios. El micrófono no funcionará:"
   },
@@ -74,4 +88,3 @@
     "user_message_placeholder": "Escribe un mensaje al usuario '%1'"
   }
 }
-
