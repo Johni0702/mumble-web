@@ -45,7 +45,7 @@
     "mumble-client": "github:johni0702/mumble-client#f73a08b",
     "mumble-client-codecs-browser": "^1.2.0",
     "mumble-client-websocket": "github:johni0702/mumble-client-websocket#5b0ed8d",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "patch-package": "^6.2.1",
     "raw-loader": "^4.0.2",
     "regexp-replace-loader": "1.0.1",
