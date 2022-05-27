@@ -164,7 +164,7 @@ import 'subworkers'
         })
       })
 
-      return [voiceId]
+      return [voiceId, stream.target]
     })
     registerEventProxy(id, user, 'remove')
 

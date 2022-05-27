@@ -5,20 +5,60 @@ import ByteBuffer from 'bytebuffer'
 import MumbleClient from 'mumble-client'
 import WorkerBasedMumbleConnector from './worker-client'
 import BufferQueueNode from 'web-audio-buffer-queue'
+import mumbleConnect from 'mumble-client-websocket'
 import audioContext from 'audio-context'
 import ko from 'knockout'
 import _dompurify from 'dompurify'
 import keyboardjs from 'keyboardjs'
+import anchorme from 'anchorme'
 
 import { ContinuousVoiceHandler, PushToTalkVoiceHandler, VADVoiceHandler, initVoice } from './voice'
 import {initialize as localizationInitialize, translate} from './loc';
 
 const dompurify = _dompurify(window)
 
+// from: https://gist.github.com/haliphax/5379454
+ko.extenders.scrollFollow = function (target, selector) {
+  target.subscribe(function (chat) {
+    const el = document.querySelector(selector);
+
+    // the scroll bar is all the way down, so we know they want to follow the text
+    if (el.scrollTop == el.scrollHeight - el.clientHeight) {
+      // have to push our code outside of this thread since the text hasn't updated yet
+      setTimeout(function () { el.scrollTop = el.scrollHeight - el.clientHeight; }, 0);
+    }  else {
+      // send notification
+      const last = chat[chat.length - 1]
+      if (Notification.permission == 'granted' && last.type != 'chat-message-self') {
+        let sender = 'Mumble Server'
+        if (last.user && last.user.name) sender=last.user.name()
+        new Notification(sender, {body: dompurify.sanitize(last.message, {ALLOWED_TAGS:[]})})
+      }
+    }
+  });
+
+  return target;
+};
+
 function sanitize (html) {
   return dompurify.sanitize(html, {
-    ALLOWED_TAGS: ['br', 'b', 'i', 'u', 'a', 'span', 'p']
+    ALLOWED_TAGS: ['br', 'b', 'i', 'u', 'a', 'span', 'p', 'img', 'center']
   })
+}
+
+const anchormeOptions = {
+  // force target _blank attribute
+  attributes: {
+    target: "_blank"
+  },
+  // force https protocol except email
+  protocol: function(s) {
+    if (anchorme.validate.email(s)) {
+      return "mailto:";
+    } else {
+      return "https://";
+    }
+  }
 }
 
 function openContextMenu (event, contextMenu, target) {
@@ -49,6 +89,20 @@ function ContextMenu () {
   self.target = ko.observable()
 }
 
+function AddChannelDialog () {
+  var self = this;
+  self.channelName = ko.observable('')
+  self.parentID = 0;
+  self.visible = ko.observable(false);
+  self.show = self.visible.bind(self.visible, true)
+  self.hide = self.visible.bind(self.visible, false)
+
+  self.addchannel = function() {
+    self.hide();
+    ui.addchannel(self.channelName());
+  }
+}
+
 function ConnectDialog () {
   var self = this
   self.address = ko.observable('')
@@ -65,6 +119,9 @@ function ConnectDialog () {
   self.hide = self.visible.bind(self.visible, false)
   self.connect = function () {
     self.hide()
+    if (ui.detectWebRTC) {
+      ui.webrtc = true
+    }
     ui.connect(self.username(), self.address(), self.port(), self.tokens(), self.password(), self.channelName())
   }
 
@@ -282,11 +339,15 @@ class GlobalBindings {
   constructor (config) {
     this.config = config
     this.settings = new Settings(config.settings)
-    this.connector = new WorkerBasedMumbleConnector()
+    this.detectWebRTC = true
+    this.webrtc = true
+    this.fallbackConnector = new WorkerBasedMumbleConnector()
+    this.webrtcConnector = { connect: mumbleConnect }
     this.client = null
     this.userContextMenu = new ContextMenu()
     this.channelContextMenu = new ContextMenu()
     this.connectDialog = new ConnectDialog()
+    this.addChannelDialog = new AddChannelDialog()
     this.connectErrorDialog = new ConnectErrorDialog(this.connectDialog)
     this.connectionInfo = new ConnectionInfo(this)
     this.commentDialog = new CommentDialog()
@@ -301,14 +362,22 @@ class GlobalBindings {
     this.messageBox = ko.observable('')
     this.toolbarHorizontal = ko.observable(!this.settings.toolbarVertical)
     this.selected = ko.observable()
-    this.selfMute = ko.observable()
-    this.selfDeaf = ko.observable()
+    this.selfMute = ko.observable(this.config.defaults.startMute)
+    this.selfDeaf = ko.observable(this.config.defaults.startDeaf)
 
     this.selfMute.subscribe(mute => {
       if (voiceHandler) {
         voiceHandler.setMute(mute)
       }
     })
+
+    this.submitOnEnter = function(data, e) {
+      if (e.which == 13 && !e.shiftKey) {
+       this.submitMessageBox();
+       return false;
+      }
+      return true;
+    }
 
     this.toggleToolbarOrientation = () => {
       this.toolbarHorizontal(!this.toolbarHorizontal())
@@ -322,6 +391,32 @@ class GlobalBindings {
 
     this.openSettings = () => {
       this.settingsDialog(new SettingsDialog(this.settings))
+    }
+
+    this.openAddChannel = (user, channel) => {
+      this.addChannelDialog.parentID = channel.model._id;
+      this.addChannelDialog.show()
+    }
+
+    this.addchannel = (channelName) => {
+      var msg = {
+        name: 'ChannelState',
+        payload: {
+          parent: this.addChannelDialog.parentID || 0,
+          name: channelName
+        }
+      }
+      this.client._send(msg);
+    }
+
+    this.ChannelRemove = (user, channel) => {
+      var msg = {
+        name: 'ChannelRemove',
+        payload: {
+          channel_id: channel.model._id
+        }
+      }
+      this.client._send(msg);
     }
 
     this.applySettings = () => {
@@ -347,6 +442,10 @@ class GlobalBindings {
     }
 
     this.connect = (username, host, port, tokens = [], password, channelName = "") => {
+
+      // if browser support Notification request permission
+      if ('Notification' in window) Notification.requestPermission()
+
       this.resetClient()
 
       this.remoteHost(host)
@@ -356,12 +455,29 @@ class GlobalBindings {
 
       // Note: This call needs to be delayed until the user has interacted with
       // the page in some way (which at this point they have), see: https://goo.gl/7K7WLu
-      this.connector.setSampleRate(audioContext().sampleRate)
+      let ctx = audioContext()
+      if (!this.webrtc) {
+        this.fallbackConnector.setSampleRate(ctx.sampleRate)
+      }
+      if (!this._delayedMicNode) {
+        this._micNode = ctx.createMediaStreamSource(this._micStream)
+        this._delayNode = ctx.createDelay()
+        this._delayNode.delayTime.value = 0.15
+        this._delayedMicNode = ctx.createMediaStreamDestination()
+      }
 
       // TODO: token
-      this.connector.connect(`wss://${host}:${port}`, {
+      (this.webrtc ? this.webrtcConnector : this.fallbackConnector).connect(`wss://${host}:${port}`, {
         username: username,
         password: password,
+        webrtc: this.webrtc ? {
+          enabled: true,
+          required: true,
+          mic: this._delayedMicNode.stream,
+          audioContext: ctx
+        } : {
+          enabled: false,
+        },
         tokens: tokens
       }).done(client => {
         log(translate('logentry.connected'))
@@ -404,7 +520,7 @@ class GlobalBindings {
             type: 'chat-message',
             user: sender.__ui,
             channel: channels.length > 0,
-            message: sanitize(message)
+            message: anchorme({input: sanitize(message), options: anchormeOptions})
           })
         })
 
@@ -442,6 +558,10 @@ class GlobalBindings {
           this.connectErrorDialog.type(err.type)
           this.connectErrorDialog.reason(err.reason)
           this.connectErrorDialog.show()
+        } else if (err === 'server_does_not_support_webrtc' && this.detectWebRTC && this.webrtc) {
+          log(translate('logentry.connection_fallback_mode'))
+          this.webrtc = false
+          this.connect(username, host, port, tokens, password, channelName)
         } else {
           log(translate('logentry.connection_error'), err)
         }
@@ -593,24 +713,32 @@ class GlobalBindings {
         }
       }).on('voice', stream => {
         console.log(`User ${user.username} started takling`)
-        var userNode = new BufferQueueNode({
-          audioContext: audioContext()
-        })
-        userNode.connect(audioContext().destination)
-
+        let userNode
+        if (!this.webrtc) {
+          userNode = new BufferQueueNode({
+            audioContext: audioContext()
+          })
+          userNode.connect(audioContext().destination)
+        }
+        if (stream.target === 'normal') {
+          ui.talking('on')
+        } else if (stream.target === 'shout') {
+          ui.talking('shout')
+        } else if (stream.target === 'whisper') {
+          ui.talking('whisper')
+        }
         stream.on('data', data => {
-          if (data.target === 'normal') {
-            ui.talking('on')
-          } else if (data.target === 'shout') {
-            ui.talking('shout')
-          } else if (data.target === 'whisper') {
-            ui.talking('whisper')
+          if (this.webrtc) {
+            // mumble-client is in WebRTC mode, no pcm data should arrive this way
+          } else {
+            userNode.write(data.buffer)
           }
-          userNode.write(data.buffer)
         }).on('end', () => {
           console.log(`User ${user.username} stopped takling`)
           ui.talking('off')
-          userNode.end()
+          if (!this.webrtc) {
+            userNode.end()
+          }
         })
       })
     }
@@ -637,13 +765,13 @@ class GlobalBindings {
         return true // TODO check for perms
       }
       ui.canAdd = () => {
-        return false // TODO check for perms and implement
+        return true // TODO check for perms
       }
       ui.canEdit = () => {
         return false // TODO check for perms and implement
       }
       ui.canRemove = () => {
-        return false // TODO check for perms and implement
+        return true // TODO check for perms
       }
       ui.canLink = () => {
         return false // TODO check for perms and implement
@@ -732,6 +860,15 @@ class GlobalBindings {
         voiceHandler.setMute(true)
       }
 
+      this._micNode.disconnect()
+      this._delayNode.disconnect()
+      if (mode === 'vad') {
+        this._micNode.connect(this._delayNode)
+        this._delayNode.connect(this._delayedMicNode)
+      } else {
+        this._micNode.connect(this._delayedMicNode)
+      }
+
       this.client.setAudioQuality(
         this.settings.audioBitrate,
         this.settings.samplesPerPacket
@@ -773,18 +910,23 @@ class GlobalBindings {
         if (target === this.thisUser()) {
           target = target.channel()
         }
+        // Avoid blank message
+        if (sanitize(message).trim().length == 0) return;
+        // Support multiline
+        message = message.replace(/\n\n+/g,"\n\n");
+        message = message.replace(/\n/g,"<br>");
         // Send message
-        target.model.sendMessage(message)
+        target.model.sendMessage(anchorme(message))
         if (target.users) { // Channel
           this.log.push({
             type: 'chat-message-self',
-            message: sanitize(message),
+            message: anchorme({input: sanitize(message), options: anchormeOptions}),
             channel: target
           })
         } else { // User
           this.log.push({
             type: 'chat-message-self',
-            message: sanitize(message),
+            message: anchorme({input: sanitize(message), options: anchormeOptions}),
             user: target
           })
         }
@@ -957,6 +1099,12 @@ function initializeUI () {
   if (queryParams.password) {
     ui.connectDialog.password(queryParams.password)
   }
+  if (queryParams.webrtc !== 'auto') {
+    ui.detectWebRTC = false
+    if (queryParams.webrtc == 'false') {
+      ui.webrtc = false
+    }
+  }
   if (queryParams.channelName) {
     ui.connectDialog.channelName(queryParams.channelName)
   }
@@ -1123,28 +1271,56 @@ function translateEverything() {
   translatePiece('.channel-context-menu .copy-mumble-url', 'textcontent', {}, 'channelcontextmenu.copy_mumble_url');
   translatePiece('.channel-context-menu .copy-mumble-web-url', 'textcontent', {}, 'channelcontextmenu.copy_mumble_web_url');
   translatePiece('.channel-context-menu .send-message', 'textcontent', {}, 'channelcontextmenu.send_message');
+
+  translatePiece('.toolbar .tb-horizontal', 'attribute', {'name': 'title'}, 'toolbar.orientation');
+  translatePiece('.toolbar .tb-horizontal', 'attribute', {'name': 'alt'}, 'toolbar.orientation');
+  translatePiece('.toolbar .tb-vertical', 'attribute', {'name': 'title'}, 'toolbar.orientation');
+  translatePiece('.toolbar .tb-vertical', 'attribute', {'name': 'alt'}, 'toolbar.orientation');
+  translatePiece('.toolbar .tb-connect', 'attribute', {'name': 'title'}, 'toolbar.connect');
+  translatePiece('.toolbar .tb-connect', 'attribute', {'name': 'alt'}, 'toolbar.connect');
+  translatePiece('.toolbar .tb-information', 'attribute', {'name': 'title'}, 'toolbar.information');
+  translatePiece('.toolbar .tb-information', 'attribute', {'name': 'alt'}, 'toolbar.information');
+  translatePiece('.toolbar .tb-mute', 'attribute', {'name': 'title'}, 'toolbar.mute');
+  translatePiece('.toolbar .tb-mute', 'attribute', {'name': 'alt'}, 'toolbar.mute');
+  translatePiece('.toolbar .tb-unmute', 'attribute', {'name': 'title'}, 'toolbar.unmute');
+  translatePiece('.toolbar .tb-unmute', 'attribute', {'name': 'alt'}, 'toolbar.unmute');
+  translatePiece('.toolbar .tb-deaf', 'attribute', {'name': 'title'}, 'toolbar.deaf');
+  translatePiece('.toolbar .tb-deaf', 'attribute', {'name': 'alt'}, 'toolbar.deaf');
+  translatePiece('.toolbar .tb-undeaf', 'attribute', {'name': 'title'}, 'toolbar.undeaf');
+  translatePiece('.toolbar .tb-undeaf', 'attribute', {'name': 'alt'}, 'toolbar.undeaf');
+  translatePiece('.toolbar .tb-record', 'attribute', {'name': 'title'}, 'toolbar.record');
+  translatePiece('.toolbar .tb-record', 'attribute', {'name': 'alt'}, 'toolbar.record');
+  translatePiece('.toolbar .tb-comment', 'attribute', {'name': 'title'}, 'toolbar.comment');
+  translatePiece('.toolbar .tb-comment', 'attribute', {'name': 'alt'}, 'toolbar.comment');
+  translatePiece('.toolbar .tb-settings', 'attribute', {'name': 'title'}, 'toolbar.settings');
+  translatePiece('.toolbar .tb-settings', 'attribute', {'name': 'alt'}, 'toolbar.settings');
+  translatePiece('.toolbar .tb-sourcecode', 'attribute', {'name': 'title'}, 'toolbar.sourcecode');
+  translatePiece('.toolbar .tb-sourcecode', 'attribute', {'name': 'alt'}, 'toolbar.sourcecode');
 }
 
 async function main() {
   await localizationInitialize(navigator.language);
   translateEverything();
-  initializeUI();
-  initVoice(data => {
-    if (testVoiceHandler) {
-      testVoiceHandler.write(data)
-    }
-    if (!ui.client) {
-      if (voiceHandler) {
-        voiceHandler.end()
+  try {
+    const userMedia = await initVoice(data => {
+      if (testVoiceHandler) {
+        testVoiceHandler.write(data)
       }
-      voiceHandler = null
-    } else if (voiceHandler) {
-      voiceHandler.write(data)
-    }
-  }, err => {
-    log(translate('logentry.mic_init_error'), err)
-  })
+      if (!ui.client) {
+        if (voiceHandler) {
+          voiceHandler.end()
+        }
+        voiceHandler = null
+      } else if (voiceHandler) {
+        voiceHandler.write(data)
+      }
+    })
+    ui._micStream = userMedia
+  } catch (err) {
+    window.alert('Failed to initialize user media\nRefresh page to retry.\n' + err)
+    return
+  }
+  initializeUI();
 }
 
 window.onload = main
-

@@ -78,6 +78,22 @@
           </form>
         </div>
       <!-- /ko -->
+      <!-- ko with: addChannelDialog -->
+      <div class="add-channel-dialog dialog" data-bind="visible: visible()">
+        <div class="dialog-header">
+          Add channel
+        </div>
+        <form data-bind="submit: addchannel">
+          <table>
+            <tr>
+              <td>Channel</td>
+              <td><input id="channelName" type="text" data-bind="value: channelName" required></td>
+            </tr>
+          </table>
+          <input class="dialog-submit" type="submit" value="Add channel">
+        </form>
+      </div>
+      <!-- /ko -->
       <!-- ko with: connectDialog -->
       <div class="join-dialog dialog" data-bind="visible: visible() && joinOnly()">
           <div class="dialog-header">
@@ -413,7 +429,7 @@
             class="join">
           Join Channel
         </li>
-        <li data-bind="css: { disabled: !canAdd() }"
+        <li data-bind="css: { disabled: !canAdd() }, click: $root.openAddChannel.bind($root, $root.thisUser())"
             class="add">
           Add
         </li>
@@ -421,7 +437,7 @@
             class="edit">
           Edit
         </li>
-        <li data-bind="css: { disabled: !canRemove() }"
+        <li data-bind="css: { disabled: !canRemove() }, click: $root.ChannelRemove.bind($root, $root.thisUser())"
             class="remove">
           Remove
         </li>
@@ -463,40 +479,52 @@
       </script>
       <div class="toolbar" data-bind="css: { 'toolbar-horizontal': toolbarHorizontal(),
                                              'toolbar-vertical': !toolbarHorizontal() }">
-        <img class="handle-horizontal" src="/svg/handle_horizontal.svg"
-             data-bind="click: toggleToolbarOrientation">
-        <img class="handle-vertical" src="/svg/handle_vertical.svg"
-             data-bind="click: toggleToolbarOrientation">
+        <img class="tb-horizontal handle-horizontal" src="/svg/handle_horizontal.svg"
+             data-bind="click: toggleToolbarOrientation"
+             title="Switch Orientation" alt="Switch Orientation">
+        <img class="tb-vertical handle-vertical" src="/svg/handle_vertical.svg"
+             data-bind="click: toggleToolbarOrientation"
+             title="Switch Orientation" alt="Switch Orientation">
         <img class="tb-connect" data-bind="visible: !connectDialog.joinOnly(),
                                            click: connectDialog.show"
-                      rel="connect" src="/svg/applications-internet.svg">
+                      rel="connect" src="/svg/applications-internet.svg"
+                      title="Connect to Server" alt="Connection">
         <img class="tb-information" rel="information" src="/svg/information_icon.svg"
              data-bind="click: connectionInfo.show,
-                        css: { disabled: !thisUser() }">
+                        css: { disabled: !thisUser() }"
+                        title="Information" alt="Information">
         <div class="divider"></div>
         <img class="tb-mute" data-bind="visible: !selfMute(),
                               click: function () { requestMute(thisUser()) }"
-                      rel="mute" src="/svg/audio-input-microphone.svg">
+                      rel="mute" src="/svg/audio-input-microphone.svg"
+                      title="Mute" alt="Mute">
         <img class="tb-unmute tb-active" data-bind="visible: selfMute,
                               click: function () { requestUnmute(thisUser()) }"
-                      rel="unmute" src="/svg/audio-input-microphone-muted.svg">
+                      rel="unmute" src="/svg/audio-input-microphone-muted.svg"
+                      title="Unmute" alt="Unmute">
         <img class="tb-deaf" data-bind="visible: !selfDeaf(),
                               click: function () { requestDeaf(thisUser()) }"
-                      rel="deaf" src="/svg/audio-output.svg">
+                      rel="deaf" src="/svg/audio-output.svg"
+                      title="Deafen" alt="Deafen">
         <img class="tb-undeaf tb-active" data-bind="visible: selfDeaf,
                               click: function () { requestUndeaf(thisUser()) }"
-                      rel="undeaf" src="/svg/audio-output-deafened.svg">
+                      rel="undeaf" src="/svg/audio-output-deafened.svg"
+                      title="Undeafen" alt="Undeafen">
         <img class="tb-record" data-bind="click: function(){}"
-                      rel="record" src="/svg/media-record.svg">
+                      rel="record" src="/svg/media-record.svg"
+                      title="Record" alt="Record">
         <div class="divider"></div>
         <img class="tb-comment" data-bind="click: commentDialog.show"
-                      rel="comment" src="/svg/toolbar-comment.svg">
+                      rel="comment" src="/svg/toolbar-comment.svg"
+                      title="Comment" alt="Comment">
         <div class="divider"></div>
         <img class="tb-settings" data-bind="click: openSettings"
-                      rel="settings" src="/svg/config_basic.svg">
+                      rel="settings" src="/svg/config_basic.svg"
+                      title="Settings" alt="Settings">
         <div class="divider"></div>
         <img class="tb-sourcecode" data-bind="click: openSourceCode"
-                      rel="Source Code" src="/svg/source-code.svg">
+                      rel="Source Code" src="/svg/source-code.svg"
+                      title="Open Soure Code" alt="Open Source Code">
       </div>
       <div class="chat">
         <script type="text/html" id="log-generic">
@@ -534,8 +562,10 @@
           </div>
         </div>
         <form data-bind="submit: submitMessageBox">
-          <input id="message-box" type="text" data-bind="
-              attr: { placeholder: messageBoxHint }, textInput: messageBox">
+          <textarea id="message-box" row=1 data-bind="
+              attr: { placeholder: messageBoxHint }, 
+              textInput: messageBox, 
+              event: {keypress: submitOnEnter}"></textarea>
         </form>
       </div>
       <script type="text/html" id="channel">

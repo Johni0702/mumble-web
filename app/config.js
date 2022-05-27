@@ -32,10 +32,13 @@ window.mumbleWebConfig = {
     'token': '',
     'username': '',
     'password': '',
+    'webrtc': 'auto', // whether to enable (true), disable (false) or auto-detect ('auto') WebRTC support
     'joinDialog': false, // replace whole dialog with single "Join Conference" button
     'matrix': false, // enable Matrix Widget support (mostly auto-detected; implies 'joinDialog')
     'avatarurl': '', // download and set the user's Mumble avatar to the image at this URL
     // General
-    'theme': 'MetroMumbleLight'
+    'theme': 'MetroMumbleLight',
+    'startMute': false,
+    'startDeaf': false
   }
 }
