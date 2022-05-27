@@ -1,22 +1,19 @@
-var theme = '../themes/MetroMumbleLight'
-var path = require('path');
+var theme = "../themes/MetroMumbleLight";
+var path = require("path");
 
 module.exports = {
-  mode: 'development',
+  mode: "development",
   entry: {
-    index: [
-      './app/index.js',
-      './app/index.html'
-    ],
-    config: './app/config.js',
-    theme: './app/theme.js',
-    matrix: './app/matrix.js'
+    index: ["./app/index.js", "./app/index.html"],
+    config: "./app/config.js",
+    theme: "./app/theme.js",
+    matrix: "./app/matrix.js",
   },
   devtool: "cheap-source-map",
   output: {
-    path: path.join(__dirname, 'dist'),
-    chunkFilename: '[chunkhash].js',
-    filename: '[name].js'
+    path: path.join(__dirname, "dist"),
+    chunkFilename: "[chunkhash].js",
+    filename: "[name].js",
   },
   module: {
     rules: [
@@ -24,86 +21,78 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-transform-runtime']
-          }
-        }
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-transform-runtime"],
+          },
+        },
       },
       {
         test: /\.html$/,
         use: [
           {
-            loader: 'file-loader',
-            options: { 'name': '[name].[ext]' }
+            loader: "file-loader",
+            options: { name: "[name].[ext]" },
           },
           {
-            loader: "extract-loader"
+            loader: "extract-loader",
           },
           {
-            loader: 'html-loader',
+            loader: "html-loader",
             options: {
-              attrs: ['img:src', 'link:href'],
-              root: theme
-            }
-          }
-        ]
+              attrs: ["img:src", "link:href"],
+              root: theme,
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
-        use: [
-          'file-loader',
-          'extract-loader',
-          'css-loader'
-        ]
+        use: ["file-loader", "extract-loader", "css-loader"],
       },
       {
         test: /\.scss$/,
         use: [
-          'file-loader?name=[hash].css',
-          'extract-loader',
-          'css-loader',
-          'sass-loader'
-        ]
+          "file-loader?name=[hash].css",
+          "extract-loader",
+          "css-loader",
+          "sass-loader",
+        ],
       },
       {
-        type: 'javascript/auto',
+        type: "javascript/auto",
         test: /manifest\.json$|\.xml$/,
         use: [
-          'file-loader',
-          'extract-loader',
+          "file-loader",
+          "extract-loader",
           {
-            loader: 'regexp-replace-loader',
+            loader: "regexp-replace-loader",
             options: {
               match: {
                 pattern: "#require\\('([^']*)'\\)",
-                flags: 'g'
+                flags: "g",
               },
-              replaceWith: '"+require("$1")+"'
-            }
+              replaceWith: '"+require("$1")+"',
+            },
           },
-          'raw-loader'
-        ]
+          "raw-loader",
+        ],
       },
       {
         test: /\.(svg|png|ico)$/,
-        use: [
-          'file-loader'
-        ]
+        use: ["file-loader"],
       },
       {
         test: /worker\.js$/,
-        use: { loader: 'worker-loader' }
+        use: { loader: "worker-loader" },
       },
       {
-        enforce: 'post',
+        enforce: "post",
         test: /mumble-streams\/lib\/data.js/,
-        use: [
-          'transform-loader?brfs'
-        ]
-      }
-    ]
+        use: ["transform-loader?brfs"],
+      },
+    ],
   },
-  target: 'web'
-}
+  target: "web",
+};
