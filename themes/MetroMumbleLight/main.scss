@@ -1,62 +1,64 @@
-$black: #000 !default
-$darkgray: #888 !default
-$gray: #a9a9a9 !default
-$lightgray: #d3d3d3 !default
-$bg-color: #eee !default
-$white: #fff !default
+$black: #000 !default;
+$darkgray: #888 !default;
+$gray: #a9a9a9 !default;
+$lightgray: #d3d3d3 !default;
+$bg-color: #eee !default;
+$white: #fff !default;
 
-$font-color: $black !default
-$font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif !default
-$font-disabled-color: $gray !default
-$panel-bg-color: $white !default
-$panel-border-color: $lightgray !default
-$channel-tree-color: $lightgray !default
-$channel-hover-bg-color: $lightgray !default
-$channel-selected-bg-color: lightblue !default
-$channel-selected-border-color: $darkgray !default
-$tooltip-border-color: $darkgray !default
-$chat-channel-color: orange !default
-$chat-user-color: green !default
-$chat-input-color: $font-color !default
-$mic-volume-border-color: $black !default
-$talk-outline-color: green !default
-$whisper-outline-color: purple !default
-$shout-outline-color: cyan !default
+$font-color: $black !default;
+$font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans",
+  "Helvetica Neue", Arial, sans-serif !default;
+$font-disabled-color: $gray !default;
+$panel-bg-color: $white !default;
+$panel-border-color: $lightgray !default;
+$channel-tree-color: $lightgray !default;
+$channel-hover-bg-color: $lightgray !default;
+$channel-selected-bg-color: lightblue !default;
+$channel-selected-border-color: $darkgray !default;
+$tooltip-border-color: $darkgray !default;
+$chat-channel-color: orange !default;
+$chat-user-color: green !default;
+$chat-input-color: $font-color !default;
+$mic-volume-border-color: $black !default;
+$talk-outline-color: green !default;
+$whisper-outline-color: purple !default;
+$shout-outline-color: cyan !default;
 
-$toolbar-hover-bg-color: $lightgray !default
-$toolbar-hover-border-color: $gray !default
-$toolbar-active-bg-color: $white !default
-$toolbar-active-border-color: $toolbar-hover-bg-color !default
-$toolbar-divider-color: $lightgray !default
-$dialog-header-color: $white !default
-$dialog-header-bg-color: $darkgray !default
-$dialog-header-border-bottom-color: $gray !default
-$dialog-bg-color: $bg-color !default
-$dialog-border-color: $darkgray !default
-$dialog-color: $font-color !default
-$dialog-button-border-color: $darkgray !default
-$dialog-button-bg-color: $white !default
-$dialog-button-color: $dialog-color !default
-$dialog-input-border-color: $darkgray !default
-$dialog-input-bg-color: $white !default
-$dialog-input-color: $dialog-color !default
-$context-menu-bg-color: $bg-color !default
-$context-menu-border-color: $panel-border-color !default
-$context-menu-hover-bg-color: $toolbar-hover-bg-color !default
+$toolbar-hover-bg-color: $lightgray !default;
+$toolbar-hover-border-color: $gray !default;
+$toolbar-active-bg-color: $white !default;
+$toolbar-active-border-color: $toolbar-hover-bg-color !default;
+$toolbar-divider-color: $lightgray !default;
+$dialog-header-color: $white !default;
+$dialog-header-bg-color: $darkgray !default;
+$dialog-header-border-bottom-color: $gray !default;
+$dialog-bg-color: $bg-color !default;
+$dialog-border-color: $darkgray !default;
+$dialog-color: $font-color !default;
+$dialog-button-border-color: $darkgray !default;
+$dialog-button-bg-color: $white !default;
+$dialog-button-color: $dialog-color !default;
+$dialog-input-border-color: $darkgray !default;
+$dialog-input-bg-color: $white !default;
+$dialog-input-color: $dialog-color !default;
+$context-menu-bg-color: $bg-color !default;
+$context-menu-border-color: $panel-border-color !default;
+$context-menu-hover-bg-color: $toolbar-hover-bg-color !default;
 
-$tooltip-bg-color: $panel-bg-color !default
-$channels-bg-color: $panel-bg-color !default
-$channels-border-color: $panel-border-color !default
-$chat-bg-color: $panel-bg-color !default
-$chat-border-color: $panel-border-color !default
+$tooltip-bg-color: $panel-bg-color !default;
+$channels-bg-color: $panel-bg-color !default;
+$channels-border-color: $panel-border-color !default;
+$chat-bg-color: $panel-bg-color !default;
+$chat-border-color: $panel-border-color !default;
 
-html, body {
+html,
+body {
   background-color: $bg-color;
   color: $font-color;
   font-family: $font-family;
   margin: 0;
   overflow: hidden;
-  height: 100%
+  height: 100%;
 }
 #container {
   height: 100%;
@@ -153,14 +155,15 @@ html, body {
 .user {
   margin-left: 9px;
 }
-.user-avatar, .user-talk {
+.user-avatar,
+.user-talk {
   vertical-align: middle;
 }
 @mixin drop-shadow-4x($size, $blur, $color) {
-  filter: drop-shadow(#{+$size} #{+$size} $blur $color)
-          drop-shadow(#{+$size} #{-$size} $blur $color)
-          drop-shadow(#{-$size} #{+$size} $blur $color)
-          drop-shadow(#{-$size} #{-$size} $blur $color);
+  filter: drop-shadow(#{+ $size} #{+ $size} $blur $color)
+    drop-shadow(#{+ $size} #{-$size} $blur $color)
+    drop-shadow(#{-$size} #{+ $size} $blur $color)
+    drop-shadow(#{-$size} #{-$size} $blur $color);
 }
 @mixin user-avatar-drop-shadow($color) {
   @include drop-shadow-4x(1px, 1px, $color);
@@ -174,10 +177,12 @@ html, body {
 .user-avatar-talk-shout {
   @include user-avatar-drop-shadow($shout-outline-color);
 }
-.user-status, .channel-status {
+.user-status,
+.channel-status {
   float: right;
 }
-.user,.channel{
+.user,
+.channel {
   height: 23px;
   line-height: 23px;
   padding: 2px;
@@ -188,28 +193,33 @@ html, body {
   border: 1px solid $channel-selected-border-color;
   border-radius: 3px;
 }
-.user:hover,.channel:hover {
+.user:hover,
+.channel:hover {
   background-color: $channel-hover-bg-color;
 }
 .thisClient {
-  font-weight: bold
+  font-weight: bold;
 }
 .currentChannel {
-  font-weight: bold
+  font-weight: bold;
 }
-.user-status img, .channel-status img {
+.user-status img,
+.channel-status img {
   margin-top: 2px;
   width: 19px;
-  height: 19px
+  height: 19px;
 }
-.channel img, .user img {
+.channel img,
+.user img {
   width: auto;
   height: 19px;
 }
-.channel-name, .user-name {
+.channel-name,
+.user-name {
   display: inline;
 }
-.channel:hover .tooltip, .user:hover .tooltip {
+.channel:hover .tooltip,
+.user:hover .tooltip {
   visibility: visible;
   height: auto;
   transition-delay: 1s;
@@ -241,10 +251,10 @@ html, body {
       display: inline-block;
       width: 10px;
       padding-right: 5px;
-      content: '';
+      content: "";
     }
     &.checked::before {
-      content: '✓';
+      content: "✓";
     }
     &:hover {
       background: $context-menu-hover-bg-color;
@@ -361,7 +371,9 @@ form {
 .message-content p {
   margin: 0;
 }
-.tb-information.disabled, .tb-record, .tb-comment {
+.tb-information.disabled,
+.tb-record,
+.tb-comment {
   filter: grayscale(100%);
 }
 .dialog-header {
@@ -380,7 +392,8 @@ form {
 .dialog-submit {
   float: right;
 }
-.dialog-close, .dialog-submit {
+.dialog-close,
+.dialog-submit {
   width: 45%;
   font-size: 15px;
   border: 1px $dialog-button-border-color solid;
@@ -392,7 +405,7 @@ form {
 }
 .connect-dialog table {
   text-align: center;
-  width: 100%
+  width: 100%;
 }
 .dialog {
   position: absolute;
@@ -446,7 +459,8 @@ form {
   top: calc(50% - 10px);
   left: calc(50% - 100px);
 }
-.connect-dialog input[type=text], select {
+.connect-dialog input[type="text"],
+select {
   font-size: 15px;
   border: 1px $dialog-input-border-color solid;
   border-radius: 3px;
@@ -455,7 +469,7 @@ form {
   padding: 2px;
   width: calc(100% - 8px);
 }
-.connect-dialog input[type=password] {
+.connect-dialog input[type="password"] {
   font-size: 15px;
   border: 1px $dialog-input-border-color solid;
   border-radius: 3px;
@@ -472,7 +486,6 @@ form {
     padding-left: 20px;
   }
 }
-
 
 /****************/
 /* Minimal view */
@@ -540,23 +553,24 @@ form {
 
 /* Mobile view */
 
-@media only screen and (max-width: 600px) and (min-width: 320px) and (min-height: 600px)  {
-
-  .toolbar-horizontal ~ .channel-root-container, .toolbar-vertical ~ .channel-root-container {
-    height:calc(100% - 440px);
-    position:static;
-    width:100%;
+@media only screen and (max-width: 600px) and (min-width: 320px) and (min-height: 600px) {
+  .toolbar-horizontal ~ .channel-root-container,
+  .toolbar-vertical ~ .channel-root-container {
+    height: calc(100% - 440px);
+    position: static;
+    width: 100%;
   }
 
-  .toolbar-horizontal ~ .chat, .toolbar-vertical ~ .chat {
-    position:fixed;
+  .toolbar-horizontal ~ .chat,
+  .toolbar-vertical ~ .chat {
+    position: fixed;
     bottom: 60px;
-    left:0;
-    width:100%;
-    height:330px;
-    y-overflow:auto;
-    font-size:0.8em;
-    z-index:10;
+    left: 0;
+    width: 100%;
+    height: 330px;
+    y-overflow: auto;
+    font-size: 0.8em;
+    z-index: 10;
   }
 
   .toolbar-vertical {
@@ -575,7 +589,8 @@ form {
     font-weight: bold;
   }
 
-  .handle-vertical, .handle-horizontal {
+  .handle-vertical,
+  .handle-horizontal {
     display: none;
   }
 

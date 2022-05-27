@@ -34,7 +34,7 @@
     "extract-loader": "^5.1.0",
     "file-loader": "^4.3.0",
     "fs": "0.0.1-security",
-    "getusermedia": "^2.0.1",
+    "webrtc-adapter": "^7.7.0",
     "html-loader": "^0.5.5",
     "json-loader": "^0.5.7",
     "keyboardjs": "^2.6.4",
