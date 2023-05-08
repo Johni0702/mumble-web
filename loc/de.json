@@ -9,7 +9,9 @@
     "remove": "Entfernen",
     "add": "Hinzufügen",
     "cancel": "Abbrechen",
-    "connect": "Verbinden"
+    "connect": "Verbinden",
+    "error": {
+      "title": "Verbindung nicht möglich"
+    }
   }
 }
-
