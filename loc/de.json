@@ -13,7 +13,8 @@
     "error": {
       "title": "Verbindung nicht möglich",
       "reason": {
-        "refused": "Die Verbindung wurde abgelehnt."
+        "refused": "Die Verbindung wurde abgelehnt.",
+        "version": "Der Server verwendet eine inkompatible Version."
       }
     }
   }
