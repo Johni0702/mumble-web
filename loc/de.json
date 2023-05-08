@@ -11,7 +11,10 @@
     "cancel": "Abbrechen",
     "connect": "Verbinden",
     "error": {
-      "title": "Verbindung nicht möglich"
+      "title": "Verbindung nicht möglich",
+      "reason": {
+        "refused": "Die Verbindung wurde abgelehnt."
+      }
     }
   }
 }
